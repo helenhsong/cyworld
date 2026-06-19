@@ -1,0 +1,85 @@
+@font-face {
+    font-family: 'Geist Sans';
+    src: url('../fonts/Geist[wght].woff2');
+    font-display: swap;
+    font-weight: 100 900;
+}
+
+@keyframes readme-enter {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes readme-exit {
+    to {
+        opacity: 0;
+    }
+}
+
+.readme {
+    --vertical-padding: clamp(24px, calc((100vw - 540px) / 2), 72px);
+
+    max-width: 540px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 72px;
+    padding: max(0px, calc(var(--vertical-padding) - var(--header-space, 0px))) 0 var(--vertical-padding);
+    animation: readme-enter 0.4s ease both;
+}
+
+.readme.closing {
+    animation: readme-exit 0.3s ease both;
+}
+
+.readme {
+    --readme-font-size: 14px;
+}
+
+.readme, .readme * {
+    font-family: 'Geist Sans', Arial, Helvetica, sans-serif;
+    font-size: var(--readme-font-size);
+    line-height: var(--line-height);
+}
+
+.readmeContent {
+    display: flex;
+    flex-direction: column;
+}
+
+.readmeParagraphs {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--readme-font-size) * var(--line-height));
+}
+
+.readme p {
+    margin: 0;
+    opacity: 0.8;
+}
+
+.readme h1 {
+    margin: 0 0 20px;
+    font-weight: var(--font-weight);
+}
+
+.readme a {
+    text-decoration: none;
+    padding-bottom: 1px;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+}
+
+.readme a:hover {
+    border-bottom-color: currentColor;
+}
+
+.readme a:focus {
+    background-color: color-mix(in srgb, currentColor 15%, transparent);
+    outline: none;
+}

@@ -7,24 +7,14 @@
 
 :root {
   --font-family: 'Geist Mono';
-  --font-size: 13px;
+  --font-size: 12px;
   --font-weight: 350;
   --font-weight-bold: 450;
-  --line-height: 1.7;
-  --background: #FFFFFF;
-  --gray1: #111111;
-  --gray2: #555555;
-  --gray3: #999999;
-  --disabled: #c9c9c9;
-  --not-active: #999999;
-  --line: #dbdbdb;
-  --focus-state: #dae8e4;
+  --line-height: 1.6;
 }
 
 * {
   font-family: var(--font-family), Arial, Helvetica, sans-serif;
   font-size: var(--font-size);
   font-weight: var(--font-weight);
-  background-color: var(--background);
-  color: var(--gray2);
 }

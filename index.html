@@ -7,6 +7,13 @@
     <title>cyworld</title>
   </head>
   <body>
+    <script>
+      const redirectPath = sessionStorage.getItem('spa-redirect-path')
+      if (redirectPath) {
+        sessionStorage.removeItem('spa-redirect-path')
+        history.replaceState(null, '', redirectPath)
+      }
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
