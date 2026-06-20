@@ -8,7 +8,7 @@ import { useHeaderSpace } from './assets/utils/useHeaderSpace'
 
 // Matches the fade-out duration in Readme.css, so the route only
 // changes once the closing animation has actually finished.
-const README_CLOSE_DURATION_MS = 300
+const README_CLOSE_DURATION_MS = 260
 
 function App() {
   const headerRef = useRef(null)
@@ -26,7 +26,7 @@ function App() {
 
   return (
     <>
-      <Background />
+      <Background isClosingReadme={isClosingReadme} />
       <Header ref={headerRef} onCloseReadme={closeReadme} />
       <Routes>
         <Route path="/" element={null} />

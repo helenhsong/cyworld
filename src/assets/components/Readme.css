@@ -8,7 +8,7 @@
 @keyframes readme-enter {
     from {
         opacity: 0;
-        transform: translateY(8px);
+        transform: translateY(6px);
     }
     to {
         opacity: 1;
@@ -23,23 +23,22 @@
 }
 
 .readme {
-    --vertical-padding: clamp(24px, calc((100vw - 540px) / 2), 72px);
-
-    max-width: 540px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 72px;
-    padding: max(0px, calc(var(--vertical-padding) - var(--header-space, 0px))) 0 var(--vertical-padding);
-    animation: readme-enter 0.4s ease both;
+    --readme-font-size: 14px;
+    /* An overlay layer, not part of normal document flow — opening/closing
+       this page is then a pure show/hide of one layer instead of a route
+       swap that reflows the rest of the page, which is what made the
+       transition feel less smooth, especially on close. */
+    position: fixed;
+    top: var(--header-space, 0px);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    animation: readme-enter 0.32s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 .readme.closing {
-    animation: readme-exit 0.3s ease both;
-}
-
-.readme {
-    --readme-font-size: 14px;
+    animation: readme-exit 0.26s ease-in-out both;
 }
 
 .readme, .readme * {
@@ -49,8 +48,14 @@
 }
 
 .readmeContent {
+    --vertical-padding: clamp(24px, calc((100vw - 540px) / 2), 72px);
+
+    max-width: 540px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
+    gap: 16px;
+    padding: var(--vertical-padding) 0;
 }
 
 .readmeParagraphs {

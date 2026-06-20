@@ -19,8 +19,14 @@ const fullScreenStyle = {
     zIndex: -1,
 }
 
-function Background() {
+function Background({ isClosingReadme }) {
     const isReadme = useLocation().pathname === '/readme'
+    // While closing, the route hasn't changed yet (App delays navigation
+    // until the close animation finishes), but the dithering should already
+    // be fading back in alongside the README content fading out, not wait
+    // for the route to actually flip — otherwise the two transitions run
+    // one after another instead of together.
+    const showDithering = !isReadme || isClosingReadme
 
     return (
         <div style={fullScreenStyle}>
@@ -38,8 +44,8 @@ function Background() {
                     inset: 0,
                     width: '100%',
                     height: '100%',
-                    opacity: isReadme ? 0 : 1,
-                    transition: 'opacity 0.3s ease',
+                    opacity: showDithering ? 1 : 0,
+                    transition: 'opacity 0.26s ease-in-out',
                 }}
             />
         </div>
