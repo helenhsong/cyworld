@@ -1,14 +1,16 @@
 :root {
   color-scheme: light;
-  /* What ProjectHeader's (transparent, see App.jsx) header bar is
-     actually sitting on — the Dithering backdrop's backing color. */
-  --project-header-bg: #e8e0f2;
-  /* Precomputed --project-header-bg contrast color (oklch(0.474
-     0.077 306) — the same value @helenhsong/ui's live relative-color
-     calc resolves to for this background), pinned here as a plain,
-     universally-supported absolute color rather than trusting live
-     computation on every visitor's browser. */
-  --project-header-fg: #67507e;
+  /* What ProjectHeader's (transparent, see App.jsx) header bar and
+     README panel are actually sitting on — the Dithering backdrop's
+     backing color. */
+  --project-bg: #e8e0f2;
+  /* Precomputed --project-bg contrast colors (oklch(0.474 0.077 306)
+     and oklch(0.063 0.077 306) — the same values @helenhsong/ui's live
+     relative-color calc resolves to for this background), pinned here
+     as plain, universally-supported absolute colors rather than
+     trusting live computation on every visitor's browser. */
+  --project-muted-fg: #67507e;
+  --project-fg: #04000e;
 }
 
 body {
@@ -16,4 +18,14 @@ body {
   min-height: 100vh;
   background: #fff;
   font-family: system-ui, sans-serif;
+}
+
+.backdrop {
+  transition: filter 0.4s ease;
+}
+/* Heavy enough to read as one flat wash of the backdrop's color
+   rather than a legible pattern, so it doesn't compete with the
+   README text sitting on top of it. */
+:root[data-ph-open] .backdrop {
+  filter: blur(100px);
 }

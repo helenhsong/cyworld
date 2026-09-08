@@ -5,11 +5,14 @@ import readme from '../README.md?raw'
 function App() {
   return (
     <>
-      {/* Full-viewport animated backdrop — --project-header-bg (set in
-          index.css) tells ProjectHeader's transparent header what it's
-          sitting on, so its label text darkens to a matching purple
-          instead of the site's usual gray. */}
+      {/* Full-viewport animated backdrop — --project-bg (set in
+          index.css) tells ProjectHeader's transparent header and README
+          panel what they're sitting on, so their text darkens to a
+          matching purple instead of the site's usual gray. Blurs
+          heavily (see index.css) while the README is open, keyed off
+          the data-ph-open attribute ProjectHeader sets on <html>. */}
       <Dithering
+        className="backdrop"
         style={{ position: 'fixed', inset: 0, zIndex: -1, background: '#E8E0F2' }}
         speed={0.07}
         shape="warp"
