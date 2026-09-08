@@ -2,11 +2,13 @@
   position: relative;
   width: min(1200px, 88vw);
   margin: 0 auto;
-  /* The source art's visible pixels aren't centered in their own
-     900x633 canvas (there's more transparent margin on the right,
-     where the tabs stick out, than on the left) — nudge the whole
-     block so the drawing itself lands centered on screen. */
-  transform: translate(7.83%, -0.79%);
+  /* The source art sits inside a 900x633 canvas with a lot of
+     transparent padding it doesn't use: extra room on the right
+     (where the tabs stick out) and a tall empty band above the book
+     (visible pixels start at y=97, x=38 of 900x633). Shift the whole
+     block so the drawing itself — not its canvas — is what's
+     positioned near the top and center of the screen. */
+  transform: translate(7.83%, -15.32%);
 }
 
 .journal-page {
