@@ -2,6 +2,11 @@
   position: relative;
   width: min(1200px, 88vw);
   margin: 0 auto;
+  /* The source art's visible pixels aren't centered in their own
+     900x633 canvas (there's more transparent margin on the right,
+     where the tabs stick out, than on the left) — nudge the whole
+     block so the drawing itself lands centered on screen. */
+  transform: translate(7.83%, -0.79%);
 }
 
 .journal-page {
@@ -24,15 +29,4 @@
   border: 0;
   background: transparent;
   cursor: pointer;
-  border-radius: 3px;
-}
-
-.journal-tab-hit:hover,
-.journal-tab-hit:focus-visible {
-  background: color-mix(in srgb, var(--project-fg, #04000e) 12%, transparent);
-}
-
-.journal-tab-hit:focus-visible {
-  outline: 1.5px solid var(--project-fg, #04000e);
-  outline-offset: 1px;
 }
