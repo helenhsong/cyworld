@@ -1,0 +1,38 @@
+.journal {
+  position: relative;
+  width: min(1200px, 88vw);
+  margin: 0 auto;
+}
+
+.journal-page {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
+/* Positions are percentages of the 900x633 source art, mapped from the
+   pixel-identical tab pill locations across all three drawings:
+   x 670-725, y 160-186 / 189-215 / 218-244. */
+.journal-tab-hit {
+  position: absolute;
+  left: 74.44%;
+  width: 6.11%;
+  top: calc(25.28% + (var(--tab-index) * 4.58%));
+  height: 4.11%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.journal-tab-hit:hover,
+.journal-tab-hit:focus-visible {
+  background: color-mix(in srgb, var(--project-fg, #04000e) 12%, transparent);
+}
+
+.journal-tab-hit:focus-visible {
+  outline: 1.5px solid var(--project-fg, #04000e);
+  outline-offset: 1px;
+}

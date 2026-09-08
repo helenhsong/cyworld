@@ -23,6 +23,12 @@ body {
 .backdrop {
   transition: filter 0.4s ease;
 }
+
+.page {
+  display: flex;
+  justify-content: center;
+  padding: 4rem 1.5rem 6rem;
+}
 /* Heavy enough to read as one flat wash of the backdrop's color
    rather than a legible pattern, so it doesn't compete with the
    README text sitting on top of it. */

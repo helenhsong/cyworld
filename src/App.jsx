@@ -1,6 +1,7 @@
 import { ProjectHeader } from '@helenhsong/ui'
 import { Dithering } from '@paper-design/shaders-react'
 import readme from '../README.md?raw'
+import { Journal } from './Journal'
 
 function App() {
   return (
@@ -23,6 +24,9 @@ function App() {
         colorFront="#D2CAE8"
       />
       <ProjectHeader readme={readme} className="bg-transparent" />
+      <main className="page">
+        <Journal />
+      </main>
     </>
   )
 }
