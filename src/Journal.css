@@ -1,6 +1,10 @@
 .journal {
   position: relative;
-  width: min(1200px, 88vw);
+  /* The PNG is now cropped tight to its content bbox (previously it sat
+     in a padded canvas), so the same width as before reads noticeably
+     more zoomed in — sized down to land at roughly the same on-screen
+     scale as the old padded art. */
+  width: min(900px, 67vw);
   margin: 0 auto;
   /* A little above true vertical middle, per feedback. */
   transform: translateY(-8%);
