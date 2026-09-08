@@ -49,3 +49,19 @@ body {
   opacity: 0;
   pointer-events: none;
 }
+/* ProjectHeader's README panel (.ph-readme) is a plain in-flow sibling
+   of <main>, so it pushes .page — and the journal inside it — down the
+   page as soon as it mounts. Take it out of flow and pin it below the
+   sticky header instead, so it reads as an overlay and nothing behind
+   it shifts. #root is its containing block: the header, readme panel,
+   and <main> are all direct children of #root, not nested. */
+#root {
+  position: relative;
+}
+.ph-readme {
+  position: absolute;
+  top: 66px;
+  left: 0;
+  right: 0;
+  z-index: 5;
+}
