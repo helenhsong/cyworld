@@ -3,6 +3,12 @@
   /* What ProjectHeader's (transparent, see App.jsx) header bar is
      actually sitting on — the Dithering backdrop's backing color. */
   --project-header-bg: #e8e0f2;
+  /* Precomputed --project-header-bg contrast color (oklch(0.474
+     0.077 306) — the same value @helenhsong/ui's live relative-color
+     calc resolves to for this background), pinned here as a plain,
+     universally-supported absolute color rather than trusting live
+     computation on every visitor's browser. */
+  --project-header-fg: #67507e;
 }
 
 body {

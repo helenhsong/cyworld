@@ -10,7 +10,7 @@ function App() {
           sitting on, so its label text darkens to a matching purple
           instead of the site's usual gray. */}
       <Dithering
-        style={{ position: 'fixed', inset: 0, background: '#E8E0F2' }}
+        style={{ position: 'fixed', inset: 0, zIndex: -1, background: '#E8E0F2' }}
         speed={0.07}
         shape="warp"
         type="4x4"
