@@ -32,10 +32,20 @@ body {
      space actually left below it, not the full viewport. */
   min-height: calc(100vh - 66px);
   padding: 1.5rem;
+  transition: opacity 0.4s ease;
 }
 /* Heavy enough to read as one flat wash of the backdrop's color
    rather than a legible pattern, so it doesn't compete with the
    README text sitting on top of it. */
 :root[data-ph-open] .backdrop {
   filter: blur(100px);
+}
+/* ProjectHeader's README panel is normal in-flow content below the
+   sticky header, not an overlay — so without this, the journal just
+   sits underneath it in the page instead of being covered by it. Fade
+   the main content out (not display:none) so .page keeps its layout
+   height and the README doesn't jump as it opens/closes. */
+:root[data-ph-open] .page {
+  opacity: 0;
+  pointer-events: none;
 }
