@@ -2,36 +2,20 @@
   position: relative;
   width: min(1200px, 88vw);
   margin: 0 auto;
-  /* The source art sits inside a 900x633 canvas with transparent
-     padding it doesn't use: extra room on the right (where the tabs
-     stick out) and above/below the book (visible pixels are x 38-721,
-     y 97-546 of 900x633). .page now vertically centers this element
-     against the space below the header — translateX corrects the
-     left/right imbalance so the drawing (not its canvas) is centered,
-     translateY corrects the top/bottom imbalance (-0.79%) and then
-     biases the result up a bit further so the book's center sits a
-     little above true vertical middle rather than dead center. */
-  transform: translate(7.83%, -11.5%);
+  /* The art is hand-drawn SVG now, cropped tightly to its own content
+     (see JournalArt's viewBox) — no more compensating for transparent
+     padding baked into a raster export. This is just the "sit a little
+     above true vertical middle" bias. */
+  transform: translateY(-8%);
 }
 
-.journal-page {
+.journal-art {
   display: block;
   width: 100%;
   height: auto;
-  pointer-events: none;
 }
 
-/* Positions are percentages of the 900x633 source art, mapped from the
-   pixel-identical tab pill locations across all three drawings:
-   x 670-725, y 160-186 / 189-215 / 218-244. */
-.journal-tab-hit {
-  position: absolute;
-  left: 74.44%;
-  width: 6.11%;
-  top: calc(25.28% + (var(--tab-index) * 4.58%));
-  height: 4.11%;
-  padding: 0;
-  border: 0;
-  background: transparent;
+.journal-tab {
   cursor: pointer;
+  outline: none;
 }
