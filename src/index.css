@@ -26,8 +26,12 @@ body {
 
 .page {
   display: flex;
+  align-items: center;
   justify-content: center;
-  padding: 0.5rem 1.5rem 6rem;
+  /* ProjectHeader's sticky header is 66px tall — center against the
+     space actually left below it, not the full viewport. */
+  min-height: calc(100vh - 66px);
+  padding: 1.5rem;
 }
 /* Heavy enough to read as one flat wash of the backdrop's color
    rather than a legible pattern, so it doesn't compete with the

@@ -2,13 +2,16 @@
   position: relative;
   width: min(1200px, 88vw);
   margin: 0 auto;
-  /* The source art sits inside a 900x633 canvas with a lot of
-     transparent padding it doesn't use: extra room on the right
-     (where the tabs stick out) and a tall empty band above the book
-     (visible pixels start at y=97, x=38 of 900x633). Shift the whole
-     block so the drawing itself — not its canvas — is what's
-     positioned near the top and center of the screen. */
-  transform: translate(7.83%, -15.32%);
+  /* The source art sits inside a 900x633 canvas with transparent
+     padding it doesn't use: extra room on the right (where the tabs
+     stick out) and above/below the book (visible pixels are x 38-721,
+     y 97-546 of 900x633). .page now vertically centers this element
+     against the space below the header — translateX corrects the
+     left/right imbalance so the drawing (not its canvas) is centered,
+     translateY corrects the top/bottom imbalance (-0.79%) and then
+     biases the result up a bit further so the book's center sits a
+     little above true vertical middle rather than dead center. */
+  transform: translate(7.83%, -9%);
 }
 
 .journal-page {
