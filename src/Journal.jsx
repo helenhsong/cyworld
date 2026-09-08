@@ -1,14 +1,16 @@
 import { useState } from 'react'
-import tab1 from './assets/journal/tab-1.svg'
-import tab2 from './assets/journal/tab-2.svg'
-import tab3 from './assets/journal/tab-3.svg'
+import tab1 from './assets/journal/tab-1.png'
+import tab2 from './assets/journal/tab-2.png'
+import tab3 from './assets/journal/tab-3.png'
 import './Journal.css'
 
-// Each SVG is a vector trace of the matching hand-drawn Aseprite export
-// (traced pixel-for-pixel from the PNG, not redrawn by eye), so it scales
-// to any size without the blur/pixelation a raster export would show.
-// They differ only in which side tab is drawn selected (white) vs.
-// unfocused (purple), same as the original PNGs.
+// Hand-drawn pixel art (Aseprite), exported as PNG and cropped to its
+// content bbox — 684x450 native pixels, no upscaling/redrawing. Rendered
+// through plain <img> (never a framework image optimizer, which would
+// re-encode and blur it) with image-rendering: pixelated in Journal.css
+// so the browser scales it with nearest-neighbor sampling, not smoothing.
+// The three PNGs are pixel-identical except for which tab pill is drawn
+// selected (white) vs. unfocused (purple).
 const TABS = [
   { src: tab1, label: 'Tab 1' },
   { src: tab2, label: 'Tab 2' },

@@ -11,18 +11,27 @@
   width: 100%;
   height: auto;
   pointer-events: none;
+  /* Nearest-neighbor sampling — the art is hand-drawn pixel art at
+     684x450 native px, so the browser's default smoothing would blur
+     its hard edges as it scales up to fill the fluid width above. */
+  image-rendering: pixelated;
+  /* Keep the scaled bitmap on its own GPU layer so it stays crisp
+     instead of being resampled again during compositing/animation. */
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
-/* Positions are percentages of the traced SVGs' cropped viewBox
-   (34 93 694 458), mapped from the pixel-identical tab pill locations
-   across all three drawings: x 700-725, y 160-186 / 189-215 / 218-244
-   in the original 900x633 source. */
+/* Positions are percentages of the cropped PNGs' native canvas
+   (684x450), measured pixel-for-pixel from the source art: the tab
+   pill spans x 638-684, y 63-90 / 89-116 / 117-144 (index-to-index
+   step of 29px), out of the full 684x450 frame. */
 .journal-tab-hit {
   position: absolute;
-  left: 95.1%;
-  width: 3.6%;
-  top: calc(14.63% + (var(--tab-index) * 6.33%));
-  height: 5.68%;
+  left: 93.275%;
+  width: 6.725%;
+  top: calc(14% + (var(--tab-index) * 6.444%));
+  height: 6%;
   padding: 0;
   border: 0;
   background: transparent;
