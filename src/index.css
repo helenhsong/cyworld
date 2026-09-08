@@ -27,7 +27,7 @@ body {
 .page {
   display: flex;
   justify-content: center;
-  padding: 4rem 1.5rem 6rem;
+  padding: 1.5rem 1.5rem 6rem;
 }
 /* Heavy enough to read as one flat wash of the backdrop's color
    rather than a legible pattern, so it doesn't compete with the
