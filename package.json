@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@helenhsong/ui": "github:helenhsong/ui",
+    "@paper-design/shaders-react": "^0.0.80",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },

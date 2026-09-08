@@ -1,5 +1,8 @@
 :root {
   color-scheme: light;
+  /* What ProjectHeader's (transparent, see App.jsx) header bar is
+     actually sitting on — the Dithering backdrop's backing color. */
+  --project-header-bg: #e8e0f2;
 }
 
 body {
