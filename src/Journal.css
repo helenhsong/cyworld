@@ -2,20 +2,30 @@
   position: relative;
   width: min(1200px, 88vw);
   margin: 0 auto;
-  /* The art is hand-drawn SVG now, cropped tightly to its own content
-     (see JournalArt's viewBox) — no more compensating for transparent
-     padding baked into a raster export. This is just the "sit a little
-     above true vertical middle" bias. */
+  /* A little above true vertical middle, per feedback. */
   transform: translateY(-8%);
 }
 
-.journal-art {
+.journal-page {
   display: block;
   width: 100%;
   height: auto;
+  pointer-events: none;
 }
 
-.journal-tab {
+/* Positions are percentages of the traced SVGs' cropped viewBox
+   (34 93 694 458), mapped from the pixel-identical tab pill locations
+   across all three drawings: x 700-725, y 160-186 / 189-215 / 218-244
+   in the original 900x633 source. */
+.journal-tab-hit {
+  position: absolute;
+  left: 95.1%;
+  width: 3.6%;
+  top: calc(14.63% + (var(--tab-index) * 6.33%));
+  height: 5.68%;
+  padding: 0;
+  border: 0;
+  background: transparent;
   cursor: pointer;
   outline: none;
 }
