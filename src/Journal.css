@@ -1,23 +1,36 @@
 .journal {
-  position: relative;
-  /* The PNG is now cropped tight to its content bbox (previously it sat
-     in a padded canvas), so the same width as before reads noticeably
-     more zoomed in — sized down to land at roughly the same on-screen
-     scale as the old padded art. */
-  width: min(900px, 67vw);
+  /* This width is a fluid *budget*, not the art's actual on-screen
+     size — Journal.jsx measures it and snaps .journal-frame down to
+     the nearest whole multiple of the 684px native art, so it renders
+     at, say, exactly 684px or 1368px rather than some in-between
+     fractional width. Raised past the old 900px cap so wide screens
+     can actually reach the 2x (1368px) step instead of always
+     landing on 1x. */
+  width: min(1400px, 67vw);
   margin: 0 auto;
+  display: flex;
+  justify-content: center;
   /* A little above true vertical middle, per feedback. */
   transform: translateY(-8%);
+}
+
+.journal-frame {
+  position: relative;
+  /* width/height set inline in Journal.jsx to an exact integer
+     multiple of the native 684x450 art. */
 }
 
 .journal-page {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
   pointer-events: none;
   /* Nearest-neighbor sampling — the art is hand-drawn pixel art at
      684x450 native px, so the browser's default smoothing would blur
-     its hard edges as it scales up to fill the fluid width above. */
+     its hard edges. Combined with .journal-frame's whole-multiple
+     sizing above, every native pixel lands on the same NxN block of
+     screen pixels everywhere in the image — no line rendering 1px
+     thick in one spot and 2px in another. */
   image-rendering: pixelated;
   /* Keep the scaled bitmap on its own GPU layer so it stays crisp
      instead of being resampled again during compositing/animation. */
@@ -26,10 +39,10 @@
   backface-visibility: hidden;
 }
 
-/* Positions are percentages of the cropped PNGs' native canvas
-   (684x450), measured pixel-for-pixel from the source art: the tab
-   pill spans x 638-684, y 63-90 / 89-116 / 117-144 (index-to-index
-   step of 29px), out of the full 684x450 frame. */
+/* Positions are percentages of .journal-frame, which is sized exactly
+   to the (scaled) native canvas — measured pixel-for-pixel from the
+   source art at 684x450: the tab pill spans x 638-684, y 63-90 /
+   89-116 / 117-144 (index-to-index step of 29px). */
 .journal-tab-hit {
   position: absolute;
   left: 93.275%;
