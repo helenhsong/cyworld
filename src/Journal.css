@@ -1,5 +1,9 @@
 @font-face {
   font-family: 'Mona12';
+  /* Subsetted (fonttools: pyftsubset --text="HomeDiaryPhotos") from a
+     10.5MB source down to ~3KB — only the glyphs the tab labels below
+     actually use. Re-run the subsetter against the full-glyph source
+     if a label ever needs a character outside "HomeDiaryPhotos". */
   src: url('./assets/fonts/Mona12.ttf') format('truetype');
   font-display: swap;
 }
@@ -56,9 +60,9 @@
   font-size: 12px;
   line-height: 1;
   user-select: none;
-  /* Purple (unfocused) pill fill is a light lavender — dark violet
-     text reads clearly on it. */
-  color: #3d2f5c;
+  /* Purple (unfocused) pill fill is a light lavender — white reads
+     clearly on it. */
+  color: #fff;
 }
 /* The active tab's pill is drawn white in the art — switch to
    --project-muted-fg (already used site-wide for text on a light
