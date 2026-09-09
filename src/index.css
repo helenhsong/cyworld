@@ -32,7 +32,12 @@ body {
      space actually left below it, not the full viewport. */
   min-height: calc(100vh - 66px);
   padding: 1.5rem;
-  transition: opacity 0.4s ease;
+  /* The transition used for a change is taken from the *destination*
+     state's own transition property — so this (the closed/visible
+     state) governs the README->main fade-in on close, kept snappy
+     per feedback, while the data-ph-open rule below governs the
+     slower main->README fade-out on open. */
+  transition: opacity 0.15s ease;
 }
 /* Heavy enough to read as one flat wash of the backdrop's color
    rather than a legible pattern, so it doesn't compete with the
@@ -48,6 +53,7 @@ body {
 :root[data-ph-open] .page {
   opacity: 0;
   pointer-events: none;
+  transition: opacity 0.4s ease;
 }
 /* ProjectHeader's README panel (.ph-readme) is a plain in-flow sibling
    of <main>, so it pushes .page — and the journal inside it — down the
