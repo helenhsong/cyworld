@@ -17,9 +17,11 @@ const TABS = [
   { src: tab1, label: 'Home' },
   { src: tab2, label: 'Diary' },
   // Was "Photos", then "Visitor" (a Cyworld guestbook/visitor-board
-  // tab) — repurposed again into a blog-style photo+text feed, so
-  // "Notes" fits better than either.
-  { src: tab3, label: 'Notes' },
+  // tab), then "Notes" — repurposed into a blog-style photo+text feed
+  // and relabeled "Blog" to say that plainly. Internals (NOTES_ENTRIES,
+  // .note-* classes, etc. below) keep the old "notes" naming — just
+  // the visible label changed.
+  { src: tab3, label: 'Blog' },
 ]
 
 // Each entry stores a real Date — formatRelativeTime() below turns it
