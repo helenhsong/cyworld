@@ -85,18 +85,20 @@ const coversBySlug = Object.fromEntries(
 
 // Real, live clock in Seoul (Asia/Seoul, KST/UTC+9) — unlike the visit
 // counter this replaced, this needs no backend to be genuine, so it's
-// the actual current time rather than fixed decorative text.
-// hourCycle: 'h23' pins zero-padded 00-23 (plain hour12:false leaves
-// midnight's hour ambiguous as "24" in some engines/locales).
+// the actual current time rather than fixed decorative text. 12-hour,
+// no leading zero on the hour, lowercase am/pm with no space before
+// it (e.g. "8:20pm") — formatToParts (rather than a plain formatted
+// string) so the built-in " AM"/" PM" can be lowercased and rejoined
+// without a space.
 function getSeoulTime(now = new Date()) {
-  const parts = new Intl.DateTimeFormat('en-GB', {
+  const parts = new Intl.DateTimeFormat('en-US', {
     timeZone: 'Asia/Seoul',
-    hour: '2-digit',
+    hour: 'numeric',
     minute: '2-digit',
-    hourCycle: 'h23',
+    hour12: true,
   }).formatToParts(now)
   const byType = Object.fromEntries(parts.map((p) => [p.type, p.value]))
-  return `${byType.hour}:${byType.minute}`
+  return `${byType.hour}:${byType.minute}${byType.dayPeriod.toLowerCase()}`
 }
 
 // Coarsens a day-count into the same "N days/weeks/months/years ago"
@@ -151,7 +153,7 @@ export function Journal() {
       {/* Left-page content, matching the layout mockup. A real live
           clock in Seoul, not a fixed visit counter — computable purely
           client-side, so no backend/storage needed to make it genuine. */}
-      <div className="journal-counter">[{seoulTime}] in Seoul</div>
+      <div className="journal-counter">{seoulTime} in Seoul, KR</div>
       <div className="journal-title">helen's cyworld</div>
       <div className="journal-site">helenhsong.com</div>
 
