@@ -31,6 +31,7 @@
   --journal-text-strong: var(--project-muted-fg, #67507e);
   --journal-accent: #8b5fbf;
   --journal-line: rgba(103, 80, 126, 0.35);
+  --journal-line-faint: rgba(103, 80, 126, 0.15);
 }
 
 .journal {
@@ -286,6 +287,9 @@
      override that explicit size with 100% x 100%. */
   display: flex;
   flex-direction: row;
+  /* Breathing room between the content and the scrollbar, per
+     feedback — they read as touching without it. */
+  gap: 10px;
   box-sizing: border-box;
   pointer-events: auto;
 }
@@ -314,15 +318,18 @@
 /* The raised-bevel look (light top/left edge, darker bottom/right
    edge) is hand-drawn with inset box-shadows rather than border-
    style: outset, which browsers render too inconsistently to rely on
-   for a specific pixel look. Just one shadow layer each side (was
-   two) and a lighter, more neutral gray palette (was the warm beige
-   "Windows 98 Gray" theme) — flatter and lighter, per feedback. */
+   for a specific pixel look. A light, neutral gray palette (was the
+   warm beige "Windows 98 Gray" theme) — flatter and lighter, per
+   feedback — plus an actual border on top of the bevel so the pieces
+   read as distinct 2D-outlined elements instead of blending into each
+   other (also per feedback). */
 .retro-scrollbar-btn {
   flex-shrink: 0;
+  box-sizing: border-box;
   width: 16px;
   height: 16px;
   padding: 0;
-  border: 0;
+  border: 1px solid #999;
   background-color: #e4e4e4;
   background-repeat: no-repeat;
   background-position: center;
@@ -347,6 +354,7 @@
   position: relative;
   flex: 1;
   background: #f2f2f2;
+  border: 1px solid #999;
   cursor: default;
 }
 
@@ -357,6 +365,8 @@
   top: 0;
   min-height: 20px;
   background-color: #e4e4e4;
+  border: 1px solid #999;
+  box-sizing: border-box;
   box-shadow:
     inset 1px 1px 0 #fff,
     inset -1px -1px 0 #b8b8b8;
@@ -369,15 +379,20 @@
 .diary-entry {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  /* Tight between the action line and its timestamp (below); the
+     card gets its own larger margin-top instead of sharing this gap,
+     per feedback that action-to-timestamp read too far apart. */
+  gap: 2px;
   flex-shrink: 0;
 }
 /* Separator between entries instead of the outer box border removed
-   above — border lives on the gap itself (padding-top on top of the
+   earlier — border lives on the gap itself (padding-top on top of the
    flex gap) rather than on every entry, so there's no doubled line at
-   the very top or bottom of the list. */
+   the very top or bottom of the list. Faint per feedback (was the
+   same strength as the card/photo-frame borders, read too heavy for
+   a plain list divider). */
 .diary-entry + .diary-entry {
-  border-top: 1px solid var(--journal-line);
+  border-top: 1px solid var(--journal-line-faint);
   padding-top: 20px;
 }
 
@@ -401,8 +416,10 @@
 .diary-card {
   display: flex;
   gap: 12px;
+  /* Restores the visual gap the tighter .diary-entry gap above took
+     away between the timestamp and the card. */
+  margin-top: 10px;
   padding: 10px;
-  border: 1px solid var(--journal-line);
 }
 
 .diary-cover {
