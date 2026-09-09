@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import tab1 from './assets/journal/tab-1.png'
 import tab2 from './assets/journal/tab-2.png'
 import tab3 from './assets/journal/tab-3.png'
@@ -83,6 +83,22 @@ const coversBySlug = Object.fromEntries(
   Object.entries(coverModules).map(([path, url]) => [path.match(/([^/]+)\.\w+$/)[1], url]),
 )
 
+// Real, live clock in Seoul (Asia/Seoul, KST/UTC+9) — unlike the visit
+// counter this replaced, this needs no backend to be genuine, so it's
+// the actual current time rather than fixed decorative text.
+// hourCycle: 'h23' pins zero-padded 00-23 (plain hour12:false leaves
+// midnight's hour ambiguous as "24" in some engines/locales).
+function getSeoulTime(now = new Date()) {
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Seoul',
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+  }).formatToParts(now)
+  const byType = Object.fromEntries(parts.map((p) => [p.type, p.value]))
+  return `${byType.hour}:${byType.minute}`
+}
+
 // Coarsens a day-count into the same "N days/weeks/months/years ago"
 // buckets most activity feeds use (e.g. day 21 reads as "3 weeks
 // ago", not "21 days ago").
@@ -106,6 +122,14 @@ function formatRelativeTime(date, now = new Date()) {
 
 export function Journal() {
   const [active, setActive] = useState(0)
+  const [seoulTime, setSeoulTime] = useState(() => getSeoulTime())
+
+  // Ticks once a minute — the display only shows HH:MM, so anything
+  // finer is wasted work.
+  useEffect(() => {
+    const id = setInterval(() => setSeoulTime(getSeoulTime()), 60_000)
+    return () => clearInterval(id)
+  }, [])
 
   return (
     <div className="journal">
@@ -124,12 +148,10 @@ export function Journal() {
         </button>
       ))}
 
-      {/* Left-page content, matching the layout mockup. "TODAY 1 |
-          TOTAL 1" is fixed decorative text, not a real visit counter
-          (this is a static site with no backend/storage). */}
-      <div className="journal-counter">
-        TODAY <strong>1</strong> | TOTAL <strong>1</strong>
-      </div>
+      {/* Left-page content, matching the layout mockup. A real live
+          clock in Seoul, not a fixed visit counter — computable purely
+          client-side, so no backend/storage needed to make it genuine. */}
+      <div className="journal-counter">[{seoulTime}] in Seoul</div>
       <div className="journal-title">helen's cyworld</div>
       <div className="journal-site">helenhsong.com</div>
 

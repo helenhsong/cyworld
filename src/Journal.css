@@ -19,6 +19,22 @@
 }
 
 @font-face {
+  font-family: 'Mona10x12';
+  font-weight: bold;
+  /* A genuine bold weight (from Mona12-Bold.ttf, subsetted the same
+     way as the regular weight above), registered under the same
+     family name so existing `font-weight: bold` rules pick it up
+     automatically — no separate font-family needed. Replaces the
+     Chicago/Adobe-Fonts detours tried for .diary-card-title; this new
+     bold file is the one meant to stick. Subsetted down to ~5KB,
+     covering only the diary card titles — re-subset against the
+     full-glyph source (kept outside the repo) if new text needs a
+     character outside that set. */
+  src: url('./assets/fonts/Mona10x12-Bold.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
   font-family: 'NeoDunggeunmoPro';
   /* Was HBIOS-SYS.ttf — replaced with this font per feedback. A
      Korean pixel-game font (Neo둥근모 Pro), fitting given the site's
@@ -125,10 +141,6 @@
   font-size: 13px;
   color: var(--journal-text);
   pointer-events: none;
-}
-.journal-counter strong {
-  color: var(--journal-accent);
-  font-weight: inherit;
 }
 
 .journal-title {
@@ -488,13 +500,11 @@
 }
 
 .diary-card-title {
-  /* "argent-pixel-cf" from Adobe Fonts (Typekit kit yso6mwu, linked in
-     index.html) — replaces Chicago per feedback (Chicago wasn't liked
-     either). Live-hosted, not self-hosted like the rest of the site's
-     fonts; see the <link> comment in index.html for that tradeoff. No
-     font-weight: bold here — this family is the emphasis on its own,
-     not a weight variant of Mona10x12. */
-  font-family: 'argent-pixel-cf', monospace;
+  /* Bold Mona10x12 (the new Mona12-Bold-derived file), per feedback —
+     both the earlier bold-Mona attempt and its Chicago/Adobe-Fonts
+     replacements are out; this new bold file is meant to stick. */
+  font-family: 'Mona10x12', monospace;
+  font-weight: bold;
   letter-spacing: 0.08em;
   font-size: 13px;
   color: var(--journal-text-strong);
