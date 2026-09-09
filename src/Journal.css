@@ -19,20 +19,6 @@
 }
 
 @font-face {
-  font-family: 'Chicago';
-  /* Was a real-bold-weight Mona10x12 face registered under the same
-     family name — replaced per feedback that bold Mona was hard to
-     read at times. Chicago (classic Mac OS's system UI font, chosen
-     specifically for legibility at small sizes) takes over instead,
-     as its own separate family rather than a Mona10x12 weight, used
-     only for .diary-card-title (the one place bold text currently
-     shows up — the two bigger titles stay NeoDunggeunmoPro). Subsetted
-     down to ~4.3KB, covering only the diary card titles. */
-  src: url('./assets/fonts/Chicago.ttf') format('truetype');
-  font-display: swap;
-}
-
-@font-face {
   font-family: 'NeoDunggeunmoPro';
   /* Was HBIOS-SYS.ttf — replaced with this font per feedback. A
      Korean pixel-game font (Neo둥근모 Pro), fitting given the site's
@@ -502,10 +488,13 @@
 }
 
 .diary-card-title {
-  /* Chicago instead of bold Mona10x12, per feedback (bold Mona was
-     hard to read at times) — no font-weight: bold here since Chicago
-     itself is the emphasis now, not a weight variant of it. */
-  font-family: 'Chicago', monospace;
+  /* "argent-pixel-cf" from Adobe Fonts (Typekit kit yso6mwu, linked in
+     index.html) — replaces Chicago per feedback (Chicago wasn't liked
+     either). Live-hosted, not self-hosted like the rest of the site's
+     fonts; see the <link> comment in index.html for that tradeoff. No
+     font-weight: bold here — this family is the emphasis on its own,
+     not a weight variant of Mona10x12. */
+  font-family: 'argent-pixel-cf', monospace;
   letter-spacing: 0.08em;
   font-size: 13px;
   color: var(--journal-text-strong);
