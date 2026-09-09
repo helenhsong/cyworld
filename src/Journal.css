@@ -225,20 +225,20 @@
    of that (so it reads as clearly framed by the page's own border
    rather than crowding it, and on the right specifically stays clear
    of the tab pills that start right at that 93.3% edge — widened from
-   ~3% per feedback, right-panel-only). Top padding matches
-   .journal-photo-frame's top (18.6%) and its bottom edge matches
-   .journal-divider-2's top (76.1%) — both nudged in slightly for a
-   bit more top/bottom breathing room, per feedback — so the left and
-   right panels' content starts and ends at the same height. Shared by
-   both right-panel variants below so they occupy the same footprint;
-   the border is specific to the empty Home/Visitor box — the Diary
-   list draws its own separators between entries instead. */
+   ~3% per feedback, right-panel-only). Top matches
+   .journal-photo-frame's top (18.6%); bottom matches .journal-email's
+   actual measured bottom (88%, not .journal-divider-2's top like
+   before) so the right panel now runs the full height of the left
+   panel's content instead of stopping level with the middle divider.
+   Shared by both right-panel variants below so they occupy the same
+   footprint; the border is specific to the empty Home/Visitor box —
+   the Diary list draws its own separators between entries instead. */
 .journal-right-panel {
   position: absolute;
   left: 34.3%;
   top: 18.6%;
   width: 54.5%;
-  height: 57.5%;
+  height: 69.4%;
 }
 
 .journal-character-box {
@@ -249,7 +249,7 @@
 .journal-character-hint {
   position: absolute;
   left: 34.3%;
-  top: 77.1%;
+  top: 89%;
   width: 54.5%;
   text-align: center;
   font-family: 'Mona12', monospace;
@@ -311,45 +311,42 @@
   flex-direction: column;
 }
 
-/* The raised-bevel look (light top/left edge, dark bottom/right
-   edge) is hand-drawn with layered inset box-shadows rather than
-   border-style: outset, which browsers render too inconsistently to
-   rely on for a specific pixel look. */
+/* The raised-bevel look (light top/left edge, darker bottom/right
+   edge) is hand-drawn with inset box-shadows rather than border-
+   style: outset, which browsers render too inconsistently to rely on
+   for a specific pixel look. Just one shadow layer each side (was
+   two) and a lighter, more neutral gray palette (was the warm beige
+   "Windows 98 Gray" theme) — flatter and lighter, per feedback. */
 .retro-scrollbar-btn {
   flex-shrink: 0;
   width: 16px;
   height: 16px;
   padding: 0;
   border: 0;
-  background-color: #d4d0c8;
+  background-color: #e4e4e4;
   background-repeat: no-repeat;
   background-position: center;
   box-shadow:
     inset 1px 1px 0 #fff,
-    inset -1px -1px 0 #808080,
-    inset 2px 2px 0 #dfdfdf,
-    inset -2px -2px 0 #404040;
+    inset -1px -1px 0 #b8b8b8;
   cursor: pointer;
 }
 .retro-scrollbar-btn:active {
   box-shadow:
     inset -1px -1px 0 #fff,
-    inset 1px 1px 0 #808080,
-    inset -2px -2px 0 #dfdfdf,
-    inset 2px 2px 0 #404040;
+    inset 1px 1px 0 #b8b8b8;
 }
 .retro-scrollbar-btn-up {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpolygon points='4,0 8,5 0,5' fill='%23000'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpolygon points='4,0 8,5 0,5' fill='%23777'/%3E%3C/svg%3E");
 }
 .retro-scrollbar-btn-down {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpolygon points='0,0 8,0 4,5' fill='%23000'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpolygon points='0,0 8,0 4,5' fill='%23777'/%3E%3C/svg%3E");
 }
 
 .retro-scrollbar-track {
   position: relative;
   flex: 1;
-  background: #ece9d8;
-  box-shadow: inset 1px 1px 0 #808080;
+  background: #f2f2f2;
   cursor: default;
 }
 
@@ -359,12 +356,10 @@
   right: 0;
   top: 0;
   min-height: 20px;
-  background-color: #d4d0c8;
+  background-color: #e4e4e4;
   box-shadow:
     inset 1px 1px 0 #fff,
-    inset -1px -1px 0 #808080,
-    inset 2px 2px 0 #dfdfdf,
-    inset -2px -2px 0 #404040;
+    inset -1px -1px 0 #b8b8b8;
   cursor: grab;
 }
 .retro-scrollbar-thumb:active {
