@@ -31,7 +31,7 @@
   --journal-text-strong: var(--project-muted-fg, #67507e);
   --journal-accent: #8b5fbf;
   --journal-line: rgba(103, 80, 126, 0.35);
-  --journal-line-faint: rgba(103, 80, 126, 0.15);
+  --journal-line-faint: rgba(103, 80, 126, 0.08);
   --journal-text-faint: rgba(103, 80, 126, 0.55);
 }
 
@@ -271,7 +271,10 @@
 .journal-diary-list {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  /* Smaller, per feedback (was 20px) — this stacks with
+     .diary-entry + .diary-entry's own padding-top below to make up
+     the full gap between entries, so both came down together. */
+  gap: 12px;
 }
 
 /* --- Custom scrollbar, from RetroScrollbar.jsx -----------------------
@@ -382,7 +385,8 @@
    divider). */
 .diary-entry + .diary-entry {
   border-top: 1px solid var(--journal-line-faint);
-  padding-top: 20px;
+  /* Smaller, per feedback (was 20px). */
+  padding-top: 12px;
 }
 
 /* Action line and timestamp side by side on one row again (per
