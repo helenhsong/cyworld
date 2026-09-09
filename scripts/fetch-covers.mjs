@@ -7,12 +7,19 @@
 // APIs itself and never sees an API key — this script's *output*
 // (plain image files) is what gets committed.
 //
-//   TMDB_API_KEY=your_key_here node scripts/fetch-covers.mjs
+//   npm run fetch-covers
 //
-// TMDB_API_KEY needs a free account + API key from
-// https://www.themoviedb.org/settings/api — required for movie
-// entries. Book entries use Open Library's cover API, which needs no
-// key at all, so those fetch regardless.
+// Reads OMDB_API_KEY from a gitignored .env.local file in the repo
+// root (KEY=value per line — see .env.local.example) if present,
+// otherwise from the environment:
+//
+//   OMDB_API_KEY=your_key_here npm run fetch-covers
+//
+// OMDB_API_KEY needs a free account + API key from
+// https://www.omdbapi.com/apikey.aspx — required for movie entries
+// (OMDb wraps real IMDB data, including its poster images). Book
+// entries use Open Library's cover API, which needs no key at all, so
+// those fetch regardless.
 //
 // Keep this list's slugs in sync with the `slug` field on each entry
 // in DIARY_ENTRIES (src/Journal.jsx) — that's how Journal.jsx matches
@@ -25,27 +32,45 @@ const ENTRIES = [
   { type: 'movie', slug: 'backrooms-2026', query: 'Backrooms', year: 2026 },
 ]
 
-const OUT_DIR = new URL('../src/assets/journal/covers/', import.meta.url)
-const TMDB_API_KEY = process.env.TMDB_API_KEY
+const REPO_ROOT = new URL('../', import.meta.url)
+const OUT_DIR = new URL('src/assets/journal/covers/', REPO_ROOT)
+
+async function loadEnvLocal() {
+  const fs = await import('node:fs/promises')
+  try {
+    const text = await fs.readFile(new URL('.env.local', REPO_ROOT), 'utf8')
+    for (const line of text.split('\n')) {
+      const match = line.match(/^\s*([\w.-]+)\s*=\s*(.*)\s*$/)
+      if (match && !(match[1] in process.env)) process.env[match[1]] = match[2]
+    }
+  } catch {
+    // No .env.local — fine, fall through to whatever's already in
+    // process.env (e.g. OMDB_API_KEY=... npm run fetch-covers).
+  }
+}
 
 async function fetchMoviePosterUrl({ query, year }) {
-  if (!TMDB_API_KEY) {
-    console.warn(`  skipped (no TMDB_API_KEY set)`)
+  const apiKey = process.env.OMDB_API_KEY
+  if (!apiKey) {
+    console.warn(`  skipped (no OMDB_API_KEY set — see this script's header comment)`)
     return null
   }
-  const url = new URL('https://api.themoviedb.org/3/search/movie')
-  url.searchParams.set('api_key', TMDB_API_KEY)
-  url.searchParams.set('query', query)
-  if (year) url.searchParams.set('year', String(year))
+  const url = new URL('https://www.omdbapi.com/')
+  url.searchParams.set('apikey', apiKey)
+  url.searchParams.set('t', query)
+  if (year) url.searchParams.set('y', String(year))
   const res = await fetch(url)
-  if (!res.ok) throw new Error(`TMDB search failed (${res.status}): ${await res.text()}`)
+  if (!res.ok) throw new Error(`OMDb request failed (${res.status}): ${await res.text()}`)
   const data = await res.json()
-  const posterPath = data.results?.[0]?.poster_path
-  if (!posterPath) {
-    console.warn(`  no TMDB match for "${query}"${year ? ` (${year})` : ''}`)
+  if (data.Response === 'False') {
+    console.warn(`  OMDb: ${data.Error} ("${query}"${year ? `, ${year}` : ''})`)
     return null
   }
-  return `https://image.tmdb.org/t/p/w500${posterPath}`
+  if (!data.Poster || data.Poster === 'N/A') {
+    console.warn(`  OMDb has no poster for "${query}"${year ? ` (${year})` : ''}`)
+    return null
+  }
+  return data.Poster
 }
 
 async function fetchBookCoverUrl({ query, author }) {
@@ -73,6 +98,7 @@ async function downloadTo(imageUrl, destUrl) {
 }
 
 async function main() {
+  await loadEnvLocal()
   const fs = await import('node:fs/promises')
   await fs.mkdir(OUT_DIR, { recursive: true })
 

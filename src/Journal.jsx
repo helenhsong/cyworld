@@ -26,11 +26,11 @@ const TABS = [
 // as time passes instead of going stale like a hardcoded string
 // would. Newest first, matching how an activity feed normally reads.
 //
-// `slug` matches a filename scripts/fetch-covers.mjs downloads into
-// src/assets/journal/covers/ (TMDB for movies, Open Library for
-// books, at build time — see that script's header comment). Entries
-// without a matching downloaded file fall back to the placeholder
-// below until one exists.
+// `slug` matches a filename in src/assets/journal/covers/ — either
+// fetched at build time by scripts/fetch-covers.mjs (OMDb for movies,
+// Open Library for books — see that script's header comment) or
+// dropped in by hand, as these five currently are. Entries without a
+// matching file fall back to the placeholder below.
 const DIARY_ENTRIES = [
   {
     action: 'watched',
