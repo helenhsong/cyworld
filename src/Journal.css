@@ -125,7 +125,7 @@
 .journal-title {
   position: absolute;
   /* Matches .journal-right-panel's left edge, per feedback. */
-  left: 33%;
+  left: 34.3%;
   top: 6.5%;
   font-family: 'HBIOS-SYS', monospace;
   font-size: 20px;
@@ -148,8 +148,8 @@
 
 .journal-photo-frame {
   position: absolute;
-  left: 6.1%;
-  top: 16.6%;
+  left: 7.4%;
+  top: 17.4%;
   width: 19.7%;
   aspect-ratio: 1;
   display: block;
@@ -160,21 +160,21 @@
 
 .journal-divider {
   position: absolute;
-  left: 6.1%;
+  left: 7.4%;
   width: 19.7%;
   border-top: 1px dashed var(--journal-line);
 }
 .journal-divider-1 {
-  top: 48.1%;
+  top: 48.9%;
 }
 .journal-divider-2 {
-  top: 78.1%;
+  top: 77.3%;
 }
 
 .journal-mood {
   position: absolute;
-  left: 6.1%;
-  top: 50.8%;
+  left: 7.4%;
+  top: 51.6%;
   width: 19.7%;
   height: 3.4%;
   display: flex;
@@ -190,8 +190,8 @@
 
 .journal-status {
   position: absolute;
-  left: 6.1%;
-  top: 58.3%;
+  left: 7.4%;
+  top: 59.1%;
   width: 19.7%;
   text-align: center;
   font-family: 'Mona12', monospace;
@@ -203,8 +203,8 @@
 
 .journal-name {
   position: absolute;
-  left: 6.1%;
-  top: 81%;
+  left: 7.4%;
+  top: 80.2%;
   font-family: 'HBIOS-SYS', monospace;
   font-size: 22px;
   font-weight: bold;
@@ -214,8 +214,8 @@
 
 .journal-email {
   position: absolute;
-  left: 6.1%;
-  top: 86.9%;
+  left: 7.4%;
+  top: 86.1%;
   font-family: 'Mona12', monospace;
   font-size: 12px;
   color: var(--journal-text);
@@ -227,24 +227,22 @@
    pixel like the tab hit-boxes) runs x 204-638, y 56-420 of the
    684x450 canvas — i.e. left 29.8%, right 93.3%, top 12.4%, bottom
    93.3%. .journal-right-panel's edges have been nudged inward from
-   that a few times now, per feedback, chasing an even margin on every
-   side against the page's own border (complicated by the binder-ring
-   graphics visually eating into the left margin) — currently ~2.5%
-   right (deliberately tighter than the others, but still clear of the
-   tab pills starting at 93.3%), ~3.5% left, ~1% top/bottom. Top/left
-   match .journal-photo-frame/-email's own top/bottom, so the right
-   panel spans the same height as the left panel's content. Shared by
-   both right-panel variants below so they occupy the same footprint;
-   the border is specific to the empty Home/Visitor box — the Diary
-   list draws its own separators between entries instead. */
+   that repeatedly, per feedback, chasing an even margin on every side
+   — currently ~4.5% left/right (matching the ~4-5% top/bottom margin,
+   per feedback that the sides had fallen noticeably tighter than
+   top/bottom after some narrower intermediate values), still clear of
+   the tab pills starting at 93.3%. Top/left match .journal-photo-
+   frame/-email's own top/bottom, so the right panel spans the same
+   height as the left panel's content. Shared by both right-panel
+   variants below so they occupy the same footprint; the border is
+   specific to the empty Home/Visitor box — the Diary list draws its
+   own separators between entries instead. */
 .journal-right-panel {
   position: absolute;
-  left: 33%;
-  top: 16.6%;
-  /* Pulled back in slightly on the right (was 58%) — the border was
-     reading too close to the page's own edge, per feedback. */
-  width: 57.3%;
-  height: 73.4%;
+  left: 34.3%;
+  top: 17.4%;
+  width: 54.5%;
+  height: 71.8%;
 }
 
 .journal-character-box {
@@ -255,9 +253,9 @@
 .journal-character-hint {
   position: absolute;
   /* Matches .journal-right-panel's left/width. */
-  left: 33%;
-  top: 91%;
-  width: 57.3%;
+  left: 34.3%;
+  top: 90.2%;
+  width: 54.5%;
   text-align: center;
   font-family: 'Mona12', monospace;
   font-size: 12px;
