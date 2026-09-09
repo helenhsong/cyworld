@@ -279,26 +279,35 @@
   height: 70.32%;
 }
 
-/* Sits in the gap between .journal-title/-site and .journal-right-
-   panel's top (18.14%), left-aligned to the panel like -title is to
-   the left panel. */
+/* A row inside .journal-character-box, above the room image, rather
+   than floating in the gap above the box — that way its text starts
+   flush with the box's top edge, same as the Diary/Photos panels'
+   own first line of content, instead of sitting higher than them and
+   making the tab switch look like the content shifts down. */
 .journal-room-label {
-  position: absolute;
-  left: 33.8%;
-  top: 14.2%;
+  flex-shrink: 0;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--journal-line-faint);
   font-family: 'Mona10x12', monospace;
   font-weight: bold;
   letter-spacing: 0.10em;
   font-size: 13px;
   color: var(--journal-text-strong);
-  pointer-events: none;
 }
 
 .journal-character-box {
+  display: flex;
+  flex-direction: column;
   border: 1px solid var(--journal-line);
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.journal-room-image {
+  flex: 1;
+  min-height: 0;
   background-size: cover;
   background-position: center;
-  pointer-events: none;
 }
 
 .journal-character-hint {

@@ -247,14 +247,18 @@ export function Journal() {
       )}
       {active === 0 && (
         <>
-          <div className="journal-room-label">Mini room</div>
-          {/* Sized to hold a future interactive character. Filled with a
-              placeholder room scene for now (src/assets/journal/room.png). */}
-          <div
-            className="journal-right-panel journal-character-box"
-            style={{ backgroundImage: `url(${room})` }}
-            aria-hidden="true"
-          />
+          {/* Label lives inside the bordered box (as its own row above
+              the image) rather than floating above it — keeps its text
+              flush with the panel's top edge, same as the Diary/Photos
+              panels' own first line, instead of sitting higher than
+              them and making the tab switch look like content shifts
+              down. Sized to hold a future interactive character;
+              filled with a placeholder room scene for now
+              (src/assets/journal/room.png). */}
+          <div className="journal-right-panel journal-character-box">
+            <div className="journal-room-label">Mini room</div>
+            <div className="journal-room-image" style={{ backgroundImage: `url(${room})` }} aria-hidden="true" />
+          </div>
           <div className="journal-character-hint">↑ ↓ ← → move the character</div>
         </>
       )}
