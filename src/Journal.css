@@ -475,7 +475,8 @@
 .diary-cover {
   flex-shrink: 0;
   display: block;
-  width: 48px;
+  /* Larger, per feedback (was 48px). */
+  width: 64px;
   aspect-ratio: 2 / 3;
   object-fit: cover;
   border: 1px solid var(--journal-line);
