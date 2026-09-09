@@ -12,9 +12,9 @@ import './Journal.css'
 // The three PNGs are pixel-identical except for which tab pill is drawn
 // selected (white) vs. unfocused (purple).
 const TABS = [
-  { src: tab1, label: 'Tab 1' },
-  { src: tab2, label: 'Tab 2' },
-  { src: tab3, label: 'Tab 3' },
+  { src: tab1, label: 'Home' },
+  { src: tab2, label: 'Diary' },
+  { src: tab3, label: 'Tab 3' }, // TODO: what should this one say?
 ]
 
 export function Journal() {
@@ -32,7 +32,9 @@ export function Journal() {
           aria-pressed={active === i}
           aria-label={`Show ${tab.label}`}
           onClick={() => setActive(i)}
-        />
+        >
+          {tab.label}
+        </button>
       ))}
     </div>
   )

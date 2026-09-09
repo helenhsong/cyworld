@@ -1,3 +1,9 @@
+@font-face {
+  font-family: 'Mona12';
+  src: url('./assets/fonts/Mona12.ttf') format('truetype');
+  font-display: swap;
+}
+
 .journal {
   position: relative;
   /* The PNG is now cropped tight to its content bbox (previously it sat
@@ -41,4 +47,23 @@
   background: transparent;
   cursor: pointer;
   outline: none;
+  /* Labels drawn in Mona12 (the same hand-picked pixel font as the
+     rest of the tab's art) rather than left blank. */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Mona12', monospace;
+  font-size: 12px;
+  line-height: 1;
+  user-select: none;
+  /* Purple (unfocused) pill fill is a light lavender — dark violet
+     text reads clearly on it. */
+  color: #3d2f5c;
+}
+/* The active tab's pill is drawn white in the art — switch to
+   --project-muted-fg (already used site-wide for text on a light
+   ground, see index.css) instead of the inactive violet, which is
+   too close to white to read. */
+.journal-tab-hit[aria-pressed='true'] {
+  color: var(--project-muted-fg, #67507e);
 }
