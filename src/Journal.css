@@ -1,24 +1,31 @@
 @font-face {
-  font-family: 'Mona12';
-  /* Subsetted (fonttools pyftsubset) from a 10.5MB source with full
-     Latin/Hangul/emoji coverage down to ~10KB — covers every string
-     rendered below PLUS the full vocabulary formatRelativeTime() in
-     Journal.jsx can ever output (today/yesterday/days/weeks/months/
-     years/ago + digits), since that text is computed from the
-     viewer's current date rather than fixed at build time. Re-run the
-     subsetter against the full-glyph source if new text ever needs a
-     character outside that. */
-  src: url('./assets/fonts/Mona12.ttf') format('truetype');
+  font-family: 'Mona10x12';
+  /* Was Mona12.ttf — replaced with this Mona variant per feedback.
+     Subsetted (fonttools pyftsubset) down to ~8KB, covering every
+     string rendered below PLUS the full vocabulary
+     formatRelativeTime() in Journal.jsx can ever output (today/
+     yesterday/days/weeks/months/years/ago + digits), since that text
+     is computed from the viewer's current date rather than fixed at
+     build time. This source font doesn't have a glyph for 彡 (used in
+     "☆彡") or 🌹 (the rose emoji) — both fall back to the browser's
+     default font for just those two characters, which is fine (🌹
+     still renders as a normal color emoji via the OS's own emoji
+     font either way). Re-run the subsetter against the full-glyph
+     source (src/assets/fonts/Mona10x12.ttf before subsetting — keep a
+     copy) if new text ever needs a character outside what's here. */
+  src: url('./assets/fonts/Mona10x12.ttf') format('truetype');
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'HBIOS-SYS';
-  /* Subsetted the same way as Mona12 above — from a 5.67MB source
-     down to ~5KB, covering only "helen's cyworld" and "Helen Song"
-     (the two elements below that use it). Reserved for bigger titles;
-     everything else stays in Mona12. */
-  src: url('./assets/fonts/HBIOS-SYS.ttf') format('truetype');
+  font-family: 'NeoDunggeunmoPro';
+  /* Was HBIOS-SYS.ttf — replaced with this font per feedback. A
+     Korean pixel-game font (Neo둥근모 Pro), fitting given the site's
+     Cyworld theme. Subsetted the same way as Mona10x12 above, down to
+     ~3KB, covering only "helen's cyworld" and "Helen Song" (the two
+     elements below that use it). Reserved for bigger titles;
+     everything else stays in Mona10x12. */
+  src: url('./assets/fonts/NeoDunggeunmoPro-Regular.ttf') format('truetype');
   font-display: swap;
 }
 
@@ -78,12 +85,12 @@
   background: transparent;
   cursor: pointer;
   outline: none;
-  /* Labels drawn in Mona12 (the same hand-picked pixel font as the
+  /* Labels drawn in Mona10x12 (the same hand-picked pixel font as the
      rest of the tab's art) rather than left blank. */
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Mona12', monospace;
+  font-family: 'Mona10x12', monospace;
   font-size: 12px;
   line-height: 1;
   user-select: none;
@@ -111,7 +118,7 @@
   position: absolute;
   left: 9.2%;
   top: 8%;
-  font-family: 'Mona12', monospace;
+  font-family: 'Mona10x12', monospace;
   font-size: 13px;
   letter-spacing: 0.02em;
   color: var(--journal-text);
@@ -127,7 +134,7 @@
   /* Matches .journal-right-panel's left edge, per feedback. */
   left: 33.8%;
   top: 6.5%;
-  font-family: 'HBIOS-SYS', monospace;
+  font-family: 'NeoDunggeunmoPro', monospace;
   font-size: 20px;
   font-weight: bold;
   color: var(--journal-text-strong);
@@ -144,7 +151,7 @@
   top: 8.3%;
   width: 23%;
   text-align: right;
-  font-family: 'Mona12', monospace;
+  font-family: 'Mona10x12', monospace;
   font-size: 12px;
   color: var(--journal-text);
   pointer-events: none;
@@ -186,7 +193,7 @@
   justify-content: center;
   gap: 0.4em;
   border: 1px solid var(--journal-line);
-  font-family: 'Mona12', monospace;
+  font-family: 'Mona10x12', monospace;
   font-size: 12px;
   color: var(--journal-text);
   pointer-events: none;
@@ -198,7 +205,7 @@
   top: 59.84%;
   width: 18.5%;
   text-align: center;
-  font-family: 'Mona12', monospace;
+  font-family: 'Mona10x12', monospace;
   font-size: 13px;
   line-height: 1.6;
   color: var(--journal-text);
@@ -209,7 +216,7 @@
   position: absolute;
   left: 7.29%;
   top: 79.46%;
-  font-family: 'HBIOS-SYS', monospace;
+  font-family: 'NeoDunggeunmoPro', monospace;
   font-size: 22px;
   font-weight: bold;
   color: var(--journal-text-strong);
@@ -220,7 +227,7 @@
   position: absolute;
   left: 7.29%;
   top: 85.36%;
-  font-family: 'Mona12', monospace;
+  font-family: 'Mona10x12', monospace;
   font-size: 12px;
   color: var(--journal-text);
   pointer-events: none;
@@ -261,7 +268,7 @@
   top: 89.46%;
   width: 55.5%;
   text-align: center;
-  font-family: 'Mona12', monospace;
+  font-family: 'Mona10x12', monospace;
   font-size: 12px;
   color: var(--journal-text);
   pointer-events: none;
@@ -408,7 +415,7 @@
 }
 
 .diary-action {
-  font-family: 'Mona12', monospace;
+  font-family: 'Mona10x12', monospace;
   /* Smaller, per feedback (was 12px). */
   font-size: 11px;
   /* Plain gray rather than a faded purple — per feedback, a bit
@@ -419,7 +426,7 @@
 }
 
 .diary-when {
-  font-family: 'Mona12', monospace;
+  font-family: 'Mona10x12', monospace;
   /* Smaller, per feedback (was 12px, matching .diary-action). */
   font-size: 11px;
   /* Lighter gray than .diary-action, per feedback. */
@@ -472,14 +479,14 @@
 }
 
 .diary-card-title {
-  font-family: 'Mona12', monospace;
+  font-family: 'Mona10x12', monospace;
   font-size: 13px;
   font-weight: bold;
   color: var(--journal-text-strong);
 }
 
 .diary-card-creator {
-  font-family: 'Mona12', monospace;
+  font-family: 'Mona10x12', monospace;
   /* Matches .diary-card-title, per feedback (was 11px). */
   font-size: 13px;
   color: var(--journal-text);
