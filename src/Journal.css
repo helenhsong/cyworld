@@ -379,6 +379,10 @@
 .diary-entry {
   display: flex;
   flex-direction: column;
+  /* Back to stacked (action, then timestamp below) per feedback —
+     was briefly a side-by-side row. Tight gap between the two; the
+     card gets its own larger margin-top instead of sharing this. */
+  gap: 2px;
   flex-shrink: 0;
 }
 /* Separator between entries instead of the outer box border removed
@@ -392,17 +396,6 @@
   padding-top: 20px;
 }
 
-/* Action line and timestamp side by side on one row instead of
-   stacked — align-items: flex-start (not center/baseline) keeps the
-   timestamp pinned to the top-right corner even when a long action
-   line wraps to two lines. */
-.diary-entry-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-}
-
 .diary-action {
   font-family: 'Mona12', monospace;
   font-size: 12px;
@@ -414,10 +407,10 @@
 }
 
 .diary-when {
-  flex-shrink: 0;
-  text-align: right;
   font-family: 'Mona12', monospace;
-  /* Matches .diary-action, per feedback (was 10px). */
+  /* Kept at 12px (matches .diary-action) even though the side-by-side
+     layout that called for it is gone again — per feedback, keep the
+     font size, just move the position back. */
   font-size: 12px;
   color: var(--journal-text);
   opacity: 0.7;

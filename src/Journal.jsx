@@ -161,12 +161,10 @@ export function Journal() {
           <div className="journal-diary-list">
             {DIARY_ENTRIES.map((entry) => (
               <div className="diary-entry" key={entry.title}>
-                <div className="diary-entry-top">
-                  <div className="diary-action">
-                    Helen {entry.action} <strong>{stripYear(entry.title)}</strong>
-                  </div>
-                  <div className="diary-when">{formatRelativeTime(entry.date)}</div>
+                <div className="diary-action">
+                  Helen {entry.action} <strong>{stripYear(entry.title)}</strong>
                 </div>
+                <div className="diary-when">{formatRelativeTime(entry.date)}</div>
                 <div className="diary-card">
                   {coversBySlug[entry.slug] ? (
                     <img src={coversBySlug[entry.slug]} alt="" className="diary-cover" draggable={false} />
