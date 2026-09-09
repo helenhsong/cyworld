@@ -222,29 +222,28 @@
    The right page's own inner content rectangle (measured pixel-for-
    pixel like the tab hit-boxes) runs x 204-638, y 56-420 of the
    684x450 canvas — i.e. left 29.8%, right 93.3%, top 12.4%, bottom
-   93.3%. The box below insets ~4% from the left/right/bottom edges of
-   that (so it reads as clearly framed by the page's own border rather
-   than crowding it, and on the right specifically stays clear of the
-   tab pills that start right at that 93.3% edge). Top padding matches
-   .journal-photo-frame's top (17.3%) instead of its own separate
-   value, so the left and right panels' content starts at the same
-   height. Box height is trimmed by that top padding so the bottom
-   edge — and the hint text below it — stay put. */
+   93.3%. The box below insets ~3% from the left/right edges of that
+   (so it reads as clearly framed by the page's own border rather than
+   crowding it, and on the right specifically stays clear of the tab
+   pills that start right at that 93.3% edge — trimmed slightly from
+   4% per feedback). Top padding matches .journal-photo-frame's top
+   (17.3%) instead of its own separate value, so the left and right
+   panels' content starts at the same height. */
 .journal-character-box {
   position: absolute;
-  left: 33.8%;
+  left: 32.8%;
   top: 17.3%;
-  width: 55.5%;
-  height: 59.1%;
+  width: 57.5%;
+  height: 60.1%;
   border: 1px solid var(--journal-line);
   pointer-events: none;
 }
 
 .journal-character-hint {
   position: absolute;
-  left: 33.8%;
+  left: 32.8%;
   top: 78.4%;
-  width: 55.5%;
+  width: 57.5%;
   text-align: center;
   font-family: 'Mona12', monospace;
   font-size: 12px;
