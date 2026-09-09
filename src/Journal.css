@@ -32,6 +32,7 @@
   --journal-accent: #8b5fbf;
   --journal-line: rgba(103, 80, 126, 0.35);
   --journal-line-faint: rgba(103, 80, 126, 0.15);
+  --journal-text-faint: rgba(103, 80, 126, 0.55);
 }
 
 .journal {
@@ -379,10 +380,6 @@
 .diary-entry {
   display: flex;
   flex-direction: column;
-  /* Back to stacked (action, then timestamp below) per feedback —
-     was briefly a side-by-side row. Tight gap between the two; the
-     card gets its own larger margin-top instead of sharing this. */
-  gap: 2px;
   flex-shrink: 0;
 }
 /* Separator between entries instead of the outer box border removed
@@ -396,10 +393,25 @@
   padding-top: 20px;
 }
 
+/* Action line and timestamp side by side on one row again (per
+   feedback) — align-items: flex-start (not center/baseline) keeps
+   the timestamp pinned to the top-right corner even when a long
+   action line wraps to two lines. */
+.diary-entry-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .diary-action {
   font-family: 'Mona12', monospace;
-  font-size: 12px;
-  color: var(--journal-text);
+  /* Smaller, per feedback (was 12px). */
+  font-size: 11px;
+  /* Fainter than the title it's attached to, per feedback — a color
+     (not opacity) so .diary-action strong's own color below isn't
+     dimmed along with it. */
+  color: var(--journal-text-faint);
 }
 .diary-action strong {
   color: var(--journal-text-strong);
@@ -408,10 +420,8 @@
 
 .diary-when {
   font-family: 'Mona12', monospace;
-  /* Kept at 12px (matches .diary-action) even though the side-by-side
-     layout that called for it is gone again — per feedback, keep the
-     font size, just move the position back. */
-  font-size: 12px;
+  /* Smaller, per feedback (was 12px, matching .diary-action). */
+  font-size: 11px;
   color: var(--journal-text);
   opacity: 0.7;
 }
@@ -419,9 +429,9 @@
 .diary-card {
   display: flex;
   gap: 12px;
-  /* Restores the visual gap the tighter .diary-entry gap above took
-     away between the timestamp and the card. */
-  margin-top: 10px;
+  /* Space below the action/timestamp row above — widened per
+     feedback (was 10px). */
+  margin-top: 16px;
   /* No padding — the border this used to inset from is gone, so
      padding was just pushing the cover in from the left, out of line
      with the action/timestamp text above it (and shrinking how much

@@ -30,6 +30,9 @@ const TABS = [
 // src/assets/journal/covers/ — add entries there and reference the
 // slug here. Entries without a matching file fall back to the
 // placeholder below.
+//
+// `creator` carries its own prefix (no separate book/movie `type`
+// field) — "dir. " for movies, "by " for books.
 const DIARY_ENTRIES = [
   {
     action: 'watched',
@@ -41,13 +44,13 @@ const DIARY_ENTRIES = [
   {
     action: 'started reading',
     title: 'Project Hail Mary',
-    creator: 'Andy Weir',
+    creator: 'by Andy Weir',
     date: new Date(2026, 7, 19),
     slug: 'project-hail-mary',
   },
   {
     action: 'watched',
-    title: 'Spider-Man Brand New Day (2026)',
+    title: 'Spider-Man: Brand New Day (2026)',
     creator: 'dir. Destin Daniel Cretton',
     date: new Date(2026, 7, 10),
     slug: 'spider-man-brand-new-day',
@@ -161,10 +164,12 @@ export function Journal() {
           <div className="journal-diary-list">
             {DIARY_ENTRIES.map((entry) => (
               <div className="diary-entry" key={entry.title}>
-                <div className="diary-action">
-                  Helen {entry.action} <strong>{stripYear(entry.title)}</strong>
+                <div className="diary-entry-top">
+                  <div className="diary-action">
+                    Helen {entry.action} <strong>{stripYear(entry.title)}</strong>
+                  </div>
+                  <div className="diary-when">{formatRelativeTime(entry.date)}</div>
                 </div>
-                <div className="diary-when">{formatRelativeTime(entry.date)}</div>
                 <div className="diary-card">
                   {coversBySlug[entry.slug] ? (
                     <img src={coversBySlug[entry.slug]} alt="" className="diary-cover" draggable={false} />
