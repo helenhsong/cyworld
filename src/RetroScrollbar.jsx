@@ -78,6 +78,26 @@ export function RetroScrollbar({ children, className = '' }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recompute, children])
 
+  // Lets any scroll gesture anywhere on the page move this content,
+  // not just one aimed directly at it — there's nothing else
+  // scrollable on the page, so a wheel/trackpad scroll can only ever
+  // mean "scroll the diary list" regardless of where the cursor
+  // happens to be. Skipped if the cursor actually is over the content
+  // (or its own scrollbar) so its native wheel handling — already
+  // correct — isn't double-applied on top of this.
+  useEffect(() => {
+    const content = contentRef.current
+    if (!content) return
+    const onWheel = (e) => {
+      if (content.scrollHeight <= content.clientHeight + 1) return
+      if (content.contains(e.target)) return
+      e.preventDefault()
+      content.scrollBy({ top: e.deltaY })
+    }
+    window.addEventListener('wheel', onWheel, { passive: false })
+    return () => window.removeEventListener('wheel', onWheel)
+  }, [])
+
   const scrollBy = (delta) => {
     contentRef.current?.scrollBy({ top: delta })
   }
