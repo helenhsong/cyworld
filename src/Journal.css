@@ -141,7 +141,7 @@
 .journal-photo-frame {
   position: absolute;
   left: 6.9%;
-  top: 17.3%;
+  top: 18.6%;
   width: 19.7%;
   aspect-ratio: 1;
   background: repeating-linear-gradient(
@@ -161,16 +161,16 @@
   border-top: 1px dashed var(--journal-line);
 }
 .journal-divider-1 {
-  top: 48.8%;
+  top: 50.1%;
 }
 .journal-divider-2 {
-  top: 77.4%;
+  top: 76.1%;
 }
 
 .journal-mood {
   position: absolute;
   left: 6.9%;
-  top: 51.5%;
+  top: 52.8%;
   width: 19.7%;
   height: 3.4%;
   display: flex;
@@ -187,7 +187,7 @@
 .journal-status {
   position: absolute;
   left: 6.9%;
-  top: 59%;
+  top: 60.3%;
   width: 19.7%;
   text-align: center;
   font-family: 'Mona12', monospace;
@@ -200,7 +200,7 @@
 .journal-name {
   position: absolute;
   left: 6.9%;
-  top: 80.3%;
+  top: 79%;
   font-family: 'HBIOS-SYS', monospace;
   font-size: 22px;
   font-weight: bold;
@@ -211,7 +211,7 @@
 .journal-email {
   position: absolute;
   left: 6.9%;
-  top: 86.2%;
+  top: 84.9%;
   font-family: 'Mona12', monospace;
   font-size: 12px;
   color: var(--journal-text);
@@ -227,14 +227,16 @@
    crowding it, and on the right specifically stays clear of the tab
    pills that start right at that 93.3% edge — trimmed slightly from
    4% per feedback). Top padding matches .journal-photo-frame's top
-   (17.3%) instead of its own separate value, so the left and right
-   panels' content starts at the same height. */
+   (18.6%) and its bottom edge matches .journal-divider-2's top
+   (76.1%) — both nudged in slightly for a bit more top/bottom
+   breathing room, per feedback — so the left and right panels'
+   content starts and ends at the same height. */
 .journal-character-box {
   position: absolute;
   left: 32.8%;
-  top: 17.3%;
+  top: 18.6%;
   width: 57.5%;
-  height: 60.1%;
+  height: 57.5%;
   border: 1px solid var(--journal-line);
   pointer-events: none;
 }
@@ -242,7 +244,7 @@
 .journal-character-hint {
   position: absolute;
   left: 32.8%;
-  top: 78.4%;
+  top: 77.1%;
   width: 57.5%;
   text-align: center;
   font-family: 'Mona12', monospace;
