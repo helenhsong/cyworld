@@ -261,7 +261,9 @@
    and padded instead of empty. */
 .journal-diary-list {
   box-sizing: border-box;
-  padding: 4%;
+  /* No inner padding — now that there's no border drawing an edge to
+     pad away from, the content fills .journal-right-panel right out
+     to where that border used to sit. */
   overflow-y: auto;
   display: flex;
   flex-direction: column;
