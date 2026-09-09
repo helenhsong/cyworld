@@ -26,18 +26,11 @@ body {
 
 .page {
   display: flex;
-  /* "safe" falls back to start-alignment instead of centering once
-     content overflows, so the part that would've centered off-screen
-     stays scrollable-to rather than unreachable — the journal is a
-     fixed pixel size (see Journal.css) that doesn't shrink to fit the
-     viewport, so this box scrolls (both axes) instead. */
-  align-items: safe center;
-  justify-content: safe center;
-  /* ProjectHeader's sticky header is 66px tall — bound this to the
-     space actually left below it (not the full viewport, and not
-     min-height: unbounded height would fight overflow:auto below). */
-  height: calc(100vh - 66px);
-  overflow: auto;
+  align-items: center;
+  justify-content: center;
+  /* ProjectHeader's sticky header is 66px tall — center against the
+     space actually left below it, not the full viewport. */
+  min-height: calc(100vh - 66px);
   padding: 1.5rem;
   transition: opacity 0.4s ease;
 }
