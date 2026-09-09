@@ -60,9 +60,7 @@ export function Journal() {
         end of year ☆彡
       </div>
       <div className="journal-divider journal-divider-2" aria-hidden="true" />
-      <div className="journal-name">
-        송혜린 <span className="journal-name-en">(HELEN)</span>
-      </div>
+      <div className="journal-name">Helen Song</div>
       <div className="journal-email">helenhsong@gmail.com</div>
 
       {/* Right-page box, sized to hold a future interactive character —

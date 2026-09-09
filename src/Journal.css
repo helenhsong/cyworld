@@ -9,9 +9,23 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'HBIOS-SYS';
+  /* Subsetted the same way as Mona12 above — from a 5.67MB source
+     down to ~5KB, covering only "helen's cyworld" and "Helen Song"
+     (the two elements below that use it). Reserved for bigger titles;
+     everything else stays in Mona12. */
+  src: url('./assets/fonts/HBIOS-SYS.ttf') format('truetype');
+  font-display: swap;
+}
+
 :root {
   --journal-text: var(--project-muted-fg, #67507e);
-  --journal-text-strong: var(--project-fg, #04000e);
+  /* Was --project-fg (near-black) — switched to the site's muted
+     purple (the same color used for helenhsong.com in the real site
+     header and .journal-site below) so the bigger titles read as
+     part of the page's purple palette instead of stark black. */
+  --journal-text-strong: var(--project-muted-fg, #67507e);
   --journal-accent: #8b5fbf;
   --journal-line: rgba(103, 80, 126, 0.35);
 }
@@ -105,7 +119,7 @@
   position: absolute;
   left: 33.5%;
   top: 6.5%;
-  font-family: 'Mona12', monospace;
+  font-family: 'HBIOS-SYS', monospace;
   font-size: 20px;
   font-weight: bold;
   color: var(--journal-text-strong);
@@ -187,16 +201,11 @@
   position: absolute;
   left: 6.9%;
   top: 80.3%;
-  font-family: 'Mona12', monospace;
+  font-family: 'HBIOS-SYS', monospace;
   font-size: 22px;
   font-weight: bold;
   color: var(--journal-text-strong);
   pointer-events: none;
-}
-.journal-name-en {
-  font-size: 13px;
-  font-weight: normal;
-  color: var(--journal-text);
 }
 
 .journal-email {
