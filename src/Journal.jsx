@@ -87,12 +87,15 @@ const coversBySlug = Object.fromEntries(
 
 // Media tab: a plain Pinterest/Tumblr-style collage, no metadata
 // needed per item (unlike Diary above) — every photo or gif dropped
-// into src/assets/journal/photos/ just shows up, sorted by filename
+// into src/assets/journal/media/ just shows up, sorted by filename
 // (prefix with e.g. "01-", "02-" to control order, or a date). CSS
 // multi-column layout (see .journal-photo-grid) does the actual
 // masonry-style tiling from each item's own aspect ratio; a plain
-// <img> autoplays a .gif same as any other browser would.
-const photoModules = import.meta.glob('./assets/journal/photos/*.{jpg,jpeg,png,webp,gif}', {
+// <img> autoplays a .gif/animated .webp same as any other browser
+// would. Large source photos were downsized (sips -Z 1000) before
+// dropping in here — full-res originals aren't worth shipping when
+// the biggest a tile ever renders is one collage column's width.
+const photoModules = import.meta.glob('./assets/journal/media/*.{jpg,jpeg,JPG,png,webp,gif}', {
   eager: true,
   import: 'default',
 })
@@ -100,7 +103,7 @@ const photos = Object.entries(photoModules)
   .sort(([a], [b]) => a.localeCompare(b))
   .map(([path, url]) => ({ key: path, url }))
 
-// Stand-in tiles shown only when src/assets/journal/photos/ is still
+// Stand-in tiles shown only when src/assets/journal/media/ is still
 // empty, so the collage layout is visible before real media is
 // dropped in — varied aspect ratios so the masonry effect actually
 // reads, same purpose as the diary placeholder elsewhere.
