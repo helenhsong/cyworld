@@ -83,11 +83,6 @@ const coversBySlug = Object.fromEntries(
   Object.entries(coverModules).map(([path, url]) => [path.match(/([^/]+)\.\w+$/)[1], url]),
 )
 
-// The "Helen <action> <title>" line reads better without the release
-// year that's part of the title everywhere else (the card below keeps
-// it in full).
-const stripYear = (title) => title.replace(/\s*\(\d{4}\)\s*$/, '')
-
 // Coarsens a day-count into the same "N days/weeks/months/years ago"
 // buckets most activity feeds use (e.g. day 21 reads as "3 weeks
 // ago", not "21 days ago").
@@ -165,9 +160,7 @@ export function Journal() {
             {DIARY_ENTRIES.map((entry) => (
               <div className="diary-entry" key={entry.title}>
                 <div className="diary-entry-top">
-                  <div className="diary-action">
-                    Helen {entry.action} <strong>{stripYear(entry.title)}</strong>
-                  </div>
+                  <div className="diary-action">Helen {entry.action}</div>
                   <div className="diary-when">{formatRelativeTime(entry.date)}</div>
                 </div>
                 <div className="diary-card">

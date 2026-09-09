@@ -408,30 +408,27 @@
   font-family: 'Mona12', monospace;
   /* Smaller, per feedback (was 12px). */
   font-size: 11px;
-  /* Fainter than the title it's attached to, per feedback — a color
-     (not opacity) so .diary-action strong's own color below isn't
-     dimmed along with it. */
-  color: var(--journal-text-faint);
-}
-.diary-action strong {
-  color: var(--journal-text-strong);
-  font-weight: bold;
+  /* Plain gray rather than a faded purple — per feedback, a bit
+     darker than .diary-when's gray below. Not a --journal-* var since
+     it's specifically a neutral gray, unlike the rest of the purple
+     palette. */
+  color: #767676;
 }
 
 .diary-when {
   font-family: 'Mona12', monospace;
   /* Smaller, per feedback (was 12px, matching .diary-action). */
   font-size: 11px;
-  color: var(--journal-text);
-  opacity: 0.7;
+  /* Lighter gray than .diary-action, per feedback. */
+  color: #999;
 }
 
 .diary-card {
   display: flex;
   gap: 12px;
-  /* Space below the action/timestamp row above — widened per
-     feedback (was 10px). */
-  margin-top: 16px;
+  /* Space below the action/timestamp row above — reduced per
+     feedback (was 16px, before that 10px). */
+  margin-top: 8px;
   /* No padding — the border this used to inset from is gone, so
      padding was just pushing the cover in from the left, out of line
      with the action/timestamp text above it (and shrinking how much
