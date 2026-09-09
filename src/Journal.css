@@ -125,7 +125,7 @@
 .journal-title {
   position: absolute;
   /* Matches .journal-right-panel's left edge, per feedback. */
-  left: 34.3%;
+  left: 33.6%;
   top: 6.5%;
   font-family: 'HBIOS-SYS', monospace;
   font-size: 20px;
@@ -150,7 +150,7 @@
   position: absolute;
   left: 7.4%;
   top: 17.4%;
-  width: 19.7%;
+  width: 19%;
   aspect-ratio: 1;
   display: block;
   object-fit: cover;
@@ -161,7 +161,7 @@
 .journal-divider {
   position: absolute;
   left: 7.4%;
-  width: 19.7%;
+  width: 19%;
   border-top: 1px dashed var(--journal-line);
 }
 .journal-divider-1 {
@@ -175,7 +175,7 @@
   position: absolute;
   left: 7.4%;
   top: 51.6%;
-  width: 19.7%;
+  width: 19%;
   height: 3.4%;
   display: flex;
   align-items: center;
@@ -192,7 +192,7 @@
   position: absolute;
   left: 7.4%;
   top: 59.1%;
-  width: 19.7%;
+  width: 19%;
   text-align: center;
   font-family: 'Mona12', monospace;
   font-size: 13px;
@@ -239,9 +239,9 @@
    own separators between entries instead. */
 .journal-right-panel {
   position: absolute;
-  left: 34.3%;
+  left: 33.6%;
   top: 17.4%;
-  width: 54.5%;
+  width: 55.9%;
   height: 71.8%;
 }
 
@@ -253,9 +253,9 @@
 .journal-character-hint {
   position: absolute;
   /* Matches .journal-right-panel's left/width. */
-  left: 34.3%;
+  left: 33.6%;
   top: 90.2%;
-  width: 54.5%;
+  width: 55.9%;
   text-align: center;
   font-family: 'Mona12', monospace;
   font-size: 12px;
