@@ -1,11 +1,19 @@
 @font-face {
   font-family: 'Mona12';
-  /* Subsetted (fonttools: pyftsubset --text="HomeDiaryPhotos") from a
-     10.5MB source down to ~3KB — only the glyphs the tab labels below
-     actually use. Re-run the subsetter against the full-glyph source
-     if a label ever needs a character outside "HomeDiaryPhotos". */
+  /* Subsetted (fonttools pyftsubset, --text-file of every string used
+     below) from a 10.5MB source with full Latin/Hangul/emoji coverage
+     down to ~8KB — only the glyphs actually used on the page. Re-run
+     the subsetter against the full-glyph source if new text ever
+     needs a character outside what's currently rendered here. */
   src: url('./assets/fonts/Mona12.ttf') format('truetype');
   font-display: swap;
+}
+
+:root {
+  --journal-text: var(--project-muted-fg, #67507e);
+  --journal-text-strong: var(--project-fg, #04000e);
+  --journal-accent: #8b5fbf;
+  --journal-line: rgba(103, 80, 126, 0.35);
 }
 
 .journal {
@@ -70,4 +78,145 @@
    too close to white to read. */
 .journal-tab-hit[aria-pressed='true'] {
   color: var(--project-muted-fg, #67507e);
+}
+
+/* --- Left-page content ---------------------------------------------
+   Positions below are all percentages of .journal's native 684x450
+   canvas, estimated from the layout mockup and eyeballed against it —
+   nudge freely, these weren't measured pixel-for-pixel like the tab
+   hit-boxes above. */
+
+.journal-counter {
+  position: absolute;
+  left: 9.2%;
+  top: 8%;
+  font-family: 'Mona12', monospace;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--journal-text);
+  pointer-events: none;
+}
+.journal-counter strong {
+  color: var(--journal-accent);
+  font-weight: inherit;
+}
+
+.journal-title {
+  position: absolute;
+  left: 33.5%;
+  top: 6.5%;
+  font-family: 'Mona12', monospace;
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--journal-text-strong);
+  pointer-events: none;
+}
+
+.journal-site {
+  position: absolute;
+  left: 70%;
+  top: 8.3%;
+  width: 23%;
+  text-align: right;
+  font-family: 'Mona12', monospace;
+  font-size: 12px;
+  color: var(--journal-text);
+  pointer-events: none;
+}
+
+.journal-photo-frame {
+  position: absolute;
+  left: 6.9%;
+  top: 17.3%;
+  width: 19.7%;
+  aspect-ratio: 1;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(103, 80, 126, 0.08),
+    rgba(103, 80, 126, 0.08) 6px,
+    rgba(103, 80, 126, 0.03) 6px,
+    rgba(103, 80, 126, 0.03) 12px
+  );
+  border: 1px solid var(--journal-line);
+}
+
+.journal-divider {
+  position: absolute;
+  left: 6.9%;
+  width: 19.7%;
+  border-top: 1px dashed var(--journal-line);
+}
+.journal-divider-1 {
+  top: 48.8%;
+}
+.journal-divider-2 {
+  top: 77.4%;
+}
+
+.journal-mood {
+  position: absolute;
+  left: 6.9%;
+  top: 51.5%;
+  width: 19.7%;
+  height: 3.4%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4em;
+  border: 1px solid var(--journal-line);
+  font-family: 'Mona12', monospace;
+  font-size: 12px;
+  color: var(--journal-text);
+  pointer-events: none;
+}
+
+.journal-status {
+  position: absolute;
+  left: 6.9%;
+  top: 59%;
+  width: 19.7%;
+  text-align: center;
+  font-family: 'Mona12', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--journal-text);
+  pointer-events: none;
+}
+
+.journal-name {
+  position: absolute;
+  left: 6.9%;
+  top: 80.3%;
+  font-family: 'Mona12', monospace;
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--journal-text-strong);
+  pointer-events: none;
+}
+.journal-name-en {
+  font-size: 13px;
+  font-weight: normal;
+  color: var(--journal-text);
+}
+
+.journal-email {
+  position: absolute;
+  left: 6.9%;
+  top: 86.2%;
+  font-family: 'Mona12', monospace;
+  font-size: 12px;
+  color: var(--journal-text);
+  pointer-events: none;
+}
+
+/* --- Right-page content --------------------------------------------
+   Empty frame reserved for a future interactive character. */
+.journal-character-box {
+  position: absolute;
+  left: 35.4%;
+  top: 17.3%;
+  width: 58.2%;
+  height: 73.8%;
+  border: 1px solid var(--journal-line);
+  pointer-events: none;
 }

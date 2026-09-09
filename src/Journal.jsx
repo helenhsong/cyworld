@@ -14,7 +14,9 @@ import './Journal.css'
 const TABS = [
   { src: tab1, label: 'Home' },
   { src: tab2, label: 'Diary' },
-  { src: tab3, label: 'Photos' },
+  // Was "Photos" — the layout mockup relabeled this "Visitor" (a
+  // Cyworld guestbook/visitor-board tab), so going with that instead.
+  { src: tab3, label: 'Visitor' },
 ]
 
 export function Journal() {
@@ -36,6 +38,36 @@ export function Journal() {
           {tab.label}
         </button>
       ))}
+
+      {/* Left-page content, matching the layout mockup. "TODAY 1 |
+          TOTAL 1" is fixed decorative text, not a real visit counter
+          (this is a static site with no backend/storage). */}
+      <div className="journal-counter">
+        TODAY <strong>1</strong> | TOTAL <strong>1</strong>
+      </div>
+      <div className="journal-title">helen's cyworld</div>
+      <div className="journal-site">helenhsong.com</div>
+
+      {/* Placeholder for the profile photo — swap the background
+          treatment out once an actual image is dropped in. */}
+      <div className="journal-photo-frame" aria-hidden="true" />
+
+      <div className="journal-divider journal-divider-1" aria-hidden="true" />
+      <div className="journal-mood">TODAY IS.. 🌹행복</div>
+      <div className="journal-status">
+        on sabbatical til
+        <br />
+        end of year ☆彡
+      </div>
+      <div className="journal-divider journal-divider-2" aria-hidden="true" />
+      <div className="journal-name">
+        송혜린 <span className="journal-name-en">(HELEN)</span>
+      </div>
+      <div className="journal-email">helenhsong@gmail.com</div>
+
+      {/* Right-page box, sized to hold a future interactive character —
+          empty for now. */}
+      <div className="journal-character-box" aria-hidden="true" />
     </div>
   )
 }
