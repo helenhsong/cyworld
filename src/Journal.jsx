@@ -19,6 +19,16 @@ const TABS = [
   { src: tab3, label: 'Visitor' },
 ]
 
+// Placeholder entries — swap in the real reading/watching list (and
+// real cover art) whenever it's ready. Each renders as one activity
+// card: "Helen <action> <title>" + a relative timestamp, then a cover
+// + title/creator card below it, matching the referenced layout.
+const DIARY_ENTRIES = [
+  { action: 'wants to read', title: 'Untitled Book', creator: 'Author Name', when: '3 days ago' },
+  { action: 'is reading', title: 'Another Untitled Book', creator: 'Another Author', when: '1 week ago' },
+  { action: 'watched', title: 'Untitled Movie', creator: 'Director Name', when: '2 weeks ago' },
+]
+
 export function Journal() {
   const [active, setActive] = useState(0)
 
@@ -63,10 +73,42 @@ export function Journal() {
       <div className="journal-name">Helen Song</div>
       <div className="journal-email">helenhsong@gmail.com</div>
 
-      {/* Right-page box, sized to hold a future interactive character —
-          empty for now. */}
-      <div className="journal-character-box" aria-hidden="true" />
-      <div className="journal-character-hint">↑ ↓ ← → move the character</div>
+      {/* Right-page content. On the Diary tab this is a scrollable
+          read/watched list instead of the character box — the box's
+          own position/size (.journal-character-box) is reused as-is
+          for the list container, so the right panel occupies the
+          same footprint no matter which tab is active. The left
+          panel above never changes with the active tab. */}
+      {active === 1 ? (
+        <div className="journal-character-box journal-diary-list">
+          {DIARY_ENTRIES.map((entry) => (
+            <div className="diary-entry" key={entry.title}>
+              <div className="diary-entry-header">
+                <div className="diary-avatar" aria-hidden="true" />
+                <div>
+                  <div className="diary-action">
+                    <strong>Helen</strong> {entry.action} <em>{entry.title}</em>
+                  </div>
+                  <div className="diary-when">{entry.when}</div>
+                </div>
+              </div>
+              <div className="diary-card">
+                <div className="diary-cover" aria-hidden="true" />
+                <div className="diary-card-info">
+                  <div className="diary-card-title">{entry.title}</div>
+                  <div className="diary-card-creator">{entry.creator}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <>
+          {/* Sized to hold a future interactive character — empty for now. */}
+          <div className="journal-character-box" aria-hidden="true" />
+          <div className="journal-character-hint">↑ ↓ ← → move the character</div>
+        </>
+      )}
     </div>
   )
 }

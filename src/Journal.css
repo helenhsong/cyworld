@@ -252,3 +252,107 @@
   color: var(--journal-text);
   pointer-events: none;
 }
+
+/* Diary tab: the read/watched list. Reuses .journal-character-box's
+   position/size exactly (see the JSX) so the right panel occupies the
+   same footprint regardless of which tab is active — just scrollable
+   and padded instead of empty. */
+.journal-diary-list {
+  box-sizing: border-box;
+  padding: 4%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  pointer-events: auto;
+}
+
+.diary-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.diary-entry-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.diary-avatar {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(103, 80, 126, 0.15),
+    rgba(103, 80, 126, 0.15) 3px,
+    rgba(103, 80, 126, 0.05) 3px,
+    rgba(103, 80, 126, 0.05) 6px
+  );
+  border: 1px solid var(--journal-line);
+}
+
+.diary-action {
+  font-family: 'Mona12', monospace;
+  font-size: 12px;
+  color: var(--journal-text);
+}
+.diary-action strong {
+  color: var(--journal-text-strong);
+}
+.diary-action em {
+  font-style: normal;
+  color: var(--journal-text-strong);
+}
+
+.diary-when {
+  font-family: 'Mona12', monospace;
+  font-size: 10px;
+  color: var(--journal-text);
+  opacity: 0.7;
+}
+
+.diary-card {
+  display: flex;
+  gap: 12px;
+  padding: 10px;
+  border: 1px solid var(--journal-line);
+}
+
+.diary-cover {
+  flex-shrink: 0;
+  width: 48px;
+  aspect-ratio: 2 / 3;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(103, 80, 126, 0.1),
+    rgba(103, 80, 126, 0.1) 4px,
+    rgba(103, 80, 126, 0.04) 4px,
+    rgba(103, 80, 126, 0.04) 8px
+  );
+  border: 1px solid var(--journal-line);
+}
+
+.diary-card-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.diary-card-title {
+  font-family: 'Mona12', monospace;
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--journal-text-strong);
+}
+
+.diary-card-creator {
+  font-family: 'Mona12', monospace;
+  font-size: 11px;
+  color: var(--journal-text);
+}
