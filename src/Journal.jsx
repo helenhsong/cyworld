@@ -157,15 +157,13 @@ export function Journal() {
       <div className="journal-title">helen's cyworld</div>
       <div className="journal-site">helenhsong.com</div>
 
+      {/* Mood box sits above the photo now, per feedback (was below
+          it, between divider-1 and .journal-status). */}
+      <div className="journal-mood">On sabbatical 🌴</div>
       <img src={dp} alt="Helen" className="journal-photo-frame" draggable={false} />
 
       <div className="journal-divider journal-divider-1" aria-hidden="true" />
-      <div className="journal-mood">TODAY IS.. 🌹행복</div>
-      <div className="journal-status">
-        on sabbatical til
-        <br />
-        end of year ☆彡
-      </div>
+      <div className="journal-status">product designer usually based in NYC, currently in korea</div>
       <div className="journal-divider journal-divider-2" aria-hidden="true" />
       <div className="journal-name">Helen Song</div>
       <div className="journal-email">helenhsong@gmail.com</div>
