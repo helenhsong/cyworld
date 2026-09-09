@@ -125,7 +125,7 @@
 .journal-title {
   position: absolute;
   /* Matches .journal-right-panel's left edge, per feedback. */
-  left: 33.6%;
+  left: 33.8%;
   top: 6.5%;
   font-family: 'HBIOS-SYS', monospace;
   font-size: 20px;
@@ -149,8 +149,8 @@
 .journal-photo-frame {
   position: absolute;
   left: 7.4%;
-  top: 17.4%;
-  width: 19%;
+  top: 17.97%;
+  width: 18.5%;
   aspect-ratio: 1;
   display: block;
   object-fit: cover;
@@ -161,21 +161,21 @@
 .journal-divider {
   position: absolute;
   left: 7.4%;
-  width: 19%;
+  width: 18.5%;
   border-top: 1px dashed var(--journal-line);
 }
 .journal-divider-1 {
-  top: 48.9%;
+  top: 49.47%;
 }
 .journal-divider-2 {
-  top: 77.3%;
+  top: 76.73%;
 }
 
 .journal-mood {
   position: absolute;
   left: 7.4%;
-  top: 51.6%;
-  width: 19%;
+  top: 52.17%;
+  width: 18.5%;
   height: 3.4%;
   display: flex;
   align-items: center;
@@ -191,8 +191,8 @@
 .journal-status {
   position: absolute;
   left: 7.4%;
-  top: 59.1%;
-  width: 19%;
+  top: 59.67%;
+  width: 18.5%;
   text-align: center;
   font-family: 'Mona12', monospace;
   font-size: 13px;
@@ -204,7 +204,7 @@
 .journal-name {
   position: absolute;
   left: 7.4%;
-  top: 80.2%;
+  top: 79.63%;
   font-family: 'HBIOS-SYS', monospace;
   font-size: 22px;
   font-weight: bold;
@@ -215,7 +215,7 @@
 .journal-email {
   position: absolute;
   left: 7.4%;
-  top: 86.1%;
+  top: 85.53%;
   font-family: 'Mona12', monospace;
   font-size: 12px;
   color: var(--journal-text);
@@ -239,10 +239,10 @@
    own separators between entries instead. */
 .journal-right-panel {
   position: absolute;
-  left: 33.6%;
-  top: 17.4%;
-  width: 55.9%;
-  height: 71.8%;
+  left: 33.8%;
+  top: 17.97%;
+  width: 55.5%;
+  height: 70.66%;
 }
 
 .journal-character-box {
@@ -253,9 +253,9 @@
 .journal-character-hint {
   position: absolute;
   /* Matches .journal-right-panel's left/width. */
-  left: 33.6%;
-  top: 90.2%;
-  width: 55.9%;
+  left: 33.8%;
+  top: 89.63%;
+  width: 55.5%;
   text-align: center;
   font-family: 'Mona12', monospace;
   font-size: 12px;
@@ -298,8 +298,8 @@
   display: flex;
   flex-direction: row;
   /* Breathing room between the content and the scrollbar — widened
-     again per feedback (was 10px, then 20px, then 28px). */
-  gap: 32px;
+     again per feedback (was 10px, then 20px, 28px, 32px). */
+  gap: 40px;
   box-sizing: border-box;
   pointer-events: auto;
 }
