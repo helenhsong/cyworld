@@ -281,6 +281,8 @@
 
 .journal-character-box {
   border: 1px solid var(--journal-line);
+  background-size: cover;
+  background-position: center;
   pointer-events: none;
 }
 

@@ -3,6 +3,7 @@ import tab1 from './assets/journal/tab-1.png'
 import tab2 from './assets/journal/tab-2.png'
 import tab3 from './assets/journal/tab-3.png'
 import dp from './assets/journal/dp.png'
+import room from './assets/journal/room.png'
 import { RetroScrollbar } from './RetroScrollbar'
 import './Journal.css'
 
@@ -246,8 +247,13 @@ export function Journal() {
       )}
       {active === 0 && (
         <>
-          {/* Sized to hold a future interactive character — empty for now. */}
-          <div className="journal-right-panel journal-character-box" aria-hidden="true" />
+          {/* Sized to hold a future interactive character. Filled with a
+              placeholder room scene for now (src/assets/journal/room.png). */}
+          <div
+            className="journal-right-panel journal-character-box"
+            style={{ backgroundImage: `url(${room})` }}
+            aria-hidden="true"
+          />
           <div className="journal-character-hint">↑ ↓ ← → move the character</div>
         </>
       )}
