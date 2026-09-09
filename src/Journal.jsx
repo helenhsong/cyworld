@@ -16,12 +16,10 @@ import './Journal.css'
 const TABS = [
   { src: tab1, label: 'Home' },
   { src: tab2, label: 'Diary' },
-  // Was "Photos", then "Visitor" (a Cyworld guestbook/visitor-board
-  // tab), then "Notes" — repurposed into a blog-style photo+text feed
-  // and relabeled "Blog" to say that plainly. Internals (NOTES_ENTRIES,
-  // .note-* classes, etc. below) keep the old "notes" naming — just
-  // the visible label changed.
-  { src: tab3, label: 'Blog' },
+  // Was "Visitor" (a Cyworld guestbook/visitor-board tab), then a
+  // blog-style photo+text feed labeled "Notes"/"Blog" — now a plain
+  // Pinterest-style photo collage instead, so "Photos" again.
+  { src: tab3, label: 'Photos' },
 ]
 
 // Each entry stores a real Date — formatRelativeTime() below turns it
@@ -86,34 +84,25 @@ const coversBySlug = Object.fromEntries(
   Object.entries(coverModules).map(([path, url]) => [path.match(/([^/]+)\.\w+$/)[1], url]),
 )
 
-// Notes tab: a small blog-style feed (photo + text per post), same
-// spirit as the Diary tab above. Starter/placeholder posts below —
-// swap in real ones the same way DIARY_ENTRIES was filled in by hand.
-// `slug` matches a filename dropped into src/assets/journal/notes/;
-// entries without a match fall back to the placeholder image below.
-const NOTES_ENTRIES = [
-  {
-    date: new Date(2026, 8, 5),
-    title: 'settling in',
-    body: 'First week in Seoul done. Still figuring out which cafés have real outlets and which ones just have decorative ones.',
-    slug: 'settling-in',
-  },
-  {
-    date: new Date(2026, 7, 22),
-    title: 'sabbatical, day something',
-    body: "Not counting the days on purpose. Spent the afternoon redrawing this journal's pixel art instead of doing anything relaxing, which feels about right.",
-    slug: 'sabbatical-day-something',
-  },
-]
-
-// Same eager-glob-by-slug pattern as coversBySlug above.
-const noteImageModules = import.meta.glob('./assets/journal/notes/*.{jpg,jpeg,png,webp}', {
+// Photos tab: a plain Pinterest/Tumblr-style photo collage, no
+// metadata needed per photo (unlike Diary above) — every image
+// dropped into src/assets/journal/photos/ just shows up, sorted by
+// filename (prefix with e.g. "01-", "02-" to control order, or a
+// date). CSS multi-column layout (see .journal-photo-grid) does the
+// actual masonry-style tiling from each photo's own aspect ratio.
+const photoModules = import.meta.glob('./assets/journal/photos/*.{jpg,jpeg,png,webp}', {
   eager: true,
   import: 'default',
 })
-const noteImagesBySlug = Object.fromEntries(
-  Object.entries(noteImageModules).map(([path, url]) => [path.match(/([^/]+)\.\w+$/)[1], url]),
-)
+const photos = Object.entries(photoModules)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([path, url]) => ({ key: path, url }))
+
+// Stand-in tiles shown only when src/assets/journal/photos/ is still
+// empty, so the collage layout is visible before real photos are
+// dropped in — varied aspect ratios so the masonry effect actually
+// reads, same purpose as the diary/notes placeholders elsewhere.
+const PLACEHOLDER_PHOTO_RATIOS = [3 / 4, 1, 4 / 3, 1, 4 / 5, 3 / 2, 1, 4 / 3]
 
 // Real, live clock in Seoul (Asia/Seoul, KST/UTC+9) — unlike the visit
 // counter this replaced, this needs no backend to be genuine, so it's
@@ -200,13 +189,12 @@ export function Journal() {
       <div className="journal-name">Helen Song</div>
       <div className="journal-email">helenhsong@gmail.com</div>
 
-      {/* Right-page content. On the Diary and Notes tabs this is a
-          scrollable list instead of the character box — all three
-          share .journal-right-panel's position/size, so the right
-          panel occupies the same footprint no matter which tab is
-          active. The border (.journal-character-box) is specific to
-          the empty Home box — the lists draw their own separators
-          between entries instead. The left panel above never changes
+      {/* Right-page content. On the Diary and Photos tabs this is a
+          scrollable list/grid instead of the character box — all
+          three share .journal-right-panel's position/size, so the
+          right panel occupies the same footprint no matter which tab
+          is active. The border (.journal-character-box) is specific
+          to the empty Home box. The left panel above never changes
           with the active tab. */}
       {active === 1 && (
         <RetroScrollbar className="journal-right-panel">
@@ -235,21 +223,19 @@ export function Journal() {
       )}
       {active === 2 && (
         <RetroScrollbar className="journal-right-panel">
-          <div className="journal-notes-list">
-            {NOTES_ENTRIES.map((entry) => (
-              <div className="note-entry" key={entry.slug}>
-                {noteImagesBySlug[entry.slug] ? (
-                  <img src={noteImagesBySlug[entry.slug]} alt="" className="note-image" draggable={false} />
-                ) : (
-                  <div className="note-image note-image-placeholder" aria-hidden="true" />
-                )}
-                <div className="note-entry-top">
-                  <div className="note-title">{entry.title}</div>
-                  <div className="note-when">{formatRelativeTime(entry.date)}</div>
-                </div>
-                <div className="note-body">{entry.body}</div>
-              </div>
-            ))}
+          <div className="journal-photo-grid">
+            {photos.length > 0
+              ? photos.map((photo) => (
+                  <img key={photo.key} src={photo.url} alt="" className="photo-grid-item" draggable={false} />
+                ))
+              : PLACEHOLDER_PHOTO_RATIOS.map((ratio, i) => (
+                  <div
+                    key={i}
+                    className="photo-grid-item photo-grid-placeholder"
+                    style={{ aspectRatio: ratio }}
+                    aria-hidden="true"
+                  />
+                ))}
           </div>
         </RetroScrollbar>
       )}
