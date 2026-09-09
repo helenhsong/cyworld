@@ -148,7 +148,7 @@
 
 .journal-photo-frame {
   position: absolute;
-  left: 7.4%;
+  left: 7.29%;
   top: 18.14%;
   width: 18.5%;
   aspect-ratio: 1;
@@ -160,7 +160,7 @@
 
 .journal-divider {
   position: absolute;
-  left: 7.4%;
+  left: 7.29%;
   width: 18.5%;
   border-top: 1px dashed var(--journal-line);
 }
@@ -173,7 +173,7 @@
 
 .journal-mood {
   position: absolute;
-  left: 7.4%;
+  left: 7.29%;
   top: 52.34%;
   width: 18.5%;
   height: 3.4%;
@@ -190,7 +190,7 @@
 
 .journal-status {
   position: absolute;
-  left: 7.4%;
+  left: 7.29%;
   top: 59.84%;
   width: 18.5%;
   text-align: center;
@@ -203,7 +203,7 @@
 
 .journal-name {
   position: absolute;
-  left: 7.4%;
+  left: 7.29%;
   top: 79.46%;
   font-family: 'HBIOS-SYS', monospace;
   font-size: 22px;
@@ -214,7 +214,7 @@
 
 .journal-email {
   position: absolute;
-  left: 7.4%;
+  left: 7.29%;
   top: 85.36%;
   font-family: 'Mona12', monospace;
   font-size: 12px;
