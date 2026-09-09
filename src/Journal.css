@@ -379,21 +379,28 @@
 .diary-entry {
   display: flex;
   flex-direction: column;
-  /* Tight between the action line and its timestamp (below); the
-     card gets its own larger margin-top instead of sharing this gap,
-     per feedback that action-to-timestamp read too far apart. */
-  gap: 2px;
   flex-shrink: 0;
 }
 /* Separator between entries instead of the outer box border removed
-   earlier — border lives on the gap itself (padding-top on top of the
-   flex gap) rather than on every entry, so there's no doubled line at
-   the very top or bottom of the list. Faint per feedback (was the
-   same strength as the card/photo-frame borders, read too heavy for
-   a plain list divider). */
+   earlier — border lives on the gap itself (padding-top) rather than
+   on every entry, so there's no doubled line at the very top or
+   bottom of the list. Faint per feedback (was the same strength as
+   the card/photo-frame borders, read too heavy for a plain list
+   divider). */
 .diary-entry + .diary-entry {
   border-top: 1px solid var(--journal-line-faint);
   padding-top: 20px;
+}
+
+/* Action line and timestamp side by side on one row instead of
+   stacked — align-items: flex-start (not center/baseline) keeps the
+   timestamp pinned to the top-right corner even when a long action
+   line wraps to two lines. */
+.diary-entry-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .diary-action {
@@ -407,8 +414,11 @@
 }
 
 .diary-when {
+  flex-shrink: 0;
+  text-align: right;
   font-family: 'Mona12', monospace;
-  font-size: 10px;
+  /* Matches .diary-action, per feedback (was 10px). */
+  font-size: 12px;
   color: var(--journal-text);
   opacity: 0.7;
 }
@@ -419,7 +429,11 @@
   /* Restores the visual gap the tighter .diary-entry gap above took
      away between the timestamp and the card. */
   margin-top: 10px;
-  padding: 10px;
+  /* No padding — the border this used to inset from is gone, so
+     padding was just pushing the cover in from the left, out of line
+     with the action/timestamp text above it (and shrinking how much
+     width the title/creator text had to work with). */
+  width: 100%;
 }
 
 .diary-cover {
@@ -431,8 +445,8 @@
   border: 1px solid var(--journal-line);
 }
 /* Shown in place of the real poster/cover — see coversBySlug in
-   Journal.jsx — for any entry scripts/fetch-covers.mjs hasn't fetched
-   art for yet. */
+   Journal.jsx — for any entry without a matching file in
+   src/assets/journal/covers/ yet. */
 .diary-cover-placeholder {
   background: repeating-linear-gradient(
     45deg,
@@ -446,7 +460,9 @@
 .diary-card-info {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* Lines up with the top of the cover image instead of sitting
+     centered against its full height, per feedback. */
+  justify-content: flex-start;
   gap: 4px;
   min-width: 0;
 }
@@ -460,6 +476,7 @@
 
 .diary-card-creator {
   font-family: 'Mona12', monospace;
-  font-size: 11px;
+  /* Matches .diary-card-title, per feedback (was 11px). */
+  font-size: 13px;
   color: var(--journal-text);
 }

@@ -26,11 +26,10 @@ const TABS = [
 // as time passes instead of going stale like a hardcoded string
 // would. Newest first, matching how an activity feed normally reads.
 //
-// `slug` matches a filename in src/assets/journal/covers/ — either
-// fetched at build time by scripts/fetch-covers.mjs (OMDb for movies,
-// Open Library for books — see that script's header comment) or
-// dropped in by hand, as these five currently are. Entries without a
-// matching file fall back to the placeholder below.
+// `slug` matches a filename dropped by hand into
+// src/assets/journal/covers/ — add entries there and reference the
+// slug here. Entries without a matching file fall back to the
+// placeholder below.
 const DIARY_ENTRIES = [
   {
     action: 'watched',
@@ -162,10 +161,12 @@ export function Journal() {
           <div className="journal-diary-list">
             {DIARY_ENTRIES.map((entry) => (
               <div className="diary-entry" key={entry.title}>
-                <div className="diary-action">
-                  Helen {entry.action} <strong>{stripYear(entry.title)}</strong>
+                <div className="diary-entry-top">
+                  <div className="diary-action">
+                    Helen {entry.action} <strong>{stripYear(entry.title)}</strong>
+                  </div>
+                  <div className="diary-when">{formatRelativeTime(entry.date)}</div>
                 </div>
-                <div className="diary-when">{formatRelativeTime(entry.date)}</div>
                 <div className="diary-card">
                   {coversBySlug[entry.slug] ? (
                     <img src={coversBySlug[entry.slug]} alt="" className="diary-cover" draggable={false} />
