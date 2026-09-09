@@ -91,6 +91,7 @@
   align-items: center;
   justify-content: center;
   font-family: 'Mona10x12', monospace;
+  letter-spacing: 0.05em;
   font-size: 12px;
   line-height: 1;
   user-select: none;
@@ -119,8 +120,9 @@
   left: 9.2%;
   top: 8%;
   font-family: 'Mona10x12', monospace;
+  letter-spacing: 0.05em;
   font-size: 13px;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.05em;
   color: var(--journal-text);
   pointer-events: none;
 }
@@ -152,6 +154,7 @@
   width: 23%;
   text-align: right;
   font-family: 'Mona10x12', monospace;
+  letter-spacing: 0.05em;
   font-size: 12px;
   color: var(--journal-text);
   pointer-events: none;
@@ -194,6 +197,7 @@
   gap: 0.4em;
   border: 1px solid var(--journal-line);
   font-family: 'Mona10x12', monospace;
+  letter-spacing: 0.05em;
   font-size: 12px;
   color: var(--journal-text);
   pointer-events: none;
@@ -206,6 +210,7 @@
   width: 18.5%;
   text-align: center;
   font-family: 'Mona10x12', monospace;
+  letter-spacing: 0.05em;
   font-size: 13px;
   line-height: 1.6;
   color: var(--journal-text);
@@ -228,6 +233,7 @@
   left: 7.29%;
   top: 85.36%;
   font-family: 'Mona10x12', monospace;
+  letter-spacing: 0.05em;
   font-size: 12px;
   color: var(--journal-text);
   pointer-events: none;
@@ -269,6 +275,7 @@
   width: 55.5%;
   text-align: center;
   font-family: 'Mona10x12', monospace;
+  letter-spacing: 0.05em;
   font-size: 12px;
   color: var(--journal-text);
   pointer-events: none;
@@ -416,6 +423,7 @@
 
 .diary-action {
   font-family: 'Mona10x12', monospace;
+  letter-spacing: 0.05em;
   /* Smaller, per feedback (was 12px). */
   font-size: 11px;
   /* Plain gray rather than a faded purple — per feedback, a bit
@@ -427,6 +435,7 @@
 
 .diary-when {
   font-family: 'Mona10x12', monospace;
+  letter-spacing: 0.05em;
   /* Smaller, per feedback (was 12px, matching .diary-action). */
   font-size: 11px;
   /* Lighter gray than .diary-action, per feedback. */
@@ -480,6 +489,7 @@
 
 .diary-card-title {
   font-family: 'Mona10x12', monospace;
+  letter-spacing: 0.05em;
   font-size: 13px;
   font-weight: bold;
   color: var(--journal-text-strong);
@@ -487,6 +497,7 @@
 
 .diary-card-creator {
   font-family: 'Mona10x12', monospace;
+  letter-spacing: 0.05em;
   /* Matches .diary-card-title, per feedback (was 11px). */
   font-size: 13px;
   color: var(--journal-text);
