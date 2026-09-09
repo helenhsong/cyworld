@@ -247,6 +247,7 @@ export function Journal() {
       )}
       {active === 0 && (
         <>
+          <div className="journal-room-label">Mini room</div>
           {/* Sized to hold a future interactive character. Filled with a
               placeholder room scene for now (src/assets/journal/room.png). */}
           <div
