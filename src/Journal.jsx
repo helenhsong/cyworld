@@ -25,19 +25,61 @@ const TABS = [
 // into "N days/weeks/months ago" at render time, so it stays accurate
 // as time passes instead of going stale like a hardcoded string
 // would. Newest first, matching how an activity feed normally reads.
-// Real cover art still needed (diagonal-hash placeholder for now).
+//
+// `slug` matches a filename scripts/fetch-covers.mjs downloads into
+// src/assets/journal/covers/ (TMDB for movies, Open Library for
+// books, at build time — see that script's header comment). Entries
+// without a matching downloaded file fall back to the placeholder
+// below until one exists.
 const DIARY_ENTRIES = [
-  { action: 'watched', title: 'Alien (1979)', creator: 'dir. Ridley Scott', date: new Date(2026, 8, 6) },
-  { action: 'started reading', title: 'Project Hail Mary', creator: 'Andy Weir', date: new Date(2026, 7, 19) },
+  {
+    action: 'watched',
+    title: 'Alien (1979)',
+    creator: 'dir. Ridley Scott',
+    date: new Date(2026, 8, 6),
+    slug: 'alien-1979',
+  },
+  {
+    action: 'started reading',
+    title: 'Project Hail Mary',
+    creator: 'Andy Weir',
+    date: new Date(2026, 7, 19),
+    slug: 'project-hail-mary',
+  },
   {
     action: 'watched',
     title: 'Spider-Man Brand New Day (2026)',
     creator: 'dir. Destin Daniel Cretton',
     date: new Date(2026, 7, 10),
+    slug: 'spider-man-brand-new-day',
   },
-  { action: 'watched', title: 'The Drama (2026)', creator: 'dir. Kristoffer Borgli', date: new Date(2026, 7, 2) },
-  { action: 'watched', title: 'Backrooms (2026)', creator: 'dir. Kane Parsons', date: new Date(2026, 5, 15) },
+  {
+    action: 'watched',
+    title: 'The Drama (2026)',
+    creator: 'dir. Kristoffer Borgli',
+    date: new Date(2026, 7, 2),
+    slug: 'the-drama-2026',
+  },
+  {
+    action: 'watched',
+    title: 'Backrooms (2026)',
+    creator: 'dir. Kane Parsons',
+    date: new Date(2026, 5, 15),
+    slug: 'backrooms-2026',
+  },
 ]
+
+// Eagerly imports every fetched cover so Vite bundles/hashes them
+// like any other local asset, keyed by slug (e.g. "project-hail-mary")
+// regardless of its extension (TMDB gives .jpg, Open Library covers
+// can vary).
+const coverModules = import.meta.glob('./assets/journal/covers/*.{jpg,jpeg,png,webp}', {
+  eager: true,
+  import: 'default',
+})
+const coversBySlug = Object.fromEntries(
+  Object.entries(coverModules).map(([path, url]) => [path.match(/([^/]+)\.\w+$/)[1], url]),
+)
 
 // The "Helen <action> <title>" line reads better without the release
 // year that's part of the title everywhere else (the card below keeps
@@ -125,7 +167,11 @@ export function Journal() {
                 </div>
                 <div className="diary-when">{formatRelativeTime(entry.date)}</div>
                 <div className="diary-card">
-                  <div className="diary-cover" aria-hidden="true" />
+                  {coversBySlug[entry.slug] ? (
+                    <img src={coversBySlug[entry.slug]} alt="" className="diary-cover" draggable={false} />
+                  ) : (
+                    <div className="diary-cover diary-cover-placeholder" aria-hidden="true" />
+                  )}
                   <div className="diary-card-info">
                     <div className="diary-card-title">{entry.title}</div>
                     <div className="diary-card-creator">{entry.creator}</div>

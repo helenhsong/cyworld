@@ -407,8 +407,16 @@
 
 .diary-cover {
   flex-shrink: 0;
+  display: block;
   width: 48px;
   aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border: 1px solid var(--journal-line);
+}
+/* Shown in place of the real poster/cover — see coversBySlug in
+   Journal.jsx — for any entry scripts/fetch-covers.mjs hasn't fetched
+   art for yet. */
+.diary-cover-placeholder {
   background: repeating-linear-gradient(
     45deg,
     rgba(103, 80, 126, 0.1),
@@ -416,7 +424,6 @@
     rgba(103, 80, 126, 0.04) 4px,
     rgba(103, 80, 126, 0.04) 8px
   );
-  border: 1px solid var(--journal-line);
 }
 
 .diary-card-info {
