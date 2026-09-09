@@ -523,11 +523,11 @@
   color: var(--journal-text);
 }
 
-/* Photos tab: a Pinterest/Tumblr-style photo collage. CSS multi-column
-   layout does the masonry tiling itself — each photo keeps its own
-   natural aspect ratio (no object-fit cropping, unlike the diary
-   covers) and break-inside: avoid stops a photo splitting across
-   columns. No text/metadata per photo, unlike the Diary list. */
+/* Media tab: a Pinterest/Tumblr-style photo/gif collage. CSS
+   multi-column layout does the masonry tiling itself — each item
+   keeps its own natural aspect ratio (no object-fit cropping, unlike
+   the diary covers) and break-inside: avoid stops one splitting
+   across columns. No text/metadata per item, unlike the Diary list. */
 .journal-photo-grid {
   column-count: 2;
   column-gap: 12px;

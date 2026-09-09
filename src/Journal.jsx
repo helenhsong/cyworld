@@ -17,9 +17,10 @@ const TABS = [
   { src: tab1, label: 'Home' },
   { src: tab2, label: 'Diary' },
   // Was "Visitor" (a Cyworld guestbook/visitor-board tab), then a
-  // blog-style photo+text feed labeled "Notes"/"Blog" — now a plain
-  // Pinterest-style photo collage instead, so "Photos" again.
-  { src: tab3, label: 'Photos' },
+  // blog-style photo+text feed ("Notes"/"Blog"), then a photo-only
+  // collage ("Photos") — now also takes gifs, so relabeled "Media" to
+  // cover both.
+  { src: tab3, label: 'Media' },
 ]
 
 // Each entry stores a real Date — formatRelativeTime() below turns it
@@ -84,13 +85,14 @@ const coversBySlug = Object.fromEntries(
   Object.entries(coverModules).map(([path, url]) => [path.match(/([^/]+)\.\w+$/)[1], url]),
 )
 
-// Photos tab: a plain Pinterest/Tumblr-style photo collage, no
-// metadata needed per photo (unlike Diary above) — every image
-// dropped into src/assets/journal/photos/ just shows up, sorted by
-// filename (prefix with e.g. "01-", "02-" to control order, or a
-// date). CSS multi-column layout (see .journal-photo-grid) does the
-// actual masonry-style tiling from each photo's own aspect ratio.
-const photoModules = import.meta.glob('./assets/journal/photos/*.{jpg,jpeg,png,webp}', {
+// Media tab: a plain Pinterest/Tumblr-style collage, no metadata
+// needed per item (unlike Diary above) — every photo or gif dropped
+// into src/assets/journal/photos/ just shows up, sorted by filename
+// (prefix with e.g. "01-", "02-" to control order, or a date). CSS
+// multi-column layout (see .journal-photo-grid) does the actual
+// masonry-style tiling from each item's own aspect ratio; a plain
+// <img> autoplays a .gif same as any other browser would.
+const photoModules = import.meta.glob('./assets/journal/photos/*.{jpg,jpeg,png,webp,gif}', {
   eager: true,
   import: 'default',
 })
@@ -99,9 +101,9 @@ const photos = Object.entries(photoModules)
   .map(([path, url]) => ({ key: path, url }))
 
 // Stand-in tiles shown only when src/assets/journal/photos/ is still
-// empty, so the collage layout is visible before real photos are
+// empty, so the collage layout is visible before real media is
 // dropped in — varied aspect ratios so the masonry effect actually
-// reads, same purpose as the diary/notes placeholders elsewhere.
+// reads, same purpose as the diary placeholder elsewhere.
 const PLACEHOLDER_PHOTO_RATIOS = [3 / 4, 1, 4 / 3, 1, 4 / 5, 3 / 2, 1, 4 / 3]
 
 // Real, live clock in Seoul (Asia/Seoul, KST/UTC+9) — unlike the visit
@@ -189,7 +191,7 @@ export function Journal() {
       <div className="journal-name">Helen Song</div>
       <div className="journal-email">helenhsong@gmail.com</div>
 
-      {/* Right-page content. On the Diary and Photos tabs this is a
+      {/* Right-page content. On the Diary and Media tabs this is a
           scrollable list/grid instead of the character box — all
           three share .journal-right-panel's position/size, so the
           right panel occupies the same footprint no matter which tab
