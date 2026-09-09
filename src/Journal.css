@@ -210,13 +210,33 @@
 }
 
 /* --- Right-page content --------------------------------------------
-   Empty frame reserved for a future interactive character. */
+   The right page's own inner content rectangle (measured pixel-for-
+   pixel like the tab hit-boxes) runs x 204-638, y 56-420 of the
+   684x450 canvas — i.e. left 29.8%, right 93.3%, top 12.4%, bottom
+   93.3%. The box below insets a couple percent from every edge of
+   that so its border sits inside the page's own border and, on the
+   right specifically, stays clear of the tab pills that start right
+   at that 93.3% edge (its previous width ran past it and visibly
+   crossed into the tabs). Also leaves room below for the hint text
+   instead of using the full inset height. */
 .journal-character-box {
   position: absolute;
-  left: 35.4%;
-  top: 17.3%;
-  width: 58.2%;
-  height: 73.8%;
+  left: 31.1%;
+  top: 14.4%;
+  width: 60.8%;
+  height: 63.6%;
   border: 1px solid var(--journal-line);
+  pointer-events: none;
+}
+
+.journal-character-hint {
+  position: absolute;
+  left: 31.1%;
+  top: 80%;
+  width: 60.8%;
+  text-align: center;
+  font-family: 'Mona12', monospace;
+  font-size: 12px;
+  color: var(--journal-text);
   pointer-events: none;
 }

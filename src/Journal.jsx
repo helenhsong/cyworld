@@ -68,6 +68,7 @@ export function Journal() {
       {/* Right-page box, sized to hold a future interactive character —
           empty for now. */}
       <div className="journal-character-box" aria-hidden="true" />
+      <div className="journal-character-hint">↑ ↓ ← → move the character</div>
     </div>
   )
 }
