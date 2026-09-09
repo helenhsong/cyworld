@@ -136,7 +136,11 @@
 
 .journal-site {
   position: absolute;
-  left: 70%;
+  /* Shifted 4px left, per feedback (0.44% ~= 4px at the journal's
+     typical 900px rendered width) — text-align: right means the
+     visible text hugs this box's right edge, so nudging the whole
+     box left moves the text left too. */
+  left: 69.56%;
   top: 8.3%;
   width: 23%;
   text-align: right;
