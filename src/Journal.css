@@ -144,14 +144,10 @@
   top: 18.6%;
   width: 19.7%;
   aspect-ratio: 1;
-  background: repeating-linear-gradient(
-    45deg,
-    rgba(103, 80, 126, 0.08),
-    rgba(103, 80, 126, 0.08) 6px,
-    rgba(103, 80, 126, 0.03) 6px,
-    rgba(103, 80, 126, 0.03) 12px
-  );
+  display: block;
+  object-fit: cover;
   border: 1px solid var(--journal-line);
+  pointer-events: none;
 }
 
 .journal-divider {
@@ -222,21 +218,27 @@
    The right page's own inner content rectangle (measured pixel-for-
    pixel like the tab hit-boxes) runs x 204-638, y 56-420 of the
    684x450 canvas — i.e. left 29.8%, right 93.3%, top 12.4%, bottom
-   93.3%. The box below insets ~4.5% from the left/right edges of that
-   (so it reads as clearly framed by the page's own border rather than
-   crowding it, and on the right specifically stays clear of the tab
-   pills that start right at that 93.3% edge — widened from ~3% per
-   feedback, right-panel-only). Top padding matches
+   93.3%. .journal-right-panel insets ~4.5% from the left/right edges
+   of that (so it reads as clearly framed by the page's own border
+   rather than crowding it, and on the right specifically stays clear
+   of the tab pills that start right at that 93.3% edge — widened from
+   ~3% per feedback, right-panel-only). Top padding matches
    .journal-photo-frame's top (18.6%) and its bottom edge matches
    .journal-divider-2's top (76.1%) — both nudged in slightly for a
    bit more top/bottom breathing room, per feedback — so the left and
-   right panels' content starts and ends at the same height. */
-.journal-character-box {
+   right panels' content starts and ends at the same height. Shared by
+   both right-panel variants below so they occupy the same footprint;
+   the border is specific to the empty Home/Visitor box — the Diary
+   list draws its own separators between entries instead. */
+.journal-right-panel {
   position: absolute;
   left: 34.3%;
   top: 18.6%;
   width: 54.5%;
   height: 57.5%;
+}
+
+.journal-character-box {
   border: 1px solid var(--journal-line);
   pointer-events: none;
 }
@@ -273,26 +275,13 @@
   gap: 10px;
   flex-shrink: 0;
 }
-
-.diary-entry-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.diary-avatar {
-  flex-shrink: 0;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: repeating-linear-gradient(
-    45deg,
-    rgba(103, 80, 126, 0.15),
-    rgba(103, 80, 126, 0.15) 3px,
-    rgba(103, 80, 126, 0.05) 3px,
-    rgba(103, 80, 126, 0.05) 6px
-  );
-  border: 1px solid var(--journal-line);
+/* Separator between entries instead of the outer box border removed
+   above — border lives on the gap itself (padding-top on top of the
+   flex gap) rather than on every entry, so there's no doubled line at
+   the very top or bottom of the list. */
+.diary-entry + .diary-entry {
+  border-top: 1px solid var(--journal-line);
+  padding-top: 20px;
 }
 
 .diary-action {

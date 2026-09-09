@@ -2,6 +2,7 @@ import { useState } from 'react'
 import tab1 from './assets/journal/tab-1.png'
 import tab2 from './assets/journal/tab-2.png'
 import tab3 from './assets/journal/tab-3.png'
+import dp from './assets/journal/dp.jpg'
 import './Journal.css'
 
 // Hand-drawn pixel art (Aseprite), exported as PNG and cropped to its
@@ -58,9 +59,7 @@ export function Journal() {
       <div className="journal-title">helen's cyworld</div>
       <div className="journal-site">helenhsong.com</div>
 
-      {/* Placeholder for the profile photo — swap the background
-          treatment out once an actual image is dropped in. */}
-      <div className="journal-photo-frame" aria-hidden="true" />
+      <img src={dp} alt="Helen" className="journal-photo-frame" draggable={false} />
 
       <div className="journal-divider journal-divider-1" aria-hidden="true" />
       <div className="journal-mood">TODAY IS.. 🌹행복</div>
@@ -74,24 +73,21 @@ export function Journal() {
       <div className="journal-email">helenhsong@gmail.com</div>
 
       {/* Right-page content. On the Diary tab this is a scrollable
-          read/watched list instead of the character box — the box's
-          own position/size (.journal-character-box) is reused as-is
-          for the list container, so the right panel occupies the
-          same footprint no matter which tab is active. The left
-          panel above never changes with the active tab. */}
+          read/watched list instead of the character box — both share
+          .journal-right-panel's position/size, so the right panel
+          occupies the same footprint no matter which tab is active.
+          The border (.journal-character-box) is specific to the
+          empty Home/Visitor box — the list draws its own separators
+          between entries instead. The left panel above never changes
+          with the active tab. */}
       {active === 1 ? (
-        <div className="journal-character-box journal-diary-list">
+        <div className="journal-right-panel journal-diary-list">
           {DIARY_ENTRIES.map((entry) => (
             <div className="diary-entry" key={entry.title}>
-              <div className="diary-entry-header">
-                <div className="diary-avatar" aria-hidden="true" />
-                <div>
-                  <div className="diary-action">
-                    <strong>Helen</strong> {entry.action} <em>{entry.title}</em>
-                  </div>
-                  <div className="diary-when">{entry.when}</div>
-                </div>
+              <div className="diary-action">
+                <strong>Helen</strong> {entry.action} <em>{entry.title}</em>
               </div>
+              <div className="diary-when">{entry.when}</div>
               <div className="diary-card">
                 <div className="diary-cover" aria-hidden="true" />
                 <div className="diary-card-info">
@@ -105,7 +101,7 @@ export function Journal() {
       ) : (
         <>
           {/* Sized to hold a future interactive character — empty for now. */}
-          <div className="journal-character-box" aria-hidden="true" />
+          <div className="journal-right-panel journal-character-box" aria-hidden="true" />
           <div className="journal-character-hint">↑ ↓ ← → move the character</div>
         </>
       )}
