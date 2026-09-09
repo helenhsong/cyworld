@@ -20,15 +20,49 @@ const TABS = [
   { src: tab3, label: 'Visitor' },
 ]
 
-// Placeholder entries — swap in the real reading/watching list (and
-// real cover art) whenever it's ready. Each renders as one activity
-// card: "Helen <action> <title>" + a relative timestamp, then a cover
-// + title/creator card below it, matching the referenced layout.
+// Each entry stores a real Date — formatRelativeTime() below turns it
+// into "N days/weeks/months ago" at render time, so it stays accurate
+// as time passes instead of going stale like a hardcoded string
+// would. Newest first, matching how an activity feed normally reads.
+// Real cover art still needed (diagonal-hash placeholder for now).
 const DIARY_ENTRIES = [
-  { action: 'wants to read', title: 'Untitled Book', creator: 'Author Name', when: '3 days ago' },
-  { action: 'is reading', title: 'Another Untitled Book', creator: 'Another Author', when: '1 week ago' },
-  { action: 'watched', title: 'Untitled Movie', creator: 'Director Name', when: '2 weeks ago' },
+  { action: 'watched', title: 'Alien (1979)', creator: 'dir. Ridley Scott', date: new Date(2026, 8, 6) },
+  { action: 'started reading', title: 'Project Hail Mary', creator: 'Andy Weir', date: new Date(2026, 7, 19) },
+  {
+    action: 'watched',
+    title: 'Spider-Man Brand New Day (2026)',
+    creator: 'dir. Destin Daniel Cretton',
+    date: new Date(2026, 7, 10),
+  },
+  { action: 'watched', title: 'The Drama (2026)', creator: 'dir. Kristoffer Borgli', date: new Date(2026, 7, 2) },
+  { action: 'watched', title: 'Backrooms (2026)', creator: 'dir. Kane Parsons', date: new Date(2026, 5, 15) },
 ]
+
+// The "Helen <action> <title>" line reads better without the release
+// year that's part of the title everywhere else (the card below keeps
+// it in full).
+const stripYear = (title) => title.replace(/\s*\(\d{4}\)\s*$/, '')
+
+// Coarsens a day-count into the same "N days/weeks/months/years ago"
+// buckets most activity feeds use (e.g. day 21 reads as "3 weeks
+// ago", not "21 days ago").
+function formatRelativeTime(date, now = new Date()) {
+  const startOfDay = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate())
+  const days = Math.round((startOfDay(now) - startOfDay(new Date(date))) / 86400000)
+  if (days <= 0) return 'today'
+  if (days === 1) return 'yesterday'
+  if (days < 7) return `${days} days ago`
+  if (days < 30) {
+    const weeks = Math.floor(days / 7)
+    return weeks === 1 ? '1 week ago' : `${weeks} weeks ago`
+  }
+  if (days < 365) {
+    const months = Math.floor(days / 30)
+    return months === 1 ? '1 month ago' : `${months} months ago`
+  }
+  const years = Math.floor(days / 365)
+  return years === 1 ? '1 year ago' : `${years} years ago`
+}
 
 export function Journal() {
   const [active, setActive] = useState(0)
@@ -85,9 +119,9 @@ export function Journal() {
           {DIARY_ENTRIES.map((entry) => (
             <div className="diary-entry" key={entry.title}>
               <div className="diary-action">
-                <strong>Helen</strong> {entry.action} <em>{entry.title}</em>
+                Helen {entry.action} <strong>{stripYear(entry.title)}</strong>
               </div>
-              <div className="diary-when">{entry.when}</div>
+              <div className="diary-when">{formatRelativeTime(entry.date)}</div>
               <div className="diary-card">
                 <div className="diary-cover" aria-hidden="true" />
                 <div className="diary-card-info">

@@ -1,10 +1,13 @@
 @font-face {
   font-family: 'Mona12';
-  /* Subsetted (fonttools pyftsubset, --text-file of every string used
-     below) from a 10.5MB source with full Latin/Hangul/emoji coverage
-     down to ~8KB — only the glyphs actually used on the page. Re-run
-     the subsetter against the full-glyph source if new text ever
-     needs a character outside what's currently rendered here. */
+  /* Subsetted (fonttools pyftsubset) from a 10.5MB source with full
+     Latin/Hangul/emoji coverage down to ~10KB — covers every string
+     rendered below PLUS the full vocabulary formatRelativeTime() in
+     Journal.jsx can ever output (today/yesterday/days/weeks/months/
+     years/ago + digits), since that text is computed from the
+     viewer's current date rather than fixed at build time. Re-run the
+     subsetter against the full-glyph source if new text ever needs a
+     character outside that. */
   src: url('./assets/fonts/Mona12.ttf') format('truetype');
   font-display: swap;
 }
@@ -293,10 +296,7 @@
 }
 .diary-action strong {
   color: var(--journal-text-strong);
-}
-.diary-action em {
-  font-style: normal;
-  color: var(--journal-text-strong);
+  font-weight: bold;
 }
 
 .diary-when {
