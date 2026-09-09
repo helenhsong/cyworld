@@ -274,13 +274,16 @@
   gap: 20px;
 }
 
-/* --- Retro (Windows 9x/2000) scrollbar, from RetroScrollbar.jsx ----
+/* --- Custom scrollbar, from RetroScrollbar.jsx -----------------------
    Hand-built rather than styled via ::-webkit-scrollbar-* — current
    browsers render scrollbars with an OS-drawn "overlay" style that
    only reads the plain scrollbar-color/-width properties and ignores
    the old bevel/button pseudo-elements outright (confirmed against
    real Chrome, not just this dev environment), so there's no way to
-   get this exact look through CSS scrollbar theming alone anymore. */
+   get a specific custom look through CSS scrollbar theming alone
+   anymore. Flat squared-off buttons/track/thumb in the site's own
+   palette (was a beveled Windows 9x/2000 gray theme), per a
+   referenced 2000s minihompy-skin scrollbar. */
 .retro-scroll-wrap {
   /* No width/height here on purpose — in practice this is always
      paired with a sizing class (.journal-right-panel), and this rule
@@ -288,9 +291,9 @@
      override that explicit size with 100% x 100%. */
   display: flex;
   flex-direction: row;
-  /* Breathing room between the content and the scrollbar, per
-     feedback — they read as touching without it. */
-  gap: 10px;
+  /* Breathing room between the content and the scrollbar — widened
+     per feedback (was 10px). */
+  gap: 20px;
   box-sizing: border-box;
   pointer-events: auto;
 }
@@ -316,46 +319,35 @@
   flex-direction: column;
 }
 
-/* The raised-bevel look (light top/left edge, darker bottom/right
-   edge) is hand-drawn with inset box-shadows rather than border-
-   style: outset, which browsers render too inconsistently to rely on
-   for a specific pixel look. A light, neutral gray palette (was the
-   warm beige "Windows 98 Gray" theme) — flatter and lighter, per
-   feedback — plus an actual border on top of the bevel so the pieces
-   read as distinct 2D-outlined elements instead of blending into each
-   other (also per feedback). */
 .retro-scrollbar-btn {
   flex-shrink: 0;
   box-sizing: border-box;
   width: 16px;
   height: 16px;
   padding: 0;
-  border: 1px solid #999;
-  background-color: #e4e4e4;
+  border: 1px solid var(--journal-line);
+  background-color: #fff;
   background-repeat: no-repeat;
   background-position: center;
-  box-shadow:
-    inset 1px 1px 0 #fff,
-    inset -1px -1px 0 #b8b8b8;
   cursor: pointer;
 }
 .retro-scrollbar-btn:active {
-  box-shadow:
-    inset -1px -1px 0 #fff,
-    inset 1px 1px 0 #b8b8b8;
+  background-color: var(--journal-line-faint);
 }
 .retro-scrollbar-btn-up {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpolygon points='4,0 8,5 0,5' fill='%23777'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpolygon points='4,0 8,5 0,5' fill='%2367507e'/%3E%3C/svg%3E");
 }
 .retro-scrollbar-btn-down {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpolygon points='0,0 8,0 4,5' fill='%23777'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpolygon points='0,0 8,0 4,5' fill='%2367507e'/%3E%3C/svg%3E");
 }
 
 .retro-scrollbar-track {
   position: relative;
   flex: 1;
-  background: #f2f2f2;
-  border: 1px solid #999;
+  background: #f5f2f9;
+  border: 1px solid var(--journal-line);
+  border-top: 0;
+  border-bottom: 0;
   cursor: default;
 }
 
@@ -365,12 +357,9 @@
   right: 0;
   top: 0;
   min-height: 20px;
-  background-color: #e4e4e4;
-  border: 1px solid #999;
   box-sizing: border-box;
-  box-shadow:
-    inset 1px 1px 0 #fff,
-    inset -1px -1px 0 #b8b8b8;
+  background-color: #c9bcd9;
+  border: 1px solid var(--journal-line);
   cursor: grab;
 }
 .retro-scrollbar-thumb:active {
