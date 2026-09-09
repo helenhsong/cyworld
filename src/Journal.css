@@ -258,20 +258,117 @@
   pointer-events: none;
 }
 
-/* Diary tab: the read/watched list. Reuses .journal-character-box's
-   position/size exactly (see the JSX) so the right panel occupies the
-   same footprint regardless of which tab is active — just scrollable
-   and padded instead of empty. */
+/* Diary tab: the read/watched list. RetroScrollbar's root
+   (.retro-scroll-wrap, from Journal.jsx) is what actually reuses
+   .journal-character-box's position/size — passed in as
+   .journal-right-panel — so the right panel occupies the same
+   footprint regardless of which tab is active. .journal-diary-list
+   just lays out the entries inside RetroScrollbar's content pane;
+   the padding that used to live here moved to .retro-scroll-content
+   below (no border to pad away from now, either — same as before). */
 .journal-diary-list {
-  box-sizing: border-box;
-  /* No inner padding — now that there's no border drawing an edge to
-     pad away from, the content fills .journal-right-panel right out
-     to where that border used to sit. */
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+/* --- Retro (Windows 9x/2000) scrollbar, from RetroScrollbar.jsx ----
+   Hand-built rather than styled via ::-webkit-scrollbar-* — current
+   browsers render scrollbars with an OS-drawn "overlay" style that
+   only reads the plain scrollbar-color/-width properties and ignores
+   the old bevel/button pseudo-elements outright (confirmed against
+   real Chrome, not just this dev environment), so there's no way to
+   get this exact look through CSS scrollbar theming alone anymore. */
+.retro-scroll-wrap {
+  /* No width/height here on purpose — in practice this is always
+     paired with a sizing class (.journal-right-panel), and this rule
+     landing after it in the cascade would otherwise silently
+     override that explicit size with 100% x 100%. */
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
   pointer-events: auto;
+}
+
+.retro-scroll-content {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  /* The real scrollbar is .retro-scrollbar below; this pane's own
+     native one is just hidden, not disabled — wheel/touch/keyboard
+     scrolling all still work on it directly. */
+  scrollbar-width: none;
+}
+.retro-scroll-content::-webkit-scrollbar {
+  display: none;
+}
+
+.retro-scrollbar {
+  flex-shrink: 0;
+  width: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* The raised-bevel look (light top/left edge, dark bottom/right
+   edge) is hand-drawn with layered inset box-shadows rather than
+   border-style: outset, which browsers render too inconsistently to
+   rely on for a specific pixel look. */
+.retro-scrollbar-btn {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  background-color: #d4d0c8;
+  background-repeat: no-repeat;
+  background-position: center;
+  box-shadow:
+    inset 1px 1px 0 #fff,
+    inset -1px -1px 0 #808080,
+    inset 2px 2px 0 #dfdfdf,
+    inset -2px -2px 0 #404040;
+  cursor: pointer;
+}
+.retro-scrollbar-btn:active {
+  box-shadow:
+    inset -1px -1px 0 #fff,
+    inset 1px 1px 0 #808080,
+    inset -2px -2px 0 #dfdfdf,
+    inset 2px 2px 0 #404040;
+}
+.retro-scrollbar-btn-up {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpolygon points='4,0 8,5 0,5' fill='%23000'/%3E%3C/svg%3E");
+}
+.retro-scrollbar-btn-down {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpolygon points='0,0 8,0 4,5' fill='%23000'/%3E%3C/svg%3E");
+}
+
+.retro-scrollbar-track {
+  position: relative;
+  flex: 1;
+  background: #ece9d8;
+  box-shadow: inset 1px 1px 0 #808080;
+  cursor: default;
+}
+
+.retro-scrollbar-thumb {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  min-height: 20px;
+  background-color: #d4d0c8;
+  box-shadow:
+    inset 1px 1px 0 #fff,
+    inset -1px -1px 0 #808080,
+    inset 2px 2px 0 #dfdfdf,
+    inset -2px -2px 0 #404040;
+  cursor: grab;
+}
+.retro-scrollbar-thumb:active {
+  cursor: grabbing;
 }
 
 .diary-entry {

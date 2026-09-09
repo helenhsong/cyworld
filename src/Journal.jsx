@@ -3,6 +3,7 @@ import tab1 from './assets/journal/tab-1.png'
 import tab2 from './assets/journal/tab-2.png'
 import tab3 from './assets/journal/tab-3.png'
 import dp from './assets/journal/dp.jpg'
+import { RetroScrollbar } from './RetroScrollbar'
 import './Journal.css'
 
 // Hand-drawn pixel art (Aseprite), exported as PNG and cropped to its
@@ -115,23 +116,25 @@ export function Journal() {
           between entries instead. The left panel above never changes
           with the active tab. */}
       {active === 1 ? (
-        <div className="journal-right-panel journal-diary-list">
-          {DIARY_ENTRIES.map((entry) => (
-            <div className="diary-entry" key={entry.title}>
-              <div className="diary-action">
-                Helen {entry.action} <strong>{stripYear(entry.title)}</strong>
-              </div>
-              <div className="diary-when">{formatRelativeTime(entry.date)}</div>
-              <div className="diary-card">
-                <div className="diary-cover" aria-hidden="true" />
-                <div className="diary-card-info">
-                  <div className="diary-card-title">{entry.title}</div>
-                  <div className="diary-card-creator">{entry.creator}</div>
+        <RetroScrollbar className="journal-right-panel">
+          <div className="journal-diary-list">
+            {DIARY_ENTRIES.map((entry) => (
+              <div className="diary-entry" key={entry.title}>
+                <div className="diary-action">
+                  Helen {entry.action} <strong>{stripYear(entry.title)}</strong>
+                </div>
+                <div className="diary-when">{formatRelativeTime(entry.date)}</div>
+                <div className="diary-card">
+                  <div className="diary-cover" aria-hidden="true" />
+                  <div className="diary-card-info">
+                    <div className="diary-card-title">{entry.title}</div>
+                    <div className="diary-card-creator">{entry.creator}</div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </RetroScrollbar>
       ) : (
         <>
           {/* Sized to hold a future interactive character — empty for now. */}
