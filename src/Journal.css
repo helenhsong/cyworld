@@ -149,7 +149,7 @@
 .journal-photo-frame {
   position: absolute;
   left: 7.4%;
-  top: 17.97%;
+  top: 18.14%;
   width: 18.5%;
   aspect-ratio: 1;
   display: block;
@@ -165,16 +165,16 @@
   border-top: 1px dashed var(--journal-line);
 }
 .journal-divider-1 {
-  top: 49.47%;
+  top: 49.64%;
 }
 .journal-divider-2 {
-  top: 76.73%;
+  top: 76.56%;
 }
 
 .journal-mood {
   position: absolute;
   left: 7.4%;
-  top: 52.17%;
+  top: 52.34%;
   width: 18.5%;
   height: 3.4%;
   display: flex;
@@ -191,7 +191,7 @@
 .journal-status {
   position: absolute;
   left: 7.4%;
-  top: 59.67%;
+  top: 59.84%;
   width: 18.5%;
   text-align: center;
   font-family: 'Mona12', monospace;
@@ -204,7 +204,7 @@
 .journal-name {
   position: absolute;
   left: 7.4%;
-  top: 79.63%;
+  top: 79.46%;
   font-family: 'HBIOS-SYS', monospace;
   font-size: 22px;
   font-weight: bold;
@@ -215,7 +215,7 @@
 .journal-email {
   position: absolute;
   left: 7.4%;
-  top: 85.53%;
+  top: 85.36%;
   font-family: 'Mona12', monospace;
   font-size: 12px;
   color: var(--journal-text);
@@ -240,9 +240,9 @@
 .journal-right-panel {
   position: absolute;
   left: 33.8%;
-  top: 17.97%;
+  top: 18.14%;
   width: 55.5%;
-  height: 70.66%;
+  height: 70.32%;
 }
 
 .journal-character-box {
@@ -254,7 +254,7 @@
   position: absolute;
   /* Matches .journal-right-panel's left/width. */
   left: 33.8%;
-  top: 89.63%;
+  top: 89.46%;
   width: 55.5%;
   text-align: center;
   font-family: 'Mona12', monospace;
