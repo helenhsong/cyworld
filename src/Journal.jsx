@@ -14,7 +14,7 @@ import './Journal.css'
 const TABS = [
   { src: tab1, label: 'Home' },
   { src: tab2, label: 'Diary' },
-  { src: tab3, label: 'Tab 3' }, // TODO: what should this one say?
+  { src: tab3, label: 'Photos' },
 ]
 
 export function Journal() {
