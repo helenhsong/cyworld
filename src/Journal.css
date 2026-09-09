@@ -523,7 +523,7 @@
   color: var(--journal-text);
 }
 
-/* Media tab: a Pinterest/Tumblr-style photo/gif collage. CSS
+/* Photos tab: a Pinterest/Tumblr-style photo/gif collage. CSS
    multi-column layout does the masonry tiling itself — each item
    keeps its own natural aspect ratio (no object-fit cropping, unlike
    the diary covers) and break-inside: avoid stops one splitting

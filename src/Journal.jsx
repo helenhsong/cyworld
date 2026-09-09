@@ -17,10 +17,10 @@ const TABS = [
   { src: tab1, label: 'Home' },
   { src: tab2, label: 'Diary' },
   // Was "Visitor" (a Cyworld guestbook/visitor-board tab), then a
-  // blog-style photo+text feed ("Notes"/"Blog"), then a photo-only
-  // collage ("Photos") — now also takes gifs, so relabeled "Media" to
-  // cover both.
-  { src: tab3, label: 'Media' },
+  // blog-style photo+text feed ("Notes"/"Blog"), then briefly "Media"
+  // once gifs were added to the collage — back to "Photos" as the
+  // simpler label; gifs still play fine in it either way.
+  { src: tab3, label: 'Photos' },
 ]
 
 // Each entry stores a real Date — formatRelativeTime() below turns it
@@ -85,7 +85,7 @@ const coversBySlug = Object.fromEntries(
   Object.entries(coverModules).map(([path, url]) => [path.match(/([^/]+)\.\w+$/)[1], url]),
 )
 
-// Media tab: a plain Pinterest/Tumblr-style collage, no metadata
+// Photos tab: a plain Pinterest/Tumblr-style collage, no metadata
 // needed per item (unlike Diary above) — every photo or gif dropped
 // into src/assets/journal/media/ just shows up, sorted by filename
 // (prefix with e.g. "01-", "02-" to control order, or a date). CSS
@@ -194,7 +194,7 @@ export function Journal() {
       <div className="journal-name">Helen Song</div>
       <div className="journal-email">helenhsong@gmail.com</div>
 
-      {/* Right-page content. On the Diary and Media tabs this is a
+      {/* Right-page content. On the Diary and Photos tabs this is a
           scrollable list/grid instead of the character box — all
           three share .journal-right-panel's position/size, so the
           right panel occupies the same footprint no matter which tab
