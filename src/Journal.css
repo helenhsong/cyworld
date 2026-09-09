@@ -239,7 +239,11 @@
   position: absolute;
   left: 34.3%;
   top: 18.6%;
-  width: 54.5%;
+  /* Widened a touch (was 54.5%) — the binder rings between the pages
+     visually eat into the left margin, so the box read as having more
+     breathing room on the right than the left; extending the right
+     edge closer to the tabs balances that out, per feedback. */
+  width: 56%;
   height: 69.4%;
 }
 
@@ -252,7 +256,8 @@
   position: absolute;
   left: 34.3%;
   top: 89%;
-  width: 54.5%;
+  /* Matches .journal-right-panel's width. */
+  width: 56%;
   text-align: center;
   font-family: 'Mona12', monospace;
   font-size: 12px;
@@ -295,8 +300,8 @@
   display: flex;
   flex-direction: row;
   /* Breathing room between the content and the scrollbar — widened
-     per feedback (was 10px). */
-  gap: 20px;
+     again per feedback (was 10px, then 20px). */
+  gap: 28px;
   box-sizing: border-box;
   pointer-events: auto;
 }
