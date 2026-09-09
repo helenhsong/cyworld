@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import tab1 from './assets/journal/tab-1.png'
 import tab2 from './assets/journal/tab-2.png'
 import tab3 from './assets/journal/tab-3.png'
-import dp from './assets/journal/dp.jpg'
+import dp from './assets/journal/dp.png'
 import { RetroScrollbar } from './RetroScrollbar'
 import './Journal.css'
 
