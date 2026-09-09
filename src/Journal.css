@@ -522,3 +522,76 @@
   font-size: 13px;
   color: var(--journal-text);
 }
+
+/* Notes tab: a small blog-style feed (photo + text per post). Reuses
+   the diary list's separator convention (border-top + padding-top on
+   `+ .entry` instead of a border on every entry) but stacks
+   image-over-text per post instead of the diary's icon-and-text row,
+   since posts here are meant to read like a blog entry, not a list
+   item. */
+.journal-notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.note-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.note-entry + .note-entry {
+  border-top: 1px solid var(--journal-line-faint);
+  padding-top: 20px;
+}
+
+.note-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border: 1px solid var(--journal-line);
+}
+/* Shown in place of a real photo — see noteImagesBySlug in
+   Journal.jsx — for any post without a matching file in
+   src/assets/journal/notes/ yet. */
+.note-image-placeholder {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(103, 80, 126, 0.1),
+    rgba(103, 80, 126, 0.1) 4px,
+    rgba(103, 80, 126, 0.04) 4px,
+    rgba(103, 80, 126, 0.04) 8px
+  );
+}
+
+.note-entry-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.note-title {
+  font-family: 'Mona10x12', monospace;
+  font-weight: bold;
+  letter-spacing: 0.10em;
+  font-size: 13px;
+  color: var(--journal-text-strong);
+}
+
+.note-when {
+  font-family: 'Mona10x12', monospace;
+  letter-spacing: 0.10em;
+  font-size: 11px;
+  color: #999;
+}
+
+.note-body {
+  font-family: 'Mona10x12', monospace;
+  letter-spacing: 0.10em;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--journal-text);
+}

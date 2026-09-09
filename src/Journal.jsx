@@ -16,9 +16,10 @@ import './Journal.css'
 const TABS = [
   { src: tab1, label: 'Home' },
   { src: tab2, label: 'Diary' },
-  // Was "Photos" — the layout mockup relabeled this "Visitor" (a
-  // Cyworld guestbook/visitor-board tab), so going with that instead.
-  { src: tab3, label: 'Visitor' },
+  // Was "Photos", then "Visitor" (a Cyworld guestbook/visitor-board
+  // tab) — repurposed again into a blog-style photo+text feed, so
+  // "Notes" fits better than either.
+  { src: tab3, label: 'Notes' },
 ]
 
 // Each entry stores a real Date — formatRelativeTime() below turns it
@@ -81,6 +82,35 @@ const coverModules = import.meta.glob('./assets/journal/covers/*.{jpg,jpeg,png,w
 })
 const coversBySlug = Object.fromEntries(
   Object.entries(coverModules).map(([path, url]) => [path.match(/([^/]+)\.\w+$/)[1], url]),
+)
+
+// Notes tab: a small blog-style feed (photo + text per post), same
+// spirit as the Diary tab above. Starter/placeholder posts below —
+// swap in real ones the same way DIARY_ENTRIES was filled in by hand.
+// `slug` matches a filename dropped into src/assets/journal/notes/;
+// entries without a match fall back to the placeholder image below.
+const NOTES_ENTRIES = [
+  {
+    date: new Date(2026, 8, 5),
+    title: 'settling in',
+    body: 'First week in Seoul done. Still figuring out which cafés have real outlets and which ones just have decorative ones.',
+    slug: 'settling-in',
+  },
+  {
+    date: new Date(2026, 7, 22),
+    title: 'sabbatical, day something',
+    body: "Not counting the days on purpose. Spent the afternoon redrawing this journal's pixel art instead of doing anything relaxing, which feels about right.",
+    slug: 'sabbatical-day-something',
+  },
+]
+
+// Same eager-glob-by-slug pattern as coversBySlug above.
+const noteImageModules = import.meta.glob('./assets/journal/notes/*.{jpg,jpeg,png,webp}', {
+  eager: true,
+  import: 'default',
+})
+const noteImagesBySlug = Object.fromEntries(
+  Object.entries(noteImageModules).map(([path, url]) => [path.match(/([^/]+)\.\w+$/)[1], url]),
 )
 
 // Real, live clock in Seoul (Asia/Seoul, KST/UTC+9) — unlike the visit
@@ -168,15 +198,15 @@ export function Journal() {
       <div className="journal-name">Helen Song</div>
       <div className="journal-email">helenhsong@gmail.com</div>
 
-      {/* Right-page content. On the Diary tab this is a scrollable
-          read/watched list instead of the character box — both share
-          .journal-right-panel's position/size, so the right panel
-          occupies the same footprint no matter which tab is active.
-          The border (.journal-character-box) is specific to the
-          empty Home/Visitor box — the list draws its own separators
+      {/* Right-page content. On the Diary and Notes tabs this is a
+          scrollable list instead of the character box — all three
+          share .journal-right-panel's position/size, so the right
+          panel occupies the same footprint no matter which tab is
+          active. The border (.journal-character-box) is specific to
+          the empty Home box — the lists draw their own separators
           between entries instead. The left panel above never changes
           with the active tab. */}
-      {active === 1 ? (
+      {active === 1 && (
         <RetroScrollbar className="journal-right-panel">
           <div className="journal-diary-list">
             {DIARY_ENTRIES.map((entry) => (
@@ -200,7 +230,28 @@ export function Journal() {
             ))}
           </div>
         </RetroScrollbar>
-      ) : (
+      )}
+      {active === 2 && (
+        <RetroScrollbar className="journal-right-panel">
+          <div className="journal-notes-list">
+            {NOTES_ENTRIES.map((entry) => (
+              <div className="note-entry" key={entry.slug}>
+                {noteImagesBySlug[entry.slug] ? (
+                  <img src={noteImagesBySlug[entry.slug]} alt="" className="note-image" draggable={false} />
+                ) : (
+                  <div className="note-image note-image-placeholder" aria-hidden="true" />
+                )}
+                <div className="note-entry-top">
+                  <div className="note-title">{entry.title}</div>
+                  <div className="note-when">{formatRelativeTime(entry.date)}</div>
+                </div>
+                <div className="note-body">{entry.body}</div>
+              </div>
+            ))}
+          </div>
+        </RetroScrollbar>
+      )}
+      {active === 0 && (
         <>
           {/* Sized to hold a future interactive character — empty for now. */}
           <div className="journal-right-panel journal-character-box" aria-hidden="true" />
