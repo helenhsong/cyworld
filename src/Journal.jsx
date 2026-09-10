@@ -257,7 +257,7 @@ export function Journal() {
               room scene for now, src/assets/journal/room.png) shrinks
               to make room for both. */}
           <div className="journal-right-panel journal-home-panel">
-            <div className="journal-room-label">Mini room</div>
+            <div className="journal-room-label">My room</div>
             <div className="journal-character-box" style={{ backgroundImage: `url(${room})` }} aria-hidden="true" />
             <div className="journal-character-hint">↑ ↓ ← → move the character</div>
           </div>
