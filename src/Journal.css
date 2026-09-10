@@ -601,9 +601,10 @@
   font-weight: bold;
   letter-spacing: 0.10em;
   font-size: 13px;
-  /* Darker than the creator/director line so the title is the clear
-     focal point of each diary card. */
-  color: var(--journal-text);
+  /* Matches .journal-room-label ("My room" on the Home tab), per
+     feedback — was --journal-text (a darker, more saturated purple),
+     which read as a different color than the Home tab's bold text. */
+  color: var(--journal-text-strong);
 }
 
 .diary-card-creator {
