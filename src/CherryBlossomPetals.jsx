@@ -2,8 +2,10 @@ import petalSprite from './assets/journal/cherry-petal-room.png'
 
 const PETALS = [
   { left: 73, top: 12, size: 8, angle: -18, turn: 48, delay: 0, driftX: -94, driftY: 92, wobble: 8 },
-  { left: 81, top: 17, size: 7, angle: 14, turn: -52, delay: -4.1, driftX: -126, driftY: 116, wobble: -7 },
-  { left: 87, top: 10, size: 6, angle: 22, turn: -66, delay: -8.2, driftX: -142, driftY: 128, wobble: -9 },
+  { left: 81, top: 17, size: 7, angle: 14, turn: -52, delay: -2.5, driftX: -126, driftY: 116, wobble: -7 },
+  { left: 77, top: 25, size: 6, angle: -32, turn: 62, delay: -5, driftX: -108, driftY: 102, wobble: 6 },
+  { left: 87, top: 10, size: 7, angle: 22, turn: -66, delay: -7.4, driftX: -142, driftY: 128, wobble: -9 },
+  { left: 83, top: 30, size: 6, angle: -10, turn: 44, delay: -9.9, driftX: -116, driftY: 88, wobble: 7 },
 ]
 
 function petalPath({ driftX, driftY, wobble, angle, turn }) {
