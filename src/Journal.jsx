@@ -271,7 +271,7 @@ export function Journal() {
       {active === 0 && (
         <>
           <div className="journal-right-panel journal-home-panel">
-            <div className="journal-room-label">My room</div>
+            <div className="journal-room-label">Mini Room</div>
             <div className="journal-character-box">
               <PixelRoom />
             </div>

@@ -53,7 +53,7 @@
      purple (the same color used for helenhsong.com in the real site
      header and .journal-site below) so the bigger titles read as
      part of the page's purple palette instead of stark black. */
-  /* Used by .journal-room-label ("My room") — decoupled from
+  /* Used by .journal-room-label ("Mini Room") — decoupled from
      --project-muted-fg and lightened/desaturated a bit, per feedback
      that the right panel's bold purple text read too heavy/saturated. */
   --journal-text-strong: #8d7c9e;
@@ -601,7 +601,7 @@
   font-weight: bold;
   letter-spacing: 0.10em;
   font-size: 13px;
-  /* Matches .journal-room-label ("My room" on the Home tab), per
+  /* Matches .journal-room-label ("Mini Room" on the Home tab), per
      feedback — was --journal-text (a darker, more saturated purple),
      which read as a different color than the Home tab's bold text. */
   color: var(--journal-text-strong);
