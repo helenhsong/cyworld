@@ -186,7 +186,11 @@
   left: 7.29%;
   top: 18.14%;
   width: 18.5%;
-  height: 3.4%;
+  /* Was a fixed height: 3.4% — swapped for padding (+2px top/bottom
+     over the old cramped fit) so the box grows to fit its content
+     instead of squeezing it. */
+  padding: 2px 0;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
