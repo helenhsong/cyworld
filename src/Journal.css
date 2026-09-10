@@ -352,8 +352,9 @@
   display: flex;
   flex-direction: row;
   /* Breathing room between the content and the scrollbar — widened
-     again per feedback (was 10px, then 20px, 28px, 32px). */
-  gap: 40px;
+     again per feedback (was 10px, then 20px, 28px, 32px), then
+     narrowed back down slightly (was 40px). */
+  gap: 36px;
   box-sizing: border-box;
   pointer-events: auto;
 }
