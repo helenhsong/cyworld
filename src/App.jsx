@@ -1,9 +1,28 @@
+import { useEffect, useState } from 'react'
 import { ProjectHeader } from '@helenhsong/ui'
 import { Dithering } from '@paper-design/shaders-react'
 import readme from '../README.md?raw'
 import { Journal } from './Journal'
 
 function App() {
+  const [readmeOpen, setReadmeOpen] = useState(false)
+  const [readmeScrolled, setReadmeScrolled] = useState(false)
+
+  useEffect(() => {
+    if (!readmeOpen) {
+      setReadmeScrolled(false)
+      return undefined
+    }
+
+    const panel = document.querySelector('.ph-readme')
+    if (!panel) return undefined
+
+    const updateFade = () => setReadmeScrolled(panel.scrollTop > 1)
+    updateFade()
+    panel.addEventListener('scroll', updateFade, { passive: true })
+    return () => panel.removeEventListener('scroll', updateFade)
+  }, [readmeOpen])
+
   return (
     <>
       {/* Full-viewport animated backdrop — --project-bg (set in
@@ -23,7 +42,18 @@ function App() {
         colorBack="#00000000"
         colorFront="#D2CAE8"
       />
-      <ProjectHeader readme={readme} className="bg-transparent" />
+      <ProjectHeader
+        readme={readme}
+        open={readmeOpen}
+        onOpenChange={setReadmeOpen}
+        className="bg-transparent"
+      />
+      {readmeOpen && (
+        <div
+          className={`readme-scroll-fade${readmeScrolled ? ' is-visible' : ''}`}
+          aria-hidden="true"
+        />
+      )}
       <main className="page">
         <Journal />
       </main>

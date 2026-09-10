@@ -162,7 +162,14 @@ export function Journal() {
 
   return (
     <div className="journal">
-      <img src={TABS[active].src} alt="Hand-drawn journal" className="journal-page" draggable={false} />
+      <img
+        src={TABS[active].src}
+        alt="Hand-drawn journal"
+        className="journal-page"
+        width="684"
+        height="450"
+        draggable={false}
+      />
       {TABS.map((tab, i) => (
         <button
           key={tab.label}

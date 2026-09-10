@@ -11,6 +11,7 @@
      trusting live computation on every visitor's browser. */
   --project-muted-fg: #67507e;
   --project-fg: #04000e;
+  --project-readme-fg: #725c88;
 }
 
 body {
@@ -56,6 +57,13 @@ body {
   pointer-events: none;
   transition: opacity 0.4s ease;
 }
+
+/* The README owns the viewport while it is open, so the hidden page
+   behind it cannot become a competing scroll surface. */
+:root[data-ph-open],
+:root[data-ph-open] body {
+  overflow: hidden;
+}
 /* ProjectHeader's README panel (.ph-readme) is a plain in-flow sibling
    of <main>, so it pushes .page — and the journal inside it — down the
    page as soon as it mounts. Take it out of flow and pin it below the
@@ -66,9 +74,68 @@ body {
   position: relative;
 }
 .ph-readme {
-  position: absolute;
+  position: fixed;
+  top: 66px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-width: none;
+  margin: 0;
+  box-sizing: border-box;
+  /* Preserve the component's original 440px reading column while
+     making the scrollable surface span the full page width. */
+  padding-left: max(30px, calc((100vw - 440px) / 2));
+  padding-right: max(30px, calc((100vw - 440px) / 2));
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  z-index: 5;
+}
+
+.ph-readme h1 {
+  color: var(--project-muted-fg);
+  margin-bottom: 20px;
+}
+
+.ph-readme p {
+  color: var(--project-readme-fg);
+}
+
+.ph-readme img {
+  border-radius: 0;
+}
+
+/* A translucent, scroll-aware veil directly below the sticky header.
+   It remains absent at the top of the README and softly obscures only
+   content that begins passing beneath the header while scrolling. */
+.readme-scroll-fade {
+  position: fixed;
   top: 66px;
   left: 0;
   right: 0;
-  z-index: 5;
+  height: 32px;
+  z-index: 6;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(232, 224, 242, 0.58),
+    rgba(232, 224, 242, 0.16) 62%,
+    transparent
+  );
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.75) 62%, transparent);
+  mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.75) 62%, transparent);
+  transition: opacity 0.18s ease;
+}
+
+.readme-scroll-fade.is-visible {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .readme-scroll-fade {
+    transition: none;
+  }
 }

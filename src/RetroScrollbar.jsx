@@ -102,6 +102,9 @@ export function RetroScrollbar({ children, className = '' }) {
     const content = contentRef.current
     if (!content) return
     const onWheel = (e) => {
+      // ProjectHeader's README becomes the page's active scroll surface
+      // while open; do not redirect those gestures to the hidden tab.
+      if (document.documentElement.hasAttribute('data-ph-open')) return
       if (content.scrollHeight <= content.clientHeight + 1) return
       if (content.contains(e.target)) return
       e.preventDefault()
