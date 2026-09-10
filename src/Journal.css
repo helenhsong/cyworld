@@ -34,6 +34,19 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Mona12ColorEmoji';
+  /* Pixel-art color emoji (COLR/CPAL), matching Mona10x12's look —
+     used instead of the OS's default emoji font wherever an emoji
+     appears in the journal, per feedback. Subsetted down to ~3.3KB,
+     covering only 🏙 💼 📍 (the stat-row icons below) and 🌴 (.journal-
+     mood's "On sabbatical" emoji); re-subset against the full-glyph
+     source (kept outside the repo, in ~/Library/Fonts) if new emoji
+     are ever needed. */
+  src: url('./assets/fonts/Mona12ColorEmoji.ttf') format('truetype');
+  font-display: swap;
+}
+
 :root {
   --journal-text: var(--project-muted-fg, #67507e);
   /* Was --project-fg (near-black) — switched to the site's muted
@@ -180,11 +193,10 @@
   pointer-events: none;
 }
 
-/* Mood box now sits above the photo instead of below it, per feedback
-   — moved into the photo's old top slot; everything below it (photo,
-   divider-1, status) shifted down to make room. divider-2/name/email
-   are unmoved, since the status text still clears them with room to
-   spare. */
+/* Mood box now sits below the photo again, per feedback (had briefly
+   moved above it, into the photo's old top slot) — photo moved back
+   up to that top slot, mood box now fills the gap between the photo
+   and .journal-divider-1. */
 /* A slightly-rounded flat badge instead of the plain square outline
    it had before — corners softened just a little (was a full pill,
    then dialed back per feedback) and no shadow, keeping it flat
@@ -192,20 +204,29 @@
 .journal-mood {
   position: absolute;
   left: 7.29%;
-  top: 18.14%;
+  top: 47.76%;
   width: 18.5%;
   /* Was a fixed height: 3.4% — swapped for padding (+2px top/bottom
      over the old cramped fit) so the box grows to fit its content
-     instead of squeezing it. */
-  padding: 2px 0;
+     instead of squeezing it, then upped twice more (was 4px, then
+     6px top/bottom) per feedback (still clear of .journal-photo-frame
+     right below it). */
+  padding: 6px 0;
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4em;
-  border: 1px solid var(--journal-line);
+  /* +2px over the base 0.4em, per feedback — a bit more room between
+     the emoji and "On sabbatical". */
+  gap: calc(0.4em + 2px);
+  /* Lighter/more faded than --journal-line/-line-faint (the shared
+     border/fill used elsewhere — photo frame, dividers, diary covers,
+     etc.), per feedback — scoped to just this box rather than
+     touching those shared tokens. Background tinted pink (was purple-
+     based, rgba(103, 80, 126, ...)), per feedback. */
+  border: 1px solid rgba(103, 80, 126, 0.2);
   border-radius: 4px;
-  background: var(--journal-line-faint);
+  background: rgba(179, 116, 154, 0.06);
   font-family: 'Mona10x12', monospace;
   letter-spacing: 0.10em;
   font-size: 12px;
@@ -213,10 +234,14 @@
   pointer-events: none;
 }
 
+.journal-emoji {
+  font-family: 'Mona12ColorEmoji', sans-serif;
+}
+
 .journal-photo-frame {
   position: absolute;
   left: 7.29%;
-  top: 24.24%;
+  top: 18.14%;
   width: 18.5%;
   aspect-ratio: 1;
   display: block;
@@ -238,18 +263,44 @@
   top: 76.56%;
 }
 
+/* Was a single centered sentence ("product designer usually based in
+   NYC, currently in korea") — replaced with a small left-aligned
+   stat table (City/Job/Now), per feedback, closer to a classic
+   minihompy info block. */
 .journal-status {
   position: absolute;
   left: 7.29%;
   top: 58.44%;
   width: 18.5%;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
   font-family: 'Mona10x12', monospace;
   letter-spacing: 0.10em;
   font-size: 13px;
-  line-height: 1.6;
+  line-height: 1.4;
   color: var(--journal-text-pink);
   pointer-events: none;
+}
+
+.journal-stat-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.journal-stat-label {
+  flex-shrink: 0;
+  /* Fixed-width slot rather than relying on gap alone, so the values
+     line up across rows regardless of label length. Text labels
+     (City/Job/Now) replaced with pixel emoji, per feedback — sized up
+     from the row's 13px so the pixel art actually reads instead of
+     shrinking to mush. */
+  width: 1.4em;
+  font-family: 'Mona12ColorEmoji', sans-serif;
+  font-size: 16px;
+  letter-spacing: normal;
 }
 
 .journal-name {
