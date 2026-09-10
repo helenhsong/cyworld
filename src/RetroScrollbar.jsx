@@ -66,10 +66,20 @@ export function RetroScrollbar({ children, className = '' }) {
     if (trackRef.current) observer.observe(trackRef.current)
     content.addEventListener('scroll', recompute)
     window.addEventListener('resize', recompute)
+    // Images (e.g. the photo grid) report zero height until they
+    // finish loading, so the very first recompute() below can run
+    // before scrollHeight reflects the real content — and nothing
+    // else would re-trigger it, since a child growing to its loaded
+    // size doesn't resize `content` itself (its own box is fixed by
+    // the flex layout), so the ResizeObserver above stays quiet. A
+    // capturing listener catches each <img>'s non-bubbling 'load'
+    // event on the way down instead.
+    content.addEventListener('load', recompute, true)
     recompute()
     return () => {
       content.removeEventListener('scroll', recompute)
       window.removeEventListener('resize', recompute)
+      content.removeEventListener('load', recompute, true)
       observer.disconnect()
       observerRef.current = null
     }
