@@ -36,7 +36,7 @@
   height: auto;
   image-rendering: auto;
   opacity: 0;
-  animation: pixel-petal-drift var(--petal-duration) linear var(--petal-delay) infinite;
+  animation: pixel-petal-drift var(--petal-duration) steps(22, end) var(--petal-delay) infinite;
   transform-origin: center;
   will-change: transform, opacity;
 }
@@ -113,25 +113,25 @@
 }
 
 @keyframes pixel-petal-drift {
-  0%, 8% {
+  0%, 6% {
     opacity: 0;
     transform: translate3d(0, 0, 0) rotate(var(--petal-r-0));
   }
-  14% {
+  10% {
     opacity: 0.9;
   }
-  30% {
+  22% {
     transform: translate3d(var(--petal-x-1), var(--petal-y-1), 0) rotate(var(--petal-r-1));
   }
-  52% {
+  36% {
     opacity: 0.8;
     transform: translate3d(var(--petal-x-2), var(--petal-y-2), 0) rotate(var(--petal-r-2));
   }
-  74% {
+  50% {
     opacity: 0.55;
     transform: translate3d(var(--petal-x-3), var(--petal-y-3), 0) rotate(var(--petal-r-3));
   }
-  100% {
+  62%, 100% {
     opacity: 0;
     transform: translate3d(var(--petal-x-4), var(--petal-y-4), 0) rotate(var(--petal-r-4));
   }
