@@ -65,7 +65,10 @@
      in a padded canvas), so the same width as before reads noticeably
      more zoomed in — sized down to land at roughly the same on-screen
      scale as the old padded art. */
-  width: min(900px, 67vw);
+  width: 900px;
+  min-width: 900px;
+  max-width: none;
+  flex: 0 0 900px;
   margin: 0 auto;
   /* A little above true vertical middle, per feedback. */
   transform: translateY(-8%);
@@ -311,20 +314,10 @@
 .journal-character-box {
   flex: 1;
   min-height: 0;
+  overflow: hidden;
   border: 1px solid var(--journal-line);
   box-sizing: border-box;
-  background-size: cover;
-  background-position: center;
-  pointer-events: none;
-}
-
-.journal-character-hint {
-  flex-shrink: 0;
-  text-align: center;
-  font-family: 'Mona10x12', monospace;
-  letter-spacing: 0.10em;
-  font-size: 12px;
-  color: var(--journal-text);
+  pointer-events: auto;
 }
 
 /* Diary tab: the read/watched list. RetroScrollbar's root

@@ -28,6 +28,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  min-width: calc(900px + 3rem);
   /* ProjectHeader's sticky header is 66px tall — center against the
      space actually left below it, not the full viewport. */
   min-height: calc(100vh - 66px);

@@ -3,7 +3,7 @@ import tab1 from './assets/journal/tab-1.png'
 import tab2 from './assets/journal/tab-2.png'
 import tab3 from './assets/journal/tab-3.png'
 import dp from './assets/journal/dp.png'
-import room from './assets/journal/room.png'
+import { PixelRoom } from './PixelRoom'
 import { RetroScrollbar } from './RetroScrollbar'
 import './Journal.css'
 
@@ -117,7 +117,7 @@ const PLACEHOLDER_PHOTO_RATIOS = [3 / 4, 1, 4 / 3, 1, 4 / 5, 3 / 2, 1, 4 / 3]
 // it (e.g. "8:20pm") — formatToParts (rather than a plain formatted
 // string) so the built-in " AM"/" PM" can be lowercased and rejoined
 // without a space.
-function getSeoulTime(now = new Date()) {
+function getSeoulClock(now = new Date()) {
   const parts = new Intl.DateTimeFormat('en-US', {
     timeZone: 'Asia/Seoul',
     hour: 'numeric',
@@ -125,7 +125,12 @@ function getSeoulTime(now = new Date()) {
     hour12: true,
   }).formatToParts(now)
   const byType = Object.fromEntries(parts.map((p) => [p.type, p.value]))
-  return `${byType.hour}:${byType.minute}${byType.dayPeriod.toLowerCase()}`
+  const hour12 = Number(byType.hour) % 12
+  const hour24 = hour12 + (byType.dayPeriod.toLowerCase() === 'pm' ? 12 : 0)
+  return {
+    label: `${byType.hour}:${byType.minute}${byType.dayPeriod.toLowerCase()}`,
+    hour: hour24 + Number(byType.minute) / 60,
+  }
 }
 
 // Coarsens a day-count into the same "N days/weeks/months/years ago"
@@ -151,12 +156,12 @@ function formatRelativeTime(date, now = new Date()) {
 
 export function Journal() {
   const [active, setActive] = useState(0)
-  const [seoulTime, setSeoulTime] = useState(() => getSeoulTime())
+  const [seoulClock, setSeoulClock] = useState(() => getSeoulClock())
 
   // Ticks once a minute — the display only shows HH:MM, so anything
   // finer is wasted work.
   useEffect(() => {
-    const id = setInterval(() => setSeoulTime(getSeoulTime()), 60_000)
+    const id = setInterval(() => setSeoulClock(getSeoulClock()), 60_000)
     return () => clearInterval(id)
   }, [])
 
@@ -180,7 +185,7 @@ export function Journal() {
       {/* Left-page content, matching the layout mockup. A real live
           clock in Seoul, not a fixed visit counter — computable purely
           client-side, so no backend/storage needed to make it genuine. */}
-      <div className="journal-counter">{seoulTime} in Seoul, KR</div>
+      <div className="journal-counter">{seoulClock.label} in Seoul, KR</div>
       <div className="journal-title">helen's cyworld</div>
       <div className="journal-site">helenhsong.com</div>
 
@@ -247,19 +252,11 @@ export function Journal() {
       )}
       {active === 0 && (
         <>
-          {/* Label and hint are outside the box's border (not drawn as
-              its own row inside it) but still stacked in normal flow
-              with the box inside .journal-right-panel, so the label +
-              box + hint together take up exactly the panel's own
-              footprint — same as the Diary/Photos panels, which don't
-              spill above or below it either. The box (sized to hold a
-              future interactive character; filled with a placeholder
-              room scene for now, src/assets/journal/room.png) shrinks
-              to make room for both. */}
           <div className="journal-right-panel journal-home-panel">
             <div className="journal-room-label">My room</div>
-            <div className="journal-character-box" style={{ backgroundImage: `url(${room})` }} aria-hidden="true" />
-            <div className="journal-character-hint">↑ ↓ ← → move the character</div>
+            <div className="journal-character-box">
+              <PixelRoom hour={seoulClock.hour} />
+            </div>
           </div>
         </>
       )}
