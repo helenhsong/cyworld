@@ -177,10 +177,10 @@
    divider-1, status) shifted down to make room. divider-2/name/email
    are unmoved, since the status text still clears them with room to
    spare. */
-/* Rounded into a pill with a hard (no-blur) offset shadow instead of
-   the plain square outline it had before — a retro sticker-badge look
-   that still fits the pixel-art border style used everywhere else
-   (crisp edges, no blur), rather than a soft modern drop shadow. */
+/* A slightly-rounded flat badge instead of the plain square outline
+   it had before — corners softened just a little (was a full pill,
+   then dialed back per feedback) and no shadow, keeping it flat
+   rather than a raised/sticker look. */
 .journal-mood {
   position: absolute;
   left: 7.29%;
@@ -192,9 +192,8 @@
   justify-content: center;
   gap: 0.4em;
   border: 1px solid var(--journal-line);
-  border-radius: 999px;
+  border-radius: 4px;
   background: var(--journal-line-faint);
-  box-shadow: 2px 2px 0 var(--journal-line);
   font-family: 'Mona10x12', monospace;
   letter-spacing: 0.10em;
   font-size: 12px;
