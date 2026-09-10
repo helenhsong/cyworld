@@ -34,29 +34,29 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: 'NeoDunggeunmoPro';
-  /* Was HBIOS-SYS.ttf — replaced with this font per feedback. A
-     Korean pixel-game font (Neo둥근모 Pro), fitting given the site's
-     Cyworld theme. Subsetted the same way as Mona10x12 above, down to
-     ~3KB, covering only "helen's cyworld" and "Helen Song" (the two
-     elements below that use it). Reserved for bigger titles;
-     everything else stays in Mona10x12. */
-  src: url('./assets/fonts/NeoDunggeunmoPro-Regular.ttf') format('truetype');
-  font-display: swap;
-}
-
 :root {
   --journal-text: var(--project-muted-fg, #67507e);
   /* Was --project-fg (near-black) — switched to the site's muted
      purple (the same color used for helenhsong.com in the real site
      header and .journal-site below) so the bigger titles read as
      part of the page's purple palette instead of stark black. */
-  --journal-text-strong: var(--project-muted-fg, #67507e);
+  /* Only used by .journal-room-label ("My room") and .diary-card-
+     title (book/movie titles) at this point — decoupled from
+     --project-muted-fg and lightened/desaturated a bit, per feedback
+     that the right panel's bold purple text read too heavy/saturated. */
+  --journal-text-strong: #8d7c9e;
   --journal-accent: #8b5fbf;
   --journal-line: rgba(103, 80, 126, 0.35);
   --journal-line-faint: rgba(103, 80, 126, 0.08);
   --journal-text-faint: rgba(103, 80, 126, 0.55);
+  /* Pink tones for the left-page text only (counter/title/site/mood/
+     status/name/email) — kept separate from --journal-text/-strong
+     above so the right panel (room label, diary titles/creators)
+     stays on the site's purple palette. Leans purpley (blended toward
+     --journal-line's purple) and faded (desaturated/lightened), per
+     feedback — was a more vivid straight rose pink. */
+  --journal-text-pink: #a97fa0;
+  --journal-text-strong-pink: #9c6690;
 }
 
 .journal {
@@ -142,7 +142,7 @@
   font-family: 'Mona10x12', monospace;
   letter-spacing: 0.10em;
   font-size: 13px;
-  color: var(--journal-text);
+  color: var(--journal-text-pink);
   pointer-events: none;
 }
 
@@ -151,10 +151,15 @@
   /* Matches .journal-right-panel's left edge, per feedback. */
   left: 33.8%;
   top: 6.5%;
-  font-family: 'NeoDunggeunmoPro', monospace;
+  /* Was a locally-hosted, subsetted Pixelify Sans — swapped for
+     argent-pixel-cf, loaded via the Typekit <link> in index.html, per
+     feedback. Only weight 400 is in the kit, so font-weight: bold
+     here is a no-op in practice (kept for semantic intent/fallback
+     stacks); everything else stays in Mona10x12. */
+  font-family: 'argent-pixel-cf', sans-serif;
   font-size: 20px;
   font-weight: bold;
-  color: var(--journal-text-strong);
+  color: var(--journal-text-strong-pink);
   pointer-events: none;
 }
 
@@ -171,7 +176,7 @@
   font-family: 'Mona10x12', monospace;
   letter-spacing: 0.10em;
   font-size: 12px;
-  color: var(--journal-text);
+  color: var(--journal-text-pink);
   pointer-events: none;
 }
 
@@ -204,7 +209,7 @@
   font-family: 'Mona10x12', monospace;
   letter-spacing: 0.10em;
   font-size: 12px;
-  color: var(--journal-text);
+  color: var(--journal-text-pink);
   pointer-events: none;
 }
 
@@ -243,7 +248,7 @@
   letter-spacing: 0.10em;
   font-size: 13px;
   line-height: 1.6;
-  color: var(--journal-text);
+  color: var(--journal-text-pink);
   pointer-events: none;
 }
 
@@ -251,21 +256,25 @@
   position: absolute;
   left: 7.29%;
   top: 79.46%;
-  font-family: 'NeoDunggeunmoPro', monospace;
+  font-family: 'argent-pixel-cf', sans-serif;
   font-size: 22px;
   font-weight: bold;
-  color: var(--journal-text-strong);
+  color: var(--journal-text-strong-pink);
   pointer-events: none;
 }
 
 .journal-email {
   position: absolute;
   left: 7.29%;
-  top: 85.36%;
+  /* Nudged up from 85.36% — tighter gap under .journal-name, per
+     feedback (was reading too loose), then eased back down slightly
+     (was 83.5%, a touch too tight), then further down twice more
+     (was 84%, then 84.44%), per feedback. */
+  top: 85%;
   font-family: 'Mona10x12', monospace;
   letter-spacing: 0.10em;
   font-size: 12px;
-  color: var(--journal-text);
+  color: var(--journal-text-pink);
   pointer-events: none;
 }
 
