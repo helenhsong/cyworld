@@ -44,7 +44,12 @@
 
 .pixel-tea-steam {
   position: absolute;
-  left: 60.5%;
+  /* Recentered over the mug (was 60.5%) — .journal-character-box's
+     aspect ratio shifted slightly once the Home tab gained a Links
+     section below it, which changed how far object-fit: cover crops
+     room-day.png, drifting this percentage-based position off the
+     mug by a few px. */
+  left: 58.8%;
   top: 65.5%;
   z-index: 2;
   width: 20px;
