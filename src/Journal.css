@@ -357,14 +357,38 @@
   height: var(--journal-panel-height);
 }
 
-/* Stacks label + box + hint in normal flow inside .journal-right-
-   panel, so together they take up exactly the panel's own footprint —
-   same as the Diary/Photos panels, which don't spill above or below
-   it either. The box (below) shrinks to make room for both. */
+/* Stacks the room section above the links section in normal flow
+   inside .journal-right-panel, so together they take up exactly the
+   panel's own footprint — same as the Diary/Photos panels, which
+   don't spill above or below it either. .journal-room-section (flex:
+   1, the only flexible child) shrinks to make room for the rest.
+   24px between the two sections (was 20px, before that 16px and
+   18px, before that a flat 6px shared with every label-to-content
+   gap), kept separate from .journal-links-section/-room-section's own
+   tighter 6px label-to-content gap below. */
 .journal-home-panel {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 24px;
+}
+
+.journal-links-section,
+.journal-room-section {
+  display: flex;
+  flex-direction: column;
+  /* -2px from the previous 6px, per feedback — the label-to-content
+     gap within each section, distinct from .journal-home-panel's
+     larger section-to-section gap above. */
+  gap: 4px;
+}
+
+.journal-links-section {
+  flex-shrink: 0;
+}
+
+.journal-room-section {
+  flex: 1;
+  min-height: 0;
 }
 
 .journal-room-label {
@@ -383,6 +407,45 @@
   border: 1px solid var(--journal-line);
   box-sizing: border-box;
   pointer-events: auto;
+}
+
+/* One line ("Email / LinkedIn / GitHub"), per feedback — was a
+   stacked column of the actual email/handle values. */
+.journal-links {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.journal-link,
+.journal-link-sep {
+  font-family: 'Mona10x12', monospace;
+  letter-spacing: 0.10em;
+  font-size: 13px;
+  /* Matches .diary-card-creator (the subtitle under each movie/book
+     title on the Diary tab), per feedback — was --journal-text-strong,
+     matching the title itself instead of its softer subtitle. */
+  color: var(--journal-text-faint);
+}
+
+.journal-link {
+  text-decoration: none;
+  pointer-events: auto;
+}
+
+/* Explicit margin rather than plain space characters around the "/"
+   — as flex items, .journal-link/.journal-link-sep's own whitespace
+   collapsed away the visual gap even though the space characters were
+   still in the DOM. */
+.journal-link-sep {
+  margin: 0 4px;
+}
+
+.journal-link:hover,
+.journal-link:focus-visible {
+  color: var(--journal-accent);
+  text-decoration: underline;
 }
 
 /* Diary tab: the read/watched list. RetroScrollbar's root

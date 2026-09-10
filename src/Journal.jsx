@@ -271,9 +271,36 @@ export function Journal() {
       {active === 0 && (
         <>
           <div className="journal-right-panel journal-home-panel">
-            <div className="journal-room-label">Mini Room</div>
-            <div className="journal-character-box">
-              <PixelRoom />
+            <div className="journal-room-section">
+              <div className="journal-room-label">Mini Room</div>
+              <div className="journal-character-box">
+                <PixelRoom />
+              </div>
+            </div>
+            <div className="journal-links-section">
+              <div className="journal-room-label">Links</div>
+              <div className="journal-links">
+                <a className="journal-link" href="mailto:helenhsong@gmail.com">
+                  Email
+                </a>
+                <span className="journal-link-sep" aria-hidden="true">
+                  /
+                </span>
+                <a
+                  className="journal-link"
+                  href="https://linkedin.com/in/helenhsong"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  LinkedIn
+                </a>
+                <span className="journal-link-sep" aria-hidden="true">
+                  /
+                </span>
+                <a className="journal-link" href="https://github.com/helenhsong" target="_blank" rel="noreferrer">
+                  GitHub
+                </a>
+              </div>
             </div>
           </div>
         </>
