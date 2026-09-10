@@ -1,7 +1,6 @@
 import roomDay from './assets/journal/room-day.png'
 import girl from './assets/journal/girl-sprite.png'
 import girlBlink from './assets/journal/girl-sprite-blink.png'
-import floorDesk from './assets/journal/floor-desk.png'
 import steam1 from './assets/journal/steam-1.png'
 import steam2 from './assets/journal/steam-2.png'
 import steam3 from './assets/journal/steam-3.png'
@@ -14,23 +13,20 @@ export function PixelRoom() {
     <div
       className="pixel-room-embed"
       role="img"
-      aria-label="Daytime pixel-art bedroom with a girl beside a floor desk, cushion, journal, book, and steaming tea"
+      aria-label="Dreamy daytime pixel-art bedroom with a girl, modern desk, couch, bed, and a low table with steaming tea"
     >
       <img src={roomDay} alt="" className="pixel-room-art" draggable={false} />
 
-      <div className="pixel-floor-desk" aria-hidden="true">
-        <img src={floorDesk} alt="" className="pixel-floor-desk-image" draggable={false} />
-        <div className="pixel-tea-steam">
-          {STEAM_FRAMES.map((frame, index) => (
-            <img
-              key={frame}
-              src={frame}
-              alt=""
-              className={`pixel-steam-frame pixel-steam-frame-${index + 1}`}
-              draggable={false}
-            />
-          ))}
-        </div>
+      <div className="pixel-tea-steam" aria-hidden="true">
+        {STEAM_FRAMES.map((frame, index) => (
+          <img
+            key={frame}
+            src={frame}
+            alt=""
+            className={`pixel-steam-frame pixel-steam-frame-${index + 1}`}
+            draggable={false}
+          />
+        ))}
       </div>
 
       <div className="pixel-avatar" aria-hidden="true">
