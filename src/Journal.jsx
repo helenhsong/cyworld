@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import tab1 from './assets/journal/tab-1.png'
 import tab2 from './assets/journal/tab-2.png'
 import tab3 from './assets/journal/tab-3.png'
-import dp from './assets/journal/dp.png'
+import profileCharacter from './assets/journal/profile-character.png'
 import { PixelRoom } from './PixelRoom'
 import { RetroScrollbar } from './RetroScrollbar'
 import './Journal.css'
@@ -110,16 +110,16 @@ const photos = Object.entries(photoModules)
 // reads, same purpose as the diary placeholder elsewhere.
 const PLACEHOLDER_PHOTO_RATIOS = [3 / 4, 1, 4 / 3, 1, 4 / 5, 3 / 2, 1, 4 / 3]
 
-// Real, live clock in Seoul (Asia/Seoul, KST/UTC+9) — unlike the visit
+// Real, live clock in New York (America/New_York) — unlike the visit
 // counter this replaced, this needs no backend to be genuine, so it's
 // the actual current time rather than fixed decorative text. 12-hour,
 // no leading zero on the hour, lowercase am/pm with no space before
 // it (e.g. "8:20pm") — formatToParts (rather than a plain formatted
 // string) so the built-in " AM"/" PM" can be lowercased and rejoined
 // without a space.
-function getSeoulTime(now = new Date()) {
+function getNewYorkTime(now = new Date()) {
   const parts = new Intl.DateTimeFormat('en-US', {
-    timeZone: 'Asia/Seoul',
+    timeZone: 'America/New_York',
     hour: 'numeric',
     minute: '2-digit',
     hour12: true,
@@ -151,12 +151,12 @@ function formatRelativeTime(date, now = new Date()) {
 
 export function Journal() {
   const [active, setActive] = useState(0)
-  const [seoulTime, setSeoulTime] = useState(() => getSeoulTime())
+  const [newYorkTime, setNewYorkTime] = useState(() => getNewYorkTime())
 
   // Ticks once a minute — the display only shows HH:MM, so anything
   // finer is wasted work.
   useEffect(() => {
-    const id = setInterval(() => setSeoulTime(getSeoulTime()), 60_000)
+    const id = setInterval(() => setNewYorkTime(getNewYorkTime()), 60_000)
     return () => clearInterval(id)
   }, [])
 
@@ -178,37 +178,39 @@ export function Journal() {
       ))}
 
       {/* Left-page content, matching the layout mockup. A real live
-          clock in Seoul, not a fixed visit counter — computable purely
+          clock in New York, not a fixed visit counter — computable purely
           client-side, so no backend/storage needed to make it genuine. */}
-      <div className="journal-counter">{seoulTime} in Seoul, KR</div>
+      <div className="journal-counter">{newYorkTime} in New York</div>
       <div className="journal-title">helen's cyworld</div>
       <div className="journal-site">helenhsong.com</div>
 
-      {/* Mood box sits below the photo now, per feedback (was above
-          it). */}
-      <img src={dp} alt="Helen" className="journal-photo-frame" draggable={false} />
-      <div className="journal-mood">
-        <span className="journal-emoji">🌴</span> Currently in Korea
-      </div>
+      {/* The profile-side content is grouped into one panel so its
+          height stays locked to the room-side panel. */}
+      <div className="journal-left-panel">
+        {/* Mood box sits below the photo now, per feedback (was above
+            it). */}
+        <img
+          src={profileCharacter}
+          alt="Candid pixel-art beach photo of four silhouetted friends and family holding sparklers"
+          className="journal-photo-frame"
+          draggable={false}
+        />
+        <div className="journal-mood">
+          <span className="journal-emoji">🌴</span> Currently in Korea
+        </div>
 
-      <div className="journal-divider journal-divider-1" aria-hidden="true" />
-      <div className="journal-status">
-        <div className="journal-stat-row">
-          <span className="journal-stat-label">🏙️</span>
-          <span>NYC</span>
-        </div>
-        <div className="journal-stat-row">
-          <span className="journal-stat-label">💼</span>
-          <span>Product Designer</span>
-        </div>
-        <div className="journal-stat-row">
-          <span className="journal-stat-label">📍</span>
-          <span>Seoul, KR</span>
-        </div>
+        <div className="journal-divider journal-divider-1" aria-hidden="true" />
+        <blockquote className="journal-quote">
+          <span aria-hidden="true">. ݁₊ ⊹ .</span>
+          <br aria-hidden="true" />
+          still deciding what
+          <br />
+          goes in this bio
+        </blockquote>
+        <div className="journal-divider journal-divider-2" aria-hidden="true" />
+        <div className="journal-name">Helen Song</div>
+        <div className="journal-email">helenhsong@gmail.com</div>
       </div>
-      <div className="journal-divider journal-divider-2" aria-hidden="true" />
-      <div className="journal-name">Helen Song</div>
-      <div className="journal-email">helenhsong@gmail.com</div>
 
       {/* Right-page content. On the Diary and Photos tabs this is a
           scrollable list/grid instead of the character box — all
@@ -217,47 +219,46 @@ export function Journal() {
           is active. The border (.journal-character-box) is specific
           to the empty Home box. The left panel above never changes
           with the active tab. */}
-      {active === 1 && (
+      {(active === 1 || active === 2) && (
         <RetroScrollbar className="journal-right-panel">
-          <div className="journal-diary-list">
-            {DIARY_ENTRIES.map((entry) => (
-              <div className="diary-entry" key={entry.title}>
-                <div className="diary-entry-top">
-                  <div className="diary-action">Helen {entry.action}</div>
-                  <div className="diary-when">{formatRelativeTime(entry.date)}</div>
-                </div>
-                <div className="diary-card">
-                  {coversBySlug[entry.slug] ? (
-                    <img src={coversBySlug[entry.slug]} alt="" className="diary-cover" draggable={false} />
-                  ) : (
-                    <div className="diary-cover diary-cover-placeholder" aria-hidden="true" />
-                  )}
-                  <div className="diary-card-info">
-                    <div className="diary-card-title">{entry.title}</div>
-                    <div className="diary-card-creator">{entry.creator}</div>
+          {active === 1 ? (
+            <div className="journal-diary-list">
+              {DIARY_ENTRIES.map((entry) => (
+                <div className="diary-entry" key={entry.title}>
+                  <div className="diary-entry-top">
+                    <div className="diary-action">Helen {entry.action}</div>
+                    <div className="diary-when">{formatRelativeTime(entry.date)}</div>
+                  </div>
+                  <div className="diary-card">
+                    {coversBySlug[entry.slug] ? (
+                      <img src={coversBySlug[entry.slug]} alt="" className="diary-cover" draggable={false} />
+                    ) : (
+                      <div className="diary-cover diary-cover-placeholder" aria-hidden="true" />
+                    )}
+                    <div className="diary-card-info">
+                      <div className="diary-card-title">{entry.title}</div>
+                      <div className="diary-card-creator">{entry.creator}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </RetroScrollbar>
-      )}
-      {active === 2 && (
-        <RetroScrollbar className="journal-right-panel">
-          <div className="journal-photo-grid">
-            {photos.length > 0
-              ? photos.map((photo) => (
-                  <img key={photo.key} src={photo.url} alt="" className="photo-grid-item" draggable={false} />
-                ))
-              : PLACEHOLDER_PHOTO_RATIOS.map((ratio, i) => (
-                  <div
-                    key={i}
-                    className="photo-grid-item photo-grid-placeholder"
-                    style={{ aspectRatio: ratio }}
-                    aria-hidden="true"
-                  />
-                ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="journal-photo-grid">
+              {photos.length > 0
+                ? photos.map((photo) => (
+                    <img key={photo.key} src={photo.url} alt="" className="photo-grid-item" draggable={false} />
+                  ))
+                : PLACEHOLDER_PHOTO_RATIOS.map((ratio, i) => (
+                    <div
+                      key={i}
+                      className="photo-grid-item photo-grid-placeholder"
+                      style={{ aspectRatio: ratio }}
+                      aria-hidden="true"
+                    />
+                  ))}
+            </div>
+          )}
         </RetroScrollbar>
       )}
       {active === 0 && (

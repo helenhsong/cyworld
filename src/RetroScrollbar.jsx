@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import './Journal.css'
 
 // Real (Windows 9x/2000-style) scrollbar, hand-built rather than
@@ -57,7 +57,10 @@ export function RetroScrollbar({ children, className = '' }) {
     [recompute],
   )
 
-  useEffect(() => {
+  // Measure before the browser paints. Using a normal effect here let
+  // the tab render for one frame without its scrollbar, then add it on
+  // the next frame, which made the rail visibly flash on tab changes.
+  useLayoutEffect(() => {
     const content = contentRef.current
     if (!content) return
     const observer = new ResizeObserver(recompute)

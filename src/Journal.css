@@ -53,8 +53,7 @@
      purple (the same color used for helenhsong.com in the real site
      header and .journal-site below) so the bigger titles read as
      part of the page's purple palette instead of stark black. */
-  /* Only used by .journal-room-label ("My room") and .diary-card-
-     title (book/movie titles) at this point — decoupled from
+  /* Used by .journal-room-label ("My room") — decoupled from
      --project-muted-fg and lightened/desaturated a bit, per feedback
      that the right panel's bold purple text read too heavy/saturated. */
   --journal-text-strong: #8d7c9e;
@@ -69,11 +68,19 @@
      --journal-line's purple) and faded (desaturated/lightened), per
      feedback — was a more vivid straight rose pink. */
   --journal-text-pink: #a97fa0;
-  --journal-text-strong-pink: #9c6690;
+  --journal-text-pink-faded: #b99ab2;
+  --journal-text-strong-pink: #9f6290;
 }
 
 .journal {
   position: relative;
+  /* Both content columns use these exact bounds. Keeping the values
+     here prevents the profile and room panels from drifting apart if
+     their internals change later. */
+  --journal-panel-top: 18.14%;
+  --journal-panel-height: 70.32%;
+  --journal-left-panel-left: 7.29%;
+  --journal-left-panel-width: 18.5%;
   /* The PNG is now cropped tight to its content bbox (previously it sat
      in a padded canvas), so the same width as before reads noticeably
      more zoomed in — sized down to land at roughly the same on-screen
@@ -141,21 +148,37 @@
 }
 
 /* --- Left-page content ---------------------------------------------
-   Positions below are all percentages of .journal's native 684x450
-   canvas, estimated from the layout mockup and eyeballed against it —
-   nudge freely, these weren't measured pixel-for-pixel like the tab
-   hit-boxes above. left: 6.1% (was 6.9%) on most of these — nudged in
-   per feedback, same "reduce the padding" pass as .journal-right-panel
-   above. */
+   The panel itself uses the same vertical bounds as the right panel.
+   Its children are positioned relative to this box, preserving their
+   original positions on the native 684x450 journal canvas. */
+
+.journal-left-panel {
+  position: absolute;
+  --journal-divider-1-top: 53.47%;
+  --journal-divider-2-top: 83.08%;
+  --journal-divider-text-gap: 3.84%;
+  /* Argent Pixel has more empty space above its visible capitals than
+     Mona10x12, so the name section needs a small optical lift for the
+     two divider-to-text gaps to look equal. */
+  --journal-name-section-optical-shift: 0.75%;
+  left: var(--journal-left-panel-left);
+  top: var(--journal-panel-top);
+  width: var(--journal-left-panel-width);
+  height: var(--journal-panel-height);
+  pointer-events: none;
+}
 
 .journal-counter {
   position: absolute;
-  left: 9.2%;
+  left: var(--journal-left-panel-left);
   top: 8%;
+  width: var(--journal-left-panel-width);
+  text-align: center;
+  white-space: nowrap;
   font-family: 'Mona10x12', monospace;
   letter-spacing: 0.10em;
   font-size: 13px;
-  color: var(--journal-text-pink);
+  color: var(--journal-text-pink-faded);
   pointer-events: none;
 }
 
@@ -178,18 +201,16 @@
 
 .journal-site {
   position: absolute;
-  /* Shifted 4px left, per feedback (0.44% ~= 4px at the journal's
-     typical 900px rendered width) — text-align: right means the
-     visible text hugs this box's right edge, so nudging the whole
-     box left moves the text left too. */
-  left: 69.56%;
+  /* Align the URL's right edge with .journal-right-panel's right edge
+     (33.8% + 55.5% = 89.3%), rather than with the tab rail. */
+  right: 10.7%;
   top: 8.3%;
   width: 23%;
   text-align: right;
   font-family: 'Mona10x12', monospace;
   letter-spacing: 0.10em;
   font-size: 12px;
-  color: var(--journal-text-pink);
+  color: var(--journal-text-pink-faded);
   pointer-events: none;
 }
 
@@ -203,9 +224,9 @@
    rather than a raised/sticker look. */
 .journal-mood {
   position: absolute;
-  left: 7.29%;
-  top: 47.76%;
-  width: 18.5%;
+  left: 0;
+  top: 42.12%;
+  width: 100%;
   /* Was a fixed height: 3.4% — swapped for padding (+2px top/bottom
      over the old cramped fit) so the box grows to fit its content
      instead of squeezing it, then upped twice more (was 4px, then
@@ -240,9 +261,9 @@
 
 .journal-photo-frame {
   position: absolute;
-  left: 7.29%;
-  top: 18.14%;
-  width: 18.5%;
+  left: 0;
+  top: 0;
+  width: 100%;
   aspect-ratio: 1;
   display: block;
   object-fit: cover;
@@ -252,61 +273,42 @@
 
 .journal-divider {
   position: absolute;
-  left: 7.29%;
-  width: 18.5%;
+  left: 0;
+  width: 100%;
   border-top: 1px dashed var(--journal-line);
 }
 .journal-divider-1 {
-  top: 55.74%;
+  top: var(--journal-divider-1-top);
 }
 .journal-divider-2 {
-  top: 76.56%;
+  top: var(--journal-divider-2-top);
 }
 
-/* Was a single centered sentence ("product designer usually based in
-   NYC, currently in korea") — replaced with a small left-aligned
-   stat table (City/Job/Now), per feedback, closer to a classic
-   minihompy info block. */
-.journal-status {
+/* Three-line personal quote in place of the location/job stat table. */
+.journal-quote {
   position: absolute;
-  left: 7.29%;
-  top: 58.44%;
-  width: 18.5%;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  left: 0;
+  top: calc(var(--journal-divider-1-top) + var(--journal-divider-text-gap));
+  width: 100%;
+  margin: 0;
   text-align: left;
   font-family: 'Mona10x12', monospace;
   letter-spacing: 0.10em;
   font-size: 13px;
-  line-height: 1.4;
-  color: var(--journal-text-pink);
+  line-height: 1.5;
+  /* Slightly lighter than the rest of the left-panel pink text so
+     this reads as a casual aside rather than profile metadata. */
+  color: #b18aa8;
   pointer-events: none;
-}
-
-.journal-stat-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.journal-stat-label {
-  flex-shrink: 0;
-  /* Fixed-width slot rather than relying on gap alone, so the values
-     line up across rows regardless of label length. Text labels
-     (City/Job/Now) replaced with pixel emoji, per feedback — sized up
-     from the row's 13px so the pixel art actually reads instead of
-     shrinking to mush. */
-  width: 1.4em;
-  font-family: 'Mona12ColorEmoji', sans-serif;
-  font-size: 16px;
-  letter-spacing: normal;
 }
 
 .journal-name {
   position: absolute;
-  left: 7.29%;
-  top: 79.46%;
+  left: 0;
+  top: calc(
+    var(--journal-divider-2-top) + var(--journal-divider-text-gap) -
+      var(--journal-name-section-optical-shift)
+  );
   font-family: 'argent-pixel-cf', sans-serif;
   font-size: 22px;
   font-weight: bold;
@@ -316,12 +318,12 @@
 
 .journal-email {
   position: absolute;
-  left: 7.29%;
+  left: 0;
   /* Nudged up from 85.36% — tighter gap under .journal-name, per
      feedback (was reading too loose), then eased back down slightly
      (was 83.5%, a touch too tight), then further down twice more
      (was 84%, then 84.44%), per feedback. */
-  top: 85%;
+  top: calc(95.08% - var(--journal-name-section-optical-shift));
   font-family: 'Mona10x12', monospace;
   letter-spacing: 0.10em;
   font-size: 12px;
@@ -347,9 +349,9 @@
 .journal-right-panel {
   position: absolute;
   left: 33.8%;
-  top: 18.14%;
+  top: var(--journal-panel-top);
   width: 55.5%;
-  height: 70.32%;
+  height: var(--journal-panel-height);
 }
 
 /* Stacks label + box + hint in normal flow inside .journal-right-
@@ -596,7 +598,9 @@
   font-weight: bold;
   letter-spacing: 0.10em;
   font-size: 13px;
-  color: var(--journal-text-strong);
+  /* Darker than the creator/director line so the title is the clear
+     focal point of each diary card. */
+  color: var(--journal-text);
 }
 
 .diary-card-creator {
@@ -604,7 +608,9 @@
   letter-spacing: 0.10em;
   /* Matches .diary-card-title, per feedback (was 11px). */
   font-size: 13px;
-  color: var(--journal-text);
+  /* Secondary metadata stays in the same purple family at a softer
+     opacity, increasing the title/subtitle contrast. */
+  color: var(--journal-text-faint);
 }
 
 /* Photos tab: a Pinterest/Tumblr-style photo/gif collage. CSS
