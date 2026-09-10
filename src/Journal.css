@@ -99,6 +99,89 @@
   transform: translateY(-8%);
 }
 
+/* The full journal stays mounted while its visible assets decode, but
+   is revealed as one composed scene. This prevents the frame, profile
+   photo, room, and animated layers from popping in independently. */
+.journal-stage {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms steps(3, end);
+}
+
+.journal.is-ready .journal-stage {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* A single, compact arrival state in place of a full-page skeleton.
+   The open-book mark borrows the page's soft paper and dusty-pink
+   palette, while the indeterminate line communicates progress without
+   pretending that individual image requests have meaningful percent
+   values. */
+.journal-loader {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 90ms steps(2, end),
+    visibility 0s linear 0s;
+}
+
+.journal.is-ready .journal-loader {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 90ms steps(2, end),
+    visibility 0s linear 90ms;
+}
+
+.journal-loader-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 176px;
+  padding: 22px 28px 20px;
+  border: 1px solid rgba(159, 98, 144, 0.46);
+  border-radius: 2px;
+  background: #fff;
+  box-shadow: 3px 3px 0 rgba(103, 80, 126, 0.12);
+}
+
+.journal-loader-label {
+  font-family: 'Mona10x12', monospace;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--journal-text-pink);
+}
+
+.journal-loader-progress {
+  width: 128px;
+  height: 8px;
+  margin-top: 13px;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 1px;
+  border: 1px solid rgba(103, 80, 126, 0.35);
+  background: #fff;
+}
+
+.journal-loader-progress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform: scaleX(0.08);
+  transform-origin: left;
+  background: repeating-linear-gradient(90deg, #a97fa0 0 12px, transparent 12px 15px);
+  animation: journal-loader-progress 1.25s steps(8, end) infinite;
+}
+
 .journal-page {
   display: block;
   width: 100%;
@@ -355,6 +438,45 @@
   top: var(--journal-panel-top);
   width: 55.5%;
   height: var(--journal-panel-height);
+}
+
+/* Tab changes are intentionally immediate, like a frame swap in an
+   early-2000s Flash page. If media is not warm yet, the flat loading
+   panel below replaces the current content without fading it out. */
+.journal-panel-loader {
+  z-index: 4;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 12px;
+  box-sizing: border-box;
+  border: 1px solid rgba(103, 80, 126, 0.2);
+  background: #fff;
+  color: var(--journal-text-faint);
+  font-family: 'Mona10x12', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+
+.journal-panel-loader-dots {
+  display: flex;
+  gap: 5px;
+}
+
+.journal-panel-loader-dots i {
+  display: block;
+  width: 4px;
+  height: 4px;
+  background: #b99ab2;
+  animation: journal-panel-dot 900ms steps(1, end) infinite;
+}
+
+.journal-panel-loader-dots i:nth-child(2) {
+  animation-delay: 120ms;
+}
+
+.journal-panel-loader-dots i:nth-child(3) {
+  animation-delay: 240ms;
 }
 
 /* Stacks the room section above the links section in normal flow
@@ -708,4 +830,26 @@
     rgba(103, 80, 126, 0.04) 4px,
     rgba(103, 80, 126, 0.04) 8px
   );
+}
+
+@keyframes journal-loader-progress {
+  from { transform: scaleX(0.08); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes journal-panel-dot {
+  0%, 32% { opacity: 1; }
+  33%, 100% { opacity: 0.2; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journal-stage,
+  .journal-loader {
+    transition: none;
+  }
+
+  .journal-loader-progress span,
+  .journal-panel-loader-dots i {
+    animation: none;
+  }
 }

@@ -1,13 +1,6 @@
-import roomDay from './assets/journal/room-day.png'
-import girl from './assets/journal/girl-sprite-soft.png'
-import girlBlink from './assets/journal/girl-sprite-blink-soft.png'
-import steam1 from './assets/journal/steam-1.png'
-import steam2 from './assets/journal/steam-2.png'
-import steam3 from './assets/journal/steam-3.png'
+import { girl, girlBlink, roomDay, STEAM_FRAMES } from './PixelRoomAssets'
 import { CherryBlossomPetals } from './CherryBlossomPetals'
 import './PixelRoom.css'
-
-const STEAM_FRAMES = [steam1, steam2, steam3]
 
 export function PixelRoom() {
   return (

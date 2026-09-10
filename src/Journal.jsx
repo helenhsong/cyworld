@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import tab1 from './assets/journal/tab-1.png'
 import tab2 from './assets/journal/tab-2.png'
 import tab3 from './assets/journal/tab-3.png'
 import profileCharacter from './assets/journal/profile-character.png'
 import { PixelRoom } from './PixelRoom'
+import { PIXEL_ROOM_ASSETS } from './PixelRoomAssets'
 import { RetroScrollbar } from './RetroScrollbar'
 import './Journal.css'
 
@@ -110,6 +111,84 @@ const photos = Object.entries(photoModules)
 // reads, same purpose as the diary placeholder elsewhere.
 const PLACEHOLDER_PHOTO_RATIOS = [3 / 4, 1, 4 / 3, 1, 4 / 5, 3 / 2, 1, 4 / 3]
 
+const imagePreloadCache = new Map()
+let initialJournalLoad
+
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+// Decode images off-DOM so the journal can arrive as one composed
+// object instead of exposing each layer as its network request wins.
+// Failed images resolve too: a missing optional image should not trap
+// the entire page behind a loader forever.
+function preloadImage(src) {
+  if (imagePreloadCache.has(src)) return imagePreloadCache.get(src)
+
+  const promise = new Promise((resolve) => {
+    const image = new Image()
+    let settled = false
+    const finish = () => {
+      if (settled) return
+      settled = true
+      resolve()
+    }
+
+    image.decoding = 'async'
+    image.onload = finish
+    image.onerror = finish
+    image.src = src
+    if (typeof image.decode === 'function') {
+      image.decode().then(finish).catch(() => {
+        // Some browsers reject decode() while the request is still in
+        // flight. In that case the load/error handlers remain the
+        // source of truth instead of revealing the layer prematurely.
+        if (image.complete) finish()
+      })
+    } else if (image.complete) finish()
+  })
+
+  imagePreloadCache.set(src, promise)
+  return promise
+}
+
+function preloadImages(sources) {
+  return Promise.race([
+    Promise.all(sources.map(preloadImage)),
+    // A slow or interrupted request should gracefully reveal the
+    // browser's normal fallback rather than leave the UI inaccessible.
+    delay(8_000),
+  ])
+}
+
+function preloadFonts() {
+  if (!document.fonts) return Promise.resolve()
+  return Promise.race([
+    Promise.allSettled([
+      document.fonts.load('12px Mona10x12'),
+      document.fonts.load('16px argent-pixel-cf'),
+    ]),
+    delay(3_000),
+  ])
+}
+
+function prepareInitialJournal() {
+  if (!initialJournalLoad) {
+    const startedAt = performance.now()
+    initialJournalLoad = Promise.all([
+      preloadImages([tab1, profileCharacter, ...PIXEL_ROOM_ASSETS]),
+      preloadFonts(),
+    ]).then(() => delay(Math.max(0, 500 - (performance.now() - startedAt))))
+  }
+  return initialJournalLoad
+}
+
+const TAB_ASSETS = [
+  [tab1, profileCharacter, ...PIXEL_ROOM_ASSETS],
+  [tab2, ...Object.values(coversBySlug)],
+  [tab3, ...photos.map((photo) => photo.url)],
+]
+
 // Real, live clock in New York (America/New_York) — unlike the visit
 // counter this replaced, this needs no backend to be genuine, so it's
 // the actual current time rather than fixed decorative text. 12-hour,
@@ -151,7 +230,41 @@ function formatRelativeTime(date, now = new Date()) {
 
 export function Journal() {
   const [active, setActive] = useState(0)
+  const [ready, setReady] = useState(false)
+  const [pendingActive, setPendingActive] = useState(null)
   const [newYorkTime, setNewYorkTime] = useState(() => getNewYorkTime())
+  const loadedTabs = useRef(new Set())
+  const tabRequest = useRef(0)
+
+  useEffect(() => {
+    let cancelled = false
+    let idleId
+
+    prepareInitialJournal().then(() => {
+      if (cancelled) return
+      loadedTabs.current.add(0)
+      setReady(true)
+
+      // Warm the light Diary/Photos assets once the first view is
+      // complete. The explicit tab loader below still covers visitors
+      // who click before this idle work finishes.
+      const warmOtherTabs = () => {
+        TAB_ASSETS.slice(1).forEach((assets, index) => {
+          preloadImages(assets).then(() => loadedTabs.current.add(index + 1))
+        })
+      }
+      if ('requestIdleCallback' in window) idleId = window.requestIdleCallback(warmOtherTabs)
+      else idleId = window.setTimeout(warmOtherTabs, 250)
+    })
+
+    return () => {
+      cancelled = true
+      tabRequest.current += 1
+      if (idleId === undefined) return
+      if ('cancelIdleCallback' in window) window.cancelIdleCallback(idleId)
+      else window.clearTimeout(idleId)
+    }
+  }, [])
 
   // Ticks once a minute — the display only shows HH:MM, so anything
   // finer is wasted work.
@@ -160,8 +273,44 @@ export function Journal() {
     return () => clearInterval(id)
   }, [])
 
+  const showTab = async (nextActive) => {
+    if (!ready) return
+    const request = ++tabRequest.current
+
+    if (nextActive === active) {
+      setPendingActive(null)
+      return
+    }
+
+    if (loadedTabs.current.has(nextActive)) {
+      setActive(nextActive)
+      setPendingActive(null)
+      return
+    }
+
+    setPendingActive(nextActive)
+    await preloadImages(TAB_ASSETS[nextActive])
+    loadedTabs.current.add(nextActive)
+    if (request !== tabRequest.current) return
+    setActive(nextActive)
+    setPendingActive(null)
+  }
+
   return (
-    <div className="journal">
+    <div
+      className={`journal${ready ? ' is-ready' : ' is-loading'}`}
+      aria-busy={!ready || pendingActive !== null}
+    >
+      <div className="journal-loader" role="status" aria-hidden={ready}>
+        <div className="journal-loader-card">
+          <div className="journal-loader-label">Loading...</div>
+          <div className="journal-loader-progress" aria-hidden="true">
+            <span />
+          </div>
+        </div>
+      </div>
+
+      <div className="journal-stage" aria-hidden={!ready} inert={!ready}>
       <img
         src={TABS[active].src}
         alt="Hand-drawn journal"
@@ -177,8 +326,9 @@ export function Journal() {
           className="journal-tab-hit"
           style={{ '--tab-index': i }}
           aria-pressed={active === i}
+          aria-busy={pendingActive === i}
           aria-label={`Show ${tab.label}`}
-          onClick={() => setActive(i)}
+          onClick={() => showTab(i)}
         >
           {tab.label}
         </button>
@@ -227,7 +377,7 @@ export function Journal() {
           to the empty Home box. The left panel above never changes
           with the active tab. */}
       {(active === 1 || active === 2) && (
-        <RetroScrollbar className="journal-right-panel">
+        <RetroScrollbar key={active} className="journal-right-panel">
           {active === 1 ? (
             <div className="journal-diary-list">
               {DIARY_ENTRIES.map((entry) => (
@@ -270,7 +420,7 @@ export function Journal() {
       )}
       {active === 0 && (
         <>
-          <div className="journal-right-panel journal-home-panel">
+          <div key={active} className="journal-right-panel journal-home-panel">
             <div className="journal-room-section">
               <div className="journal-room-label">Mini Room</div>
               <div className="journal-character-box">
@@ -305,6 +455,17 @@ export function Journal() {
           </div>
         </>
       )}
+      {pendingActive !== null && (
+        <div className="journal-right-panel journal-panel-loader" role="status">
+          <span>Loading...</span>
+          <div className="journal-panel-loader-dots" aria-hidden="true">
+            <i />
+            <i />
+            <i />
+          </div>
+        </div>
+      )}
+      </div>
     </div>
   )
 }
