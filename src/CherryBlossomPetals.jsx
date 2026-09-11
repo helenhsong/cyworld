@@ -9,6 +9,12 @@ function randomSign() {
   return Math.random() < 0.5 ? -1 : 1
 }
 
+function randomPetalAngle() {
+  // The sprite is already drawn with its long axis at about 45 degrees.
+  // Keep it near that natural half-upright angle instead of rotating it vertical.
+  return randomBetween(-8, 8)
+}
+
 // A gust supplies the common direction for petals that arrive together.
 // Each petal only varies slightly around it, like nearby petals caught by
 // the same current rather than independent particles crossing paths.
@@ -16,15 +22,16 @@ function createPetal(id, gust, index, count) {
   const driftX = gust.driftX + randomBetween(-6, 6)
   const driftY = gust.driftY + randomBetween(-10, 12)
   const sway = gust.sway * randomBetween(0.78, 1.16)
-  const angle = randomBetween(28, 62) * randomSign()
+  const angle = randomPetalAngle()
   const rock = randomBetween(4, 10) * randomSign()
   const lift = gust.lift + randomBetween(-1, 1)
   const spreadPosition = index - (count - 1) / 2
+  const verticalSpread = count === 2 ? gust.spreadY : gust.spreadY * 0.65
 
   return {
     id,
     left: gust.left + spreadPosition * gust.spreadX + randomBetween(-0.7, 0.7),
-    top: gust.top + spreadPosition * gust.spreadY + randomBetween(-0.6, 0.6),
+    top: gust.top + spreadPosition * verticalSpread + randomBetween(-0.6, 0.6),
     size: randomBetween(5.5, 8),
     duration: gust.duration + randomBetween(-550, 650),
     delay: index * gust.stagger + (index === 0 ? 0 : randomBetween(-60, 80)),
@@ -50,18 +57,20 @@ function createPetal(id, gust, index, count) {
 }
 
 function createGust() {
+  const reachesCharacter = Math.random() < 0.2
+
   return {
     // Spawn inside the lower half of the visible window, then let
     // gravity carry the path farther down than the breeze carries it in.
     left: randomBetween(75.5, 82),
     top: randomBetween(21, 28),
-    driftX: randomBetween(-76, -48),
+    driftX: reachesCharacter ? randomBetween(-138, -112) : randomBetween(-76, -48),
     driftY: randomBetween(112, 164),
     sway: randomBetween(5, 12) * randomSign(),
     lift: randomBetween(-2, 3),
-    duration: randomBetween(7600, 9800),
-    spreadX: randomBetween(4.2, 5.8),
-    spreadY: randomBetween(2.2, 3.8),
+    duration: reachesCharacter ? randomBetween(8400, 10400) : randomBetween(7600, 9800),
+    spreadX: randomBetween(7.5, 9.5),
+    spreadY: randomBetween(10, 14.5),
     stagger: randomBetween(580, 880),
   }
 }
