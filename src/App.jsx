@@ -43,9 +43,8 @@ function App() {
       {/* Full-viewport animated backdrop — --project-bg (set in
           index.css) tells ProjectHeader's transparent header and README
           panel what they're sitting on, so their text darkens to a
-          matching purple instead of the site's usual gray. Blurs
-          heavily (see index.css) while the README is open, keyed off
-          the data-ph-open attribute ProjectHeader sets on <html>. */}
+          matching purple instead of the site's usual gray. The README's
+          controlled transition and covering veil are defined below. */}
       <Dithering
         className="backdrop"
         style={{ position: 'fixed', inset: 0, zIndex: -1, background: '#E8E0F2' }}

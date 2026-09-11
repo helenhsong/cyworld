@@ -1,62 +1,134 @@
+import { useEffect, useRef, useState } from 'react'
 import petalSprite from './assets/journal/cherry-petal-room.png'
 
-// left/top are % of .journal-character-box, re-derived from each
-// petal's intended spawn point in room-day.png's window (pixel-
-// measured against the source art, then mapped through the box's
-// current object-fit: cover crop) rather than eyeballed — the box's
-// aspect ratio shifts slightly whenever the surrounding Home tab
-// layout changes (it did when the Links section was added below
-// Mini Room), which silently drifts plain eyeballed percentages off
-// the window and onto the curtain/wall. Re-measure the same way (see
-// PixelRoom.css's .pixel-tea-steam comment) if this drifts again.
-// Motion itself is back to the original driftX/driftY/wobble/turn
-// diagonal-dash model, per feedback — a couple of "floatier"/slower
-// passes were tried in between and preferred less than this original.
-const PETALS = [
-  { left: 71.0, top: 11.9, size: 8, angle: -18, turn: 48, delay: 0, driftX: -94, driftY: 92, wobble: 8 },
-  { left: 75.5, top: 10.4, size: 7, angle: 14, turn: -52, delay: -2.5, driftX: -126, driftY: 116, wobble: -7 },
-  { left: 80.1, top: 12.9, size: 6, angle: -32, turn: 62, delay: -5, driftX: -108, driftY: 102, wobble: 6 },
-  { left: 82.7, top: 16.4, size: 7, angle: 22, turn: -66, delay: -7.4, driftX: -142, driftY: 128, wobble: -9 },
-  { left: 78.1, top: 19.4, size: 6, angle: -10, turn: 44, delay: -9.9, driftX: -116, driftY: 88, wobble: 7 },
-  { left: 73.6, top: 17.9, size: 7, angle: -24, turn: 54, delay: -1.25, driftX: -102, driftY: 96, wobble: -6 },
-  { left: 81.4, top: 21.9, size: 6, angle: 18, turn: -58, delay: -6.2, driftX: -132, driftY: 110, wobble: 8 },
-]
+function randomBetween(min, max) {
+  return min + Math.random() * (max - min)
+}
 
-function petalPath({ driftX, driftY, wobble, angle, turn }) {
+function randomSign() {
+  return Math.random() < 0.5 ? -1 : 1
+}
+
+// A gust supplies the common direction for petals that arrive together.
+// Each petal only varies slightly around it, like nearby petals caught by
+// the same current rather than independent particles crossing paths.
+function createPetal(id, gust, index, count) {
+  const driftX = gust.driftX + randomBetween(-6, 6)
+  const driftY = gust.driftY + randomBetween(-10, 12)
+  const sway = gust.sway * randomBetween(0.78, 1.16)
+  const angle = randomBetween(28, 62) * randomSign()
+  const rock = randomBetween(4, 10) * randomSign()
+  const lift = gust.lift + randomBetween(-1, 1)
+  const spreadPosition = index - (count - 1) / 2
+
   return {
-    '--petal-x-1': `${Math.round(driftX * 0.18 + wobble)}px`,
-    '--petal-y-1': `${Math.round(driftY * 0.2)}px`,
-    '--petal-x-2': `${Math.round(driftX * 0.43 - wobble)}px`,
-    '--petal-y-2': `${Math.round(driftY * 0.46)}px`,
-    '--petal-x-3': `${Math.round(driftX * 0.72 + wobble)}px`,
-    '--petal-y-3': `${Math.round(driftY * 0.73)}px`,
-    '--petal-x-4': `${driftX}px`,
-    '--petal-y-4': `${driftY}px`,
-    '--petal-r-0': `${angle}deg`,
-    '--petal-r-1': `${Math.round(angle + turn * 0.28)}deg`,
-    '--petal-r-2': `${Math.round(angle + turn * 0.55)}deg`,
-    '--petal-r-3': `${Math.round(angle + turn * 0.78)}deg`,
-    '--petal-r-4': `${angle + turn}deg`,
+    id,
+    left: gust.left + spreadPosition * gust.spreadX + randomBetween(-0.7, 0.7),
+    top: gust.top + spreadPosition * gust.spreadY + randomBetween(-0.6, 0.6),
+    size: randomBetween(5.5, 8),
+    duration: gust.duration + randomBetween(-550, 650),
+    delay: index * gust.stagger + (index === 0 ? 0 : randomBetween(-60, 80)),
+    path: {
+      '--petal-x-1': `${Math.round(driftX * 0.16)}px`,
+      '--petal-y-1': `${Math.round(lift)}px`,
+      '--petal-x-2': `${Math.round(driftX * 0.34 + sway * 0.25)}px`,
+      '--petal-y-2': `${Math.round(driftY * 0.12 + lift)}px`,
+      '--petal-x-3': `${Math.round(driftX * 0.55 - sway * 0.2)}px`,
+      '--petal-y-3': `${Math.round(driftY * 0.34)}px`,
+      '--petal-x-4': `${Math.round(driftX * 0.78 + sway * 0.12)}px`,
+      '--petal-y-4': `${Math.round(driftY * 0.64)}px`,
+      '--petal-x-5': `${Math.round(driftX)}px`,
+      '--petal-y-5': `${Math.round(driftY)}px`,
+      '--petal-r-0': `${angle.toFixed(1)}deg`,
+      '--petal-r-1': `${(angle + rock * 0.4).toFixed(1)}deg`,
+      '--petal-r-2': `${(angle - rock * 0.35).toFixed(1)}deg`,
+      '--petal-r-3': `${(angle + rock * 0.25).toFixed(1)}deg`,
+      '--petal-r-4': `${(angle - rock * 0.15).toFixed(1)}deg`,
+      '--petal-r-5': `${angle.toFixed(1)}deg`,
+    },
+  }
+}
+
+function createGust() {
+  return {
+    // Spawn inside the lower half of the visible window, then let
+    // gravity carry the path farther down than the breeze carries it in.
+    left: randomBetween(75.5, 82),
+    top: randomBetween(21, 28),
+    driftX: randomBetween(-76, -48),
+    driftY: randomBetween(112, 164),
+    sway: randomBetween(5, 12) * randomSign(),
+    lift: randomBetween(-2, 3),
+    duration: randomBetween(7600, 9800),
+    spreadX: randomBetween(4.2, 5.8),
+    spreadY: randomBetween(2.2, 3.8),
+    stagger: randomBetween(580, 880),
   }
 }
 
 export function CherryBlossomPetals() {
+  const [petals, setPetals] = useState([])
+  const nextId = useRef(0)
+
+  useEffect(() => {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    let timer
+
+    const scheduleGust = (delay) => {
+      timer = window.setTimeout(() => {
+        if (!reducedMotion.matches) {
+          const gust = createGust()
+          const roll = Math.random()
+          const count = roll < 0.72 ? 1 : roll < 0.97 ? 2 : 3
+          const incoming = Array.from({ length: count }, (_, index) =>
+            createPetal(nextId.current++, gust, index, count),
+          )
+
+          // The slice is only a safety net for a suspended tab where an
+          // animationend event might be delayed for a long time.
+          setPetals((current) => [...current, ...incoming].slice(-8))
+        }
+
+        scheduleGust(randomBetween(4800, 7800))
+      }, delay)
+    }
+
+    const handleMotionPreference = () => {
+      window.clearTimeout(timer)
+      setPetals([])
+      if (!reducedMotion.matches) scheduleGust(randomBetween(450, 1100))
+    }
+
+    reducedMotion.addEventListener('change', handleMotionPreference)
+    if (!reducedMotion.matches) scheduleGust(randomBetween(500, 1300))
+
+    return () => {
+      window.clearTimeout(timer)
+      reducedMotion.removeEventListener('change', handleMotionPreference)
+    }
+  }, [])
+
+  const removePetal = (id) => {
+    setPetals((current) => current.filter((petal) => petal.id !== id))
+  }
+
   return (
     <div className="pixel-petal-layer" aria-hidden="true">
-      {PETALS.map((petal) => (
+      {petals.map((petal) => (
         <img
-          key={`${petal.left}-${petal.top}`}
+          key={petal.id}
           src={petalSprite}
           alt=""
           className="pixel-petal"
           draggable={false}
+          onAnimationEnd={() => removePetal(petal.id)}
           style={{
             '--petal-left': `${petal.left}%`,
             '--petal-top': `${petal.top}%`,
             '--petal-size': `${petal.size}px`,
-            '--petal-duration': '12.4s',
-            '--petal-delay': `${petal.delay}s`,
-            ...petalPath(petal),
+            '--petal-duration': `${petal.duration}ms`,
+            '--petal-delay': `${petal.delay}ms`,
+            ...petal.path,
           }}
         />
       ))}

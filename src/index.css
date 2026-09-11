@@ -54,16 +54,14 @@ body {
    overlay and nothing behind it shifts. Its scroll surface extends
    behind the transparent header (rather than being clipped at 66px),
    while the added top padding keeps the initial reading position
-   unchanged. This lets scrolled content dissolve through the entire
-   blur gradient without exposing the header boundary. */
+   unchanged and avoids a layout jump when the panel mounts. */
 #root {
   position: relative;
 }
 
-/* A tinted sheet between the journal and README content. On open it
-   settles upward over the page; on close it continues upward while
-   fading away, so both directions feel like the same overlay rather
-   than unrelated blur and opacity effects. */
+/* A tinted sheet between the journal and README content. It fades in
+   with the README as one surface, then lifts slightly while fading
+   away on close. */
 .readme-transition-veil {
   position: fixed;
   /* Extend behind the transparent sticky header. The header itself is
@@ -115,7 +113,6 @@ body {
 
 .ph-readme h1 {
   color: var(--project-muted-fg);
-  margin-bottom: 20px;
 }
 
 .ph-readme p {
