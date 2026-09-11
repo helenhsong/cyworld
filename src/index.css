@@ -22,7 +22,7 @@ body {
 }
 
 .backdrop {
-  transition: filter 0.4s ease;
+  transition: none;
 }
 
 .page {
@@ -34,28 +34,12 @@ body {
      space actually left below it, not the full viewport. */
   min-height: calc(100vh - 66px);
   padding: 1.5rem;
-  /* The transition used for a change is taken from the *destination*
-     state's own transition property — so this (the closed/visible
-     state) governs the README->main fade-in on close, kept snappy
-     per feedback, while the data-ph-open rule below governs the
-     slower main->README fade-out on open. */
-  transition: opacity 0.15s ease;
+  transition: none;
 }
-/* Heavy enough to read as one flat wash of the backdrop's color
-   rather than a legible pattern, so it doesn't compete with the
-   README text sitting on top of it. */
-:root[data-ph-open] .backdrop {
-  filter: blur(100px);
-}
-/* ProjectHeader's README panel is normal in-flow content below the
-   sticky header, not an overlay — so without this, the journal just
-   sits underneath it in the page instead of being covered by it. Fade
-   the main content out (not display:none) so .page keeps its layout
-   height and the README doesn't jump as it opens/closes. */
+/* The journal remains fully composed beneath the README transition;
+   the dedicated veil below is what visually covers and reveals it. */
 :root[data-ph-open] .page {
-  opacity: 0;
   pointer-events: none;
-  transition: opacity 0.4s ease;
 }
 
 /* The README owns the viewport while it is open, so the hidden page
@@ -66,16 +50,44 @@ body {
 }
 /* ProjectHeader's README panel (.ph-readme) is a plain in-flow sibling
    of <main>, so it pushes .page — and the journal inside it — down the
-   page as soon as it mounts. Take it out of flow and pin it below the
-   sticky header instead, so it reads as an overlay and nothing behind
-   it shifts. #root is its containing block: the header, readme panel,
-   and <main> are all direct children of #root, not nested. */
+   page as soon as it mounts. Take it out of flow so it reads as an
+   overlay and nothing behind it shifts. Its scroll surface extends
+   behind the transparent header (rather than being clipped at 66px),
+   while the added top padding keeps the initial reading position
+   unchanged. This lets scrolled content dissolve through the entire
+   blur gradient without exposing the header boundary. */
 #root {
   position: relative;
 }
+
+/* A tinted sheet between the journal and README content. On open it
+   settles upward over the page; on close it continues upward while
+   fading away, so both directions feel like the same overlay rather
+   than unrelated blur and opacity effects. */
+.readme-transition-veil {
+  position: fixed;
+  /* Extend behind the transparent sticky header. The header itself is
+     z-index: 10, so its labels remain crisp while the backdrop below
+     stays continuous instead of changing abruptly at 66px. */
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: rgba(232, 224, 242, 0.94);
+  -webkit-backdrop-filter: blur(28px);
+  backdrop-filter: blur(28px);
+  animation: readme-veil-in 0.24s ease-in-out both;
+}
+
+.readme-transition-veil.is-closing {
+  animation: readme-veil-out 0.16s cubic-bezier(0.2, 0, 0.4, 1) both;
+}
+
 .ph-readme {
   position: fixed;
-  top: 66px;
+  top: 0;
   bottom: 0;
   left: 0;
   right: 0;
@@ -86,10 +98,19 @@ body {
      making the scrollable surface span the full page width. */
   padding-left: max(30px, calc((100vw - 440px) / 2));
   padding-right: max(30px, calc((100vw - 440px) / 2));
+  padding-top: calc(66px + 4.5rem);
   overflow-y: auto;
   overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: touch;
   z-index: 5;
+  /* Fade the README and its veil in as one surface, without a delayed
+     content handoff or positional movement. */
+  animation: readme-content-in 0.24s ease-in-out both;
+}
+
+:root[data-ph-closing] .ph-readme {
+  pointer-events: none;
+  animation: readme-content-out 0.14s cubic-bezier(0.2, 0, 0.4, 1) both;
 }
 
 .ph-readme h1 {
@@ -105,65 +126,59 @@ body {
   border-radius: 0;
 }
 
-/* A scroll-aware progressive blur directly below the sticky header —
-   no added color/tint (was a purple gradient veil, per feedback; a
-   plain color wash read as "adding color to the header" rather than
-   part of the content itself). It remains absent at the top of the
-   README and softly obscures only content that begins passing
-   beneath the header while scrolling.
-   True progressive blur (increasing blur strength toward the header,
-   not just fading opacity on one flat blur) needs several stacked
-   layers — a single backdrop-filter + mask only fades how much of one
-   fixed blur amount shows through, it can't vary the blur radius
-   itself. Three layers here, each blurrier and masked to a shorter
-   top slice than the last, approximate a smooth blur gradient. Tall
-   enough (96px) to span several lines of text — a shorter zone
-   (was 32px) let content pass through before it visibly softened,
-   reading as a hard cutoff instead of a gradual one. */
-.readme-scroll-fade {
-  position: fixed;
-  top: 66px;
-  left: 0;
-  right: 0;
-  height: 96px;
-  z-index: 6;
-  pointer-events: none;
-  opacity: 0;
-  -webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px);
-  -webkit-mask-image: linear-gradient(to bottom, #000, transparent);
-  mask-image: linear-gradient(to bottom, #000, transparent);
-  transition: opacity 0.18s ease;
+@keyframes readme-veil-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-.readme-scroll-fade::before,
-.readme-scroll-fade::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
+@keyframes readme-veil-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
 }
 
-.readme-scroll-fade::before {
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
-  -webkit-mask-image: linear-gradient(to bottom, #000, transparent 65%);
-  mask-image: linear-gradient(to bottom, #000, transparent 65%);
+@keyframes readme-content-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-.readme-scroll-fade::after {
-  -webkit-backdrop-filter: blur(32px);
-  backdrop-filter: blur(32px);
-  -webkit-mask-image: linear-gradient(to bottom, #000, transparent 35%);
-  mask-image: linear-gradient(to bottom, #000, transparent 35%);
-}
-
-.readme-scroll-fade.is-visible {
-  opacity: 1;
+@keyframes readme-content-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .readme-scroll-fade {
+  .backdrop,
+  .page {
     transition: none;
   }
+
+  .ph-readme {
+    animation: none;
+  }
+
+  .readme-transition-veil,
+  .readme-transition-veil.is-closing {
+    animation: none;
+  }
+
 }

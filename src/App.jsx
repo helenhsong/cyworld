@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ProjectHeader } from '@helenhsong/ui'
 import { Dithering } from '@paper-design/shaders-react'
 import readme from '../README.md?raw'
@@ -6,22 +6,37 @@ import { Journal } from './Journal'
 
 function App() {
   const [readmeOpen, setReadmeOpen] = useState(false)
-  const [readmeScrolled, setReadmeScrolled] = useState(false)
+  const [readmeClosing, setReadmeClosing] = useState(false)
+  const readmeCloseTimer = useRef(null)
 
-  useEffect(() => {
-    if (!readmeOpen) {
-      setReadmeScrolled(false)
-      return undefined
+  const handleReadmeOpenChange = (nextOpen) => {
+    window.clearTimeout(readmeCloseTimer.current)
+
+    if (nextOpen) {
+      document.documentElement.removeAttribute('data-ph-closing')
+      setReadmeClosing(false)
+      setReadmeOpen(true)
+      return
     }
 
-    const panel = document.querySelector('.ph-readme')
-    if (!panel) return undefined
+    // Keep ProjectHeader's panel mounted while both it and the veil
+    // lift/fade away, then reveal the already-present journal below.
+    document.documentElement.setAttribute('data-ph-closing', '')
+    setReadmeClosing(true)
+    readmeCloseTimer.current = window.setTimeout(() => {
+      setReadmeOpen(false)
+      setReadmeClosing(false)
+      window.requestAnimationFrame(() => document.documentElement.removeAttribute('data-ph-closing'))
+    }, 160)
+  }
 
-    const updateFade = () => setReadmeScrolled(panel.scrollTop > 1)
-    updateFade()
-    panel.addEventListener('scroll', updateFade, { passive: true })
-    return () => panel.removeEventListener('scroll', updateFade)
-  }, [readmeOpen])
+  useEffect(
+    () => () => {
+      window.clearTimeout(readmeCloseTimer.current)
+      document.documentElement.removeAttribute('data-ph-closing')
+    },
+    [],
+  )
 
   return (
     <>
@@ -45,12 +60,12 @@ function App() {
       <ProjectHeader
         readme={readme}
         open={readmeOpen}
-        onOpenChange={setReadmeOpen}
+        onOpenChange={handleReadmeOpenChange}
         className="bg-transparent"
       />
       {readmeOpen && (
         <div
-          className={`readme-scroll-fade${readmeScrolled ? ' is-visible' : ''}`}
+          className={`readme-transition-veil${readmeClosing ? ' is-closing' : ''}`}
           aria-hidden="true"
         />
       )}
