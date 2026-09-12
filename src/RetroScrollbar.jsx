@@ -91,10 +91,11 @@ export function RetroScrollbar({ children, className = '' }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recompute, children])
 
-  // Route vertical gestures that begin anywhere inside the journal to its
-  // active scrollable panel. Gestures outside the journal remain native page
-  // scrolls, and horizontal gestures remain available for panning the wide
-  // journal across a narrow viewport.
+  // Route vertical gestures inside the journal to its active panel. If the
+  // document fits vertically, expand that gesture area to the whole page so
+  // otherwise-unused wheel/touch movement still scrolls the journal. When the
+  // document itself can scroll, gestures outside the journal stay native.
+  // Horizontal gestures always remain available for panning a narrow viewport.
   useEffect(() => {
     const content = contentRef.current
     const journal = content?.closest('.journal')
@@ -104,9 +105,16 @@ export function RetroScrollbar({ children, className = '' }) {
       !document.documentElement.hasAttribute('data-ph-open') &&
       content.scrollHeight > content.clientHeight + 1
 
+    const shouldRouteToJournal = (target) => {
+      const page = document.scrollingElement
+      const pageCanScrollVertically = page && page.scrollHeight > page.clientHeight + 1
+      return journal.contains(target) || !pageCanScrollVertically
+    }
+
     const onWheel = (event) => {
       if (!canScroll()) return
       if (content.contains(event.target)) return
+      if (!shouldRouteToJournal(event.target)) return
       if (event.shiftKey || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return
 
       event.preventDefault()
@@ -116,21 +124,24 @@ export function RetroScrollbar({ children, className = '' }) {
     let lastX = 0
     let lastY = 0
     let axis = null
+    let routeTouchToJournal = false
 
     const onTouchStart = (event) => {
       if (event.touches.length !== 1) {
         axis = null
+        routeTouchToJournal = false
         return
       }
 
       lastX = event.touches[0].clientX
       lastY = event.touches[0].clientY
       axis = null
+      routeTouchToJournal =
+        !content.contains(event.target) && shouldRouteToJournal(event.target)
     }
 
     const onTouchMove = (event) => {
-      if (event.touches.length !== 1 || !canScroll()) return
-      if (content.contains(event.target)) return
+      if (event.touches.length !== 1 || !canScroll() || !routeTouchToJournal) return
 
       const touch = event.touches[0]
       const deltaX = touch.clientX - lastX
@@ -150,20 +161,21 @@ export function RetroScrollbar({ children, className = '' }) {
 
     const onTouchEnd = () => {
       axis = null
+      routeTouchToJournal = false
     }
 
-    journal.addEventListener('wheel', onWheel, { passive: false })
-    journal.addEventListener('touchstart', onTouchStart, { passive: true })
-    journal.addEventListener('touchmove', onTouchMove, { passive: false })
-    journal.addEventListener('touchend', onTouchEnd)
-    journal.addEventListener('touchcancel', onTouchEnd)
+    window.addEventListener('wheel', onWheel, { passive: false })
+    window.addEventListener('touchstart', onTouchStart, { passive: true })
+    window.addEventListener('touchmove', onTouchMove, { passive: false })
+    window.addEventListener('touchend', onTouchEnd)
+    window.addEventListener('touchcancel', onTouchEnd)
 
     return () => {
-      journal.removeEventListener('wheel', onWheel)
-      journal.removeEventListener('touchstart', onTouchStart)
-      journal.removeEventListener('touchmove', onTouchMove)
-      journal.removeEventListener('touchend', onTouchEnd)
-      journal.removeEventListener('touchcancel', onTouchEnd)
+      window.removeEventListener('wheel', onWheel)
+      window.removeEventListener('touchstart', onTouchStart)
+      window.removeEventListener('touchmove', onTouchMove)
+      window.removeEventListener('touchend', onTouchEnd)
+      window.removeEventListener('touchcancel', onTouchEnd)
     }
   }, [])
 
