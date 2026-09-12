@@ -617,6 +617,8 @@
   min-width: 0;
   min-height: 0;
   overflow-y: auto;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
   /* The real scrollbar is .retro-scrollbar below; this pane's own
      native one is just hidden, not disabled — wheel/touch/keyboard
      scrolling all still work on it directly. */

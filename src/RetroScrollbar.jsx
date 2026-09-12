@@ -91,13 +91,9 @@ export function RetroScrollbar({ children, className = '' }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recompute, children])
 
-  // Lets any scroll gesture anywhere on the page move this content,
-  // not just one aimed directly at it — there's nothing else
-  // scrollable on the page, so a wheel/trackpad scroll can only ever
-  // mean "scroll the diary list" regardless of where the cursor
-  // happens to be. Skipped if the cursor actually is over the content
-  // (or its own scrollbar) so its native wheel handling — already
-  // correct — isn't double-applied on top of this.
+  // Lets any wheel/trackpad gesture anywhere on the page move this
+  // content, not just one aimed directly at it. Touch needs separate
+  // handling below because mobile browsers do not emit wheel events.
   useEffect(() => {
     const content = contentRef.current
     if (!content) return
@@ -112,6 +108,67 @@ export function RetroScrollbar({ children, className = '' }) {
     }
     window.addEventListener('wheel', onWheel, { passive: false })
     return () => window.removeEventListener('wheel', onWheel)
+  }, [])
+
+  // On narrow touch screens the fixed-size journal can make the document
+  // vertically scrollable. A vertical swipe begun anywhere on the journal
+  // should scroll its active panel instead of moving the whole page. Keep
+  // horizontal swipes native so the wide journal can still be panned.
+  useEffect(() => {
+    const content = contentRef.current
+    const journal = content?.closest('.journal')
+    if (!content || !journal) return
+
+    let lastX = 0
+    let lastY = 0
+    let axis = null
+
+    const onTouchStart = (event) => {
+      if (event.touches.length !== 1) {
+        axis = null
+        return
+      }
+      lastX = event.touches[0].clientX
+      lastY = event.touches[0].clientY
+      axis = null
+    }
+
+    const onTouchMove = (event) => {
+      if (event.touches.length !== 1) return
+      if (document.documentElement.hasAttribute('data-ph-open')) return
+      if (content.scrollHeight <= content.clientHeight + 1) return
+
+      const touch = event.touches[0]
+      const deltaX = touch.clientX - lastX
+      const deltaY = touch.clientY - lastY
+
+      if (!axis && (Math.abs(deltaX) > 3 || Math.abs(deltaY) > 3)) {
+        axis = Math.abs(deltaY) > Math.abs(deltaX) ? 'vertical' : 'horizontal'
+      }
+
+      lastX = touch.clientX
+      lastY = touch.clientY
+
+      if (axis !== 'vertical') return
+      if (event.cancelable) event.preventDefault()
+      content.scrollTop -= deltaY
+    }
+
+    const onTouchEnd = () => {
+      axis = null
+    }
+
+    journal.addEventListener('touchstart', onTouchStart, { passive: true })
+    journal.addEventListener('touchmove', onTouchMove, { passive: false })
+    journal.addEventListener('touchend', onTouchEnd)
+    journal.addEventListener('touchcancel', onTouchEnd)
+
+    return () => {
+      journal.removeEventListener('touchstart', onTouchStart)
+      journal.removeEventListener('touchmove', onTouchMove)
+      journal.removeEventListener('touchend', onTouchEnd)
+      journal.removeEventListener('touchcancel', onTouchEnd)
+    }
   }, [])
 
   const scrollBy = (delta) => {
