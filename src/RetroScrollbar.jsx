@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 import './Journal.css'
 
 // Real (Windows 9x/2000-style) scrollbar, hand-built rather than
@@ -90,86 +90,6 @@ export function RetroScrollbar({ children, className = '' }) {
     // entries added) in case that alone doesn't fire a resize.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recompute, children])
-
-  // Lets any wheel/trackpad gesture anywhere on the page move this
-  // content, not just one aimed directly at it. Touch needs separate
-  // handling below because mobile browsers do not emit wheel events.
-  useEffect(() => {
-    const content = contentRef.current
-    if (!content) return
-    const onWheel = (e) => {
-      // ProjectHeader's README becomes the page's active scroll surface
-      // while open; do not redirect those gestures to the hidden tab.
-      if (document.documentElement.hasAttribute('data-ph-open')) return
-      if (content.scrollHeight <= content.clientHeight + 1) return
-      if (content.contains(e.target)) return
-      e.preventDefault()
-      content.scrollBy({ top: e.deltaY })
-    }
-    window.addEventListener('wheel', onWheel, { passive: false })
-    return () => window.removeEventListener('wheel', onWheel)
-  }, [])
-
-  // On narrow touch screens the fixed-size journal can make the document
-  // vertically scrollable. A vertical swipe begun anywhere on the journal
-  // should scroll its active panel instead of moving the whole page. Keep
-  // horizontal swipes native so the wide journal can still be panned.
-  useEffect(() => {
-    const content = contentRef.current
-    const journal = content?.closest('.journal')
-    if (!content || !journal) return
-
-    let lastX = 0
-    let lastY = 0
-    let axis = null
-
-    const onTouchStart = (event) => {
-      if (event.touches.length !== 1) {
-        axis = null
-        return
-      }
-      lastX = event.touches[0].clientX
-      lastY = event.touches[0].clientY
-      axis = null
-    }
-
-    const onTouchMove = (event) => {
-      if (event.touches.length !== 1) return
-      if (document.documentElement.hasAttribute('data-ph-open')) return
-      if (content.scrollHeight <= content.clientHeight + 1) return
-
-      const touch = event.touches[0]
-      const deltaX = touch.clientX - lastX
-      const deltaY = touch.clientY - lastY
-
-      if (!axis && (Math.abs(deltaX) > 3 || Math.abs(deltaY) > 3)) {
-        axis = Math.abs(deltaY) > Math.abs(deltaX) ? 'vertical' : 'horizontal'
-      }
-
-      lastX = touch.clientX
-      lastY = touch.clientY
-
-      if (axis !== 'vertical') return
-      if (event.cancelable) event.preventDefault()
-      content.scrollTop -= deltaY
-    }
-
-    const onTouchEnd = () => {
-      axis = null
-    }
-
-    journal.addEventListener('touchstart', onTouchStart, { passive: true })
-    journal.addEventListener('touchmove', onTouchMove, { passive: false })
-    journal.addEventListener('touchend', onTouchEnd)
-    journal.addEventListener('touchcancel', onTouchEnd)
-
-    return () => {
-      journal.removeEventListener('touchstart', onTouchStart)
-      journal.removeEventListener('touchmove', onTouchMove)
-      journal.removeEventListener('touchend', onTouchEnd)
-      journal.removeEventListener('touchcancel', onTouchEnd)
-    }
-  }, [])
 
   const scrollBy = (delta) => {
     contentRef.current?.scrollBy({ top: delta })
