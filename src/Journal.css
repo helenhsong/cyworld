@@ -95,8 +95,8 @@
   aspect-ratio: 684 / 450;
   flex: 0 0 900px;
   margin: 0 auto;
-  /* A little above true vertical middle, per feedback. */
-  transform: translateY(-8%);
+  /* A little above true vertical middle, plus a 16px optical lift. */
+  transform: translateY(calc(-8% - 16px));
 }
 
 /* The full journal stays mounted while its visible assets decode, but
