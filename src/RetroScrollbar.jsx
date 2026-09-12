@@ -1,4 +1,4 @@
-import { useCallback, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import './Journal.css'
 
 // Real (Windows 9x/2000-style) scrollbar, hand-built rather than
@@ -90,6 +90,82 @@ export function RetroScrollbar({ children, className = '' }) {
     // entries added) in case that alone doesn't fire a resize.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recompute, children])
+
+  // Route vertical gestures that begin anywhere inside the journal to its
+  // active scrollable panel. Gestures outside the journal remain native page
+  // scrolls, and horizontal gestures remain available for panning the wide
+  // journal across a narrow viewport.
+  useEffect(() => {
+    const content = contentRef.current
+    const journal = content?.closest('.journal')
+    if (!content || !journal) return
+
+    const canScroll = () =>
+      !document.documentElement.hasAttribute('data-ph-open') &&
+      content.scrollHeight > content.clientHeight + 1
+
+    const onWheel = (event) => {
+      if (!canScroll()) return
+      if (content.contains(event.target)) return
+      if (event.shiftKey || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return
+
+      event.preventDefault()
+      content.scrollBy({ top: event.deltaY })
+    }
+
+    let lastX = 0
+    let lastY = 0
+    let axis = null
+
+    const onTouchStart = (event) => {
+      if (event.touches.length !== 1) {
+        axis = null
+        return
+      }
+
+      lastX = event.touches[0].clientX
+      lastY = event.touches[0].clientY
+      axis = null
+    }
+
+    const onTouchMove = (event) => {
+      if (event.touches.length !== 1 || !canScroll()) return
+      if (content.contains(event.target)) return
+
+      const touch = event.touches[0]
+      const deltaX = touch.clientX - lastX
+      const deltaY = touch.clientY - lastY
+
+      if (!axis && (Math.abs(deltaX) > 3 || Math.abs(deltaY) > 3)) {
+        axis = Math.abs(deltaY) > Math.abs(deltaX) ? 'vertical' : 'horizontal'
+      }
+
+      lastX = touch.clientX
+      lastY = touch.clientY
+
+      if (axis !== 'vertical') return
+      if (event.cancelable) event.preventDefault()
+      content.scrollTop -= deltaY
+    }
+
+    const onTouchEnd = () => {
+      axis = null
+    }
+
+    journal.addEventListener('wheel', onWheel, { passive: false })
+    journal.addEventListener('touchstart', onTouchStart, { passive: true })
+    journal.addEventListener('touchmove', onTouchMove, { passive: false })
+    journal.addEventListener('touchend', onTouchEnd)
+    journal.addEventListener('touchcancel', onTouchEnd)
+
+    return () => {
+      journal.removeEventListener('wheel', onWheel)
+      journal.removeEventListener('touchstart', onTouchStart)
+      journal.removeEventListener('touchmove', onTouchMove)
+      journal.removeEventListener('touchend', onTouchEnd)
+      journal.removeEventListener('touchcancel', onTouchEnd)
+    }
+  }, [])
 
   const scrollBy = (delta) => {
     contentRef.current?.scrollBy({ top: delta })
