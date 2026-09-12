@@ -4,7 +4,7 @@ Inspired by 2000s-era Cyworld, the Korean social media platform where everyone h
 
 ![Cyworld](/cyworld/content/media/cyworld-info-title.jpg)
 
-I never actually used Cyworld myself, but I vaguely remember my mom once showing me her 미니홈피 (mini-hompy, short for mini-homepage): a page filled with cute little characters for each family member, flower animations, music playing in the background.
+I never actually used Cyworld myself, but I vaguely remember a relative once showing me their 미니홈피 (mini-hompy, short for mini-homepage): a page filled with cute little characters for each family member, flower animations, music playing in the background.
 
 Good references were hard to come by — most surviving screenshots are low-res, and nearly all only show the homepage. Figuring out what the other pages and interactions looked like meant piecing things together from old photos, screen recordings, and forum posts. Much of what's here is my attempt at capturing the spirit of Cyworld rather than a strict recreation.
 

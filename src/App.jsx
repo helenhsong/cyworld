@@ -5,7 +5,7 @@ import readme from '../README.md?raw'
 import { Journal } from './Journal'
 
 function App() {
-  const [readmeOpen, setReadmeOpen] = useState(false)
+  const [readmeOpen, setReadmeOpen] = useState(() => /\/readme\/?$/.test(window.location.pathname))
   const [readmeClosing, setReadmeClosing] = useState(false)
   const readmeCloseTimer = useRef(null)
 
