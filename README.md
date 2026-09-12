@@ -10,4 +10,4 @@ Good references were hard to come by — most surviving screenshots are low-res,
 
 ![Cyworld screenshot](/cyworld/content/media/cyworld-screenshot.jpg)
 
-I drew the base journal UI and tabs in Aseprite, then used Claude and Codex to build the animated room scene and refine the rest.
+Built with Aseprite, Claude, and Codex.
